@@ -4,6 +4,15 @@
  * 美化版本 - 更加精致的Mac风格设计
  **/
 
+/* 完全隐藏原始的notion-code样式 */
+.notion-code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
 /* 终端风格代码工具栏 */
 .code-toolbar {
   position: relative;
@@ -51,8 +60,11 @@
   border-color: #777;
 }
 
-/* 终端风格代码块 */
-pre[class*='language-'] {
+/* 完全重置所有代码块相关样式 */
+.notion .notion-code,
+.notion-code,
+pre[class*='language-'],
+code[class*='language-'] {
   margin: 0 !important;
   padding: 0 !important;
   background: #1a1a1a !important;
@@ -61,6 +73,16 @@ pre[class*='language-'] {
   border-radius: 0 !important;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
   position: relative;
+}
+
+/* 特别处理原始的notion-code容器 */
+.notion-code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 /* 终端标题栏 */
@@ -168,6 +190,20 @@ pre[class*='language-'] code .token.punctuation {
 /* 隐藏所有不需要的元素 */
 .code-toolbar::before {
   display: none;
+}
+
+/* 隐藏PrismJS show-language插件生成的元素 */
+.code-toolbar .toolbar-item:first-child,
+.code-toolbar .toolbar-item[data-show-language],
+.code-toolbar .toolbar-item .show-language,
+.prism-show-language {
+  display: none !important;
+}
+
+/* 隐藏语言标签 */
+code[class*='language-']::before,
+pre[class*='language-']::before {
+  display: none !important;
 }
 
 /* 隐藏滚动条 */
