@@ -42,8 +42,6 @@ const PrismMac = () => {
     if (codeMacBar) {
       loadExternalResource('/css/prism-mac-style.css', 'css')
     }
-    // 加载代码块增强样式
-    loadExternalResource('/css/code-enhancements.css', 'css')
     // 加载prism样式
     loadPrismThemeCSS(
       isDarkMode,
@@ -230,58 +228,10 @@ function renderPrismMac(codeLineNumbers) {
   if (codeToolBars) {
     Array.from(codeToolBars).forEach(item => {
       const existPreMac = item.getElementsByClassName('pre-mac')
-      if (existPreMac.length === 0) {
+      if (existPreMac.length < codeToolBars.length) {
         const preMac = document.createElement('div')
         preMac.classList.add('pre-mac')
         preMac.innerHTML = '<span></span><span></span><span></span>'
-        
-        // 获取代码语言
-        const codeElement = item.querySelector('code')
-        if (codeElement) {
-          const classList = codeElement.className
-          const languageMatch = classList.match(/language-(\w+)/)
-          if (languageMatch) {
-            const language = languageMatch[1]
-            // 设置语言标识
-            item.setAttribute('data-language', language)
-            
-            // 设置标题栏显示语言名称
-            const languageNames = {
-              'javascript': 'JavaScript',
-              'typescript': 'TypeScript',
-              'python': 'Python',
-              'java': 'Java',
-              'cpp': 'C++',
-              'c': 'C',
-              'css': 'CSS',
-              'html': 'HTML',
-              'json': 'JSON',
-              'xml': 'XML',
-              'sql': 'SQL',
-              'bash': 'Bash',
-              'shell': 'Shell',
-              'powershell': 'PowerShell',
-              'php': 'PHP',
-              'ruby': 'Ruby',
-              'go': 'Go',
-              'rust': 'Rust',
-              'swift': 'Swift',
-              'kotlin': 'Kotlin',
-              'scala': 'Scala',
-              'r': 'R',
-              'matlab': 'MATLAB',
-              'yaml': 'YAML',
-              'markdown': 'Markdown',
-              'dockerfile': 'Dockerfile',
-              'nginx': 'Nginx',
-              'apache': 'Apache'
-            }
-            
-            const displayName = languageNames[language] || language.charAt(0).toUpperCase() + language.slice(1)
-            preMac.setAttribute('data-title', displayName)
-          }
-        }
-        
         item?.appendChild(preMac, item)
       }
     })
