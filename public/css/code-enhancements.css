@@ -1,0 +1,234 @@
+/**
+ * 代码块增强样式
+ * 提供额外的美化效果和动画
+ */
+
+/* 代码块进入动画 */
+@keyframes codeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.code-toolbar {
+  animation: codeSlideIn 0.6s ease-out;
+}
+
+/* 代码块复制按钮美化 */
+.code-toolbar .toolbar-item button[data-copy-state] {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.code-toolbar .toolbar-item button[data-copy-state]:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.code-toolbar .toolbar-item button[data-copy-state="copy-success"] {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-color: #059669;
+}
+
+.code-toolbar .toolbar-item button[data-copy-state="copy-error"] {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border-color: #dc2626;
+}
+
+/* 深色模式下的复制按钮 */
+.dark-mode .code-toolbar .toolbar-item button[data-copy-state] {
+  background: rgba(31, 41, 55, 0.9);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #e5e7eb;
+}
+
+.dark-mode .code-toolbar .toolbar-item button[data-copy-state]:hover {
+  background: rgba(31, 41, 55, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 代码高亮增强 */
+.token.comment {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.token.string {
+  font-weight: 500;
+}
+
+.token.function {
+  font-weight: 600;
+}
+
+.token.keyword {
+  font-weight: 600;
+}
+
+/* 代码块选择效果 */
+pre[class*='language-'] code::selection {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+pre[class*='language-'] code::-moz-selection {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+/* 代码块聚焦效果 */
+.code-toolbar:focus-within {
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 行号美化（如果启用） */
+.line-numbers .line-numbers-rows {
+  border-right: 2px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.dark-mode .line-numbers .line-numbers-rows {
+  border-right-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.line-numbers .line-numbers-rows > span:before {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.dark-mode .line-numbers .line-numbers-rows > span:before {
+  color: #6b7280;
+}
+
+/* 代码块工具栏图标美化 */
+.code-toolbar .toolbar-item button svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  transition: all 0.2s ease;
+}
+
+.code-toolbar .toolbar-item button:hover svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  transform: scale(1.1);
+}
+
+/* 代码块加载状态 */
+.code-toolbar.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.code-toolbar.loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 代码块错误状态 */
+.code-toolbar.error {
+  border: 2px solid #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.code-toolbar.error .pre-mac {
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+}
+
+.dark-mode .code-toolbar.error {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.dark-mode .code-toolbar.error .pre-mac {
+  background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+}
+
+/* 响应式优化 */
+@media (max-width: 640px) {
+  .code-toolbar .toolbar-item button[data-copy-state] {
+    padding: 0.375rem 0.75rem;
+    font-size: 11px;
+  }
+  
+  .code-toolbar .toolbar-item button svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* 打印样式优化 */
+@media print {
+  .code-toolbar {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .pre-mac {
+    background: #f5f5f5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  .pre-mac > span {
+    background: #000 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .code-toolbar {
+    border: 2px solid currentColor;
+  }
+  
+  .pre-mac > span {
+    border: 1px solid currentColor;
+  }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+  .code-toolbar {
+    animation: none;
+    transition: none;
+  }
+  
+  .code-toolbar:hover {
+    transform: none;
+  }
+  
+  .toolbar-item > button:hover {
+    transform: none;
+  }
+  
+  .pre-mac > span:hover {
+    transform: none;
+  }
+}
