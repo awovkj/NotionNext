@@ -58,6 +58,19 @@ pre[class*='language-'] {
   position: relative;
 }
 
+/* 重置代码块内部padding，避免与Mac标题栏冲突 */
+.notion-code {
+  padding: 0 !important;
+}
+
+/* 为代码内容添加适当的padding */
+pre[class*='language-'] > code {
+  padding: 1rem 1.5rem !important;
+  display: block;
+  white-space: pre;
+  text-indent: 0 !important;
+}
+
 /* 深色模式代码块 */
 .dark-mode pre[class*='language-'] {
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
