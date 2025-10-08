@@ -1,58 +1,235 @@
 /**
  * @author https://github.com/txs
  * 当配置文件 CODE_MAC_BAR 开启时，此样式会被动态引入，将开启代码组件左上角的mac图标
+ * 美化版本 - 更加精致的Mac风格设计
  **/
+
+/* 代码工具栏容器美化 */
 .code-toolbar {
   position: relative;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   width: 100%;
-  border-radius: 0.5rem;
-  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.code-toolbar:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .collapse-wrapper .code-toolbar {
-    margin-bottom: 0;
+  margin-bottom: 0;
+  box-shadow: none;
+  transform: none;
 }
 
-.toolbar-item{
+.collapse-wrapper .code-toolbar:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+/* 工具栏按钮美化 */
+.toolbar-item {
   white-space: nowrap;
 }
 
 .toolbar-item > button {
   margin-top: -0.1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
+.toolbar-item > button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+/* 代码块容器美化 */
 pre[class*='language-'] {
-  margin-top: 0rem !important;
-  // margin-bottom: 0rem !important;
-  padding-top: 1.5rem !important;
-
+  margin-top: 0 !important;
+  padding-top: 2.5rem !important;
+  border-radius: 0 0 12px 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  position: relative;
 }
 
+/* 深色模式代码块 */
+.dark-mode pre[class*='language-'] {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+}
+
+/* Mac风格标题栏 */
 .pre-mac {
   position: absolute;
-  left: 0.9rem;
-  top: 0.5rem;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 2.5rem;
+  background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
   z-index: 10;
+  border-radius: 12px 12px 0 0;
 }
 
+.dark-mode .pre-mac {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Mac风格控制按钮 */
 .pre-mac > span {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  margin-right: 5px;
+  margin-right: 8px;
   float: left;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.pre-mac > span:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .pre-mac > span:nth-child(1) {
-  background: red;
+  background: linear-gradient(135deg, #ff5f57 0%, #ff3b30 100%);
+}
+
+.pre-mac > span:nth-child(1):hover {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
 }
 
 .pre-mac > span:nth-child(2) {
-  background: sandybrown;
+  background: linear-gradient(135deg, #ffbd2e 0%, #ff9500 100%);
+}
+
+.pre-mac > span:nth-child(2):hover {
+  background: linear-gradient(135deg, #ffcc33 0%, #ffb347 100%);
 }
 
 .pre-mac > span:nth-child(3) {
-  background: limegreen;
+  background: linear-gradient(135deg, #28ca42 0%, #30d158 100%);
+}
+
+.pre-mac > span:nth-child(3):hover {
+  background: linear-gradient(135deg, #34d058 0%, #40df5f 100%);
+}
+
+/* 添加Mac风格标题栏文字 */
+.pre-mac::after {
+  content: attr(data-title);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+.dark-mode .pre-mac::after {
+  color: #e5e7eb;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .code-toolbar {
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+  }
+  
+  pre[class*='language-'] {
+    border-radius: 0 0 8px 8px;
+    padding-top: 2rem !important;
+  }
+  
+  .pre-mac {
+    height: 2rem;
+    padding: 0 0.75rem;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .pre-mac > span {
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+  }
+  
+  .pre-mac::after {
+    font-size: 12px;
+  }
+}
+
+/* 代码块内容区域优化 */
+pre[class*='language-'] > code {
+  padding: 1rem 1.5rem !important;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* 添加代码块语言标识美化 */
+.code-toolbar::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 11;
+}
+
+.dark-mode .code-toolbar::before {
+  background: rgba(0, 0, 0, 0.3);
+  color: #9ca3af;
+}
+
+/* 滚动条美化 */
+pre[class*='language-']::-webkit-scrollbar {
+  height: 8px;
+}
+
+pre[class*='language-']::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+pre[class*='language-']::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+pre[class*='language-']::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode pre[class*='language-']::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode pre[class*='language-']::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dark-mode pre[class*='language-']::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
