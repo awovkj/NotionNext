@@ -30,11 +30,11 @@
   margin-bottom: 0;
 }
 
-/* 复制按钮 - 终端风格图标，紧贴折叠按钮 */
+/* 复制按钮 - 终端风格图标，与折叠按钮适当分开 */
 .code-toolbar > .toolbar {
   position: absolute !important;
   top: 0 !important;
-  right: 30px !important; /* 紧贴折叠按钮 */
+  right: 38px !important; /* 与折叠按钮适当分开 */
   height: 32px !important;
   background: transparent !important;
   border: none !important;
