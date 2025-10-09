@@ -125,37 +125,36 @@ const renderCollapseCode = (codeCollapse, codeCollapseExpandDefault) => {
     panelWrapper.className =
       'border dark:border-gray-600 rounded-md hover:border-indigo-500 duration-200 transition-colors'
 
-    // 不创建header，直接将代码块包装以保持样式一致
-    // const header = document.createElement('div')
-    // header.className =
-    //   'flex justify-between items-center px-4 py-2 cursor-pointer select-none'
-    // header.innerHTML = `<h3 class="text-lg font-medium">${language}</h3><svg class="transition-all duration-200 w-5 h-5 transform rotate-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.293 6.293a1 1 0 0 1 1.414 0L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414z" clip-rule="evenodd"/></svg>`
+    const header = document.createElement('div')
+    header.className =
+      'flex justify-between items-center px-4 py-2 cursor-pointer select-none'
+    header.innerHTML = `<h3 class="text-lg font-medium">${language}</h3><svg class="transition-all duration-200 w-5 h-5 transform rotate-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.293 6.293a1 1 0 0 1 1.414 0L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414z" clip-rule="evenodd"/></svg>`
 
     const panel = document.createElement('div')
-    panel.className = 'h-auto' // 直接展开，不添加折叠功能
+    panel.className =
+      'invisible h-0 transition-transform duration-200 border-t border-gray-300'
 
-    // panelWrapper.appendChild(header) // 不添加header
+    panelWrapper.appendChild(header)
     panelWrapper.appendChild(panel)
     collapseWrapper.appendChild(panelWrapper)
 
     codeBlock.parentNode.insertBefore(collapseWrapper, codeBlock)
     panel.appendChild(codeBlock)
 
-    // 不再需要折叠功能
-    // function collapseCode() {
-    //   panel.classList.toggle('invisible')
-    //   panel.classList.toggle('h-0')
-    //   panel.classList.toggle('h-auto')
-    //   header.querySelector('svg').classList.toggle('rotate-180')
-    //   panelWrapper.classList.toggle('border-gray-300')
-    // }
+    function collapseCode() {
+      panel.classList.toggle('invisible')
+      panel.classList.toggle('h-0')
+      panel.classList.toggle('h-auto')
+      header.querySelector('svg').classList.toggle('rotate-180')
+      panelWrapper.classList.toggle('border-gray-300')
+    }
 
-    // // 点击后折叠展开代码
-    // header.addEventListener('click', collapseCode)
-    // // 是否自动展开
-    // if (codeCollapseExpandDefault) {
-    //   header.click()
-    // }
+    // 点击后折叠展开代码
+    header.addEventListener('click', collapseCode)
+    // 是否自动展开
+    if (codeCollapseExpandDefault) {
+      header.click()
+    }
   }
 }
 
