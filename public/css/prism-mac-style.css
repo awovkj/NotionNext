@@ -253,9 +253,35 @@ pre[class*='language-']::before,
   overflow: hidden !important;
 }
 
-/* 隐藏代码折叠功能的header（语言标签） */
-.collapse-wrapper .flex.justify-between.items-center,
-.collapse-wrapper > div > div.flex {
+/* 强制隐藏代码折叠功能的header（语言标签） - 多重选择器确保生效 */
+.collapse-wrapper .flex.justify-between,
+.collapse-wrapper .flex.items-center,
+.collapse-wrapper .cursor-pointer,
+.collapse-wrapper .select-none,
+.collapse-wrapper > div > div:first-child,
+div.flex.justify-between.items-center.px-4.py-2,
+div.flex.justify-between.items-center h3 {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+/* 隐藏包含语言名称的h3标签 */
+.collapse-wrapper h3.text-lg,
+.collapse-wrapper h3.font-medium,
+h3.text-lg.font-medium {
+  display: none !important;
+}
+
+/* 隐藏折叠箭头SVG */
+.collapse-wrapper svg.rotate-0,
+.collapse-wrapper svg.rotate-180,
+.collapse-wrapper svg.w-5.h-5 {
   display: none !important;
 }
 
@@ -266,9 +292,11 @@ pre[class*='language-']::before,
   height: auto !important;
 }
 
-/* 移除折叠包装器的边框 */
-.collapse-wrapper .border {
+/* 移除折叠包装器的边框和内边距 */
+.collapse-wrapper .border,
+.collapse-wrapper > div {
   border: none !important;
+  padding: 0 !important;
 }
 
 /* 隐藏滚动条 */
