@@ -210,3 +210,61 @@ pre[class*='language-']::before {
 pre[class*='language-']::-webkit-scrollbar {
   display: none;
 }
+
+/* 彻底隐藏白色语言标签框 */
+.code-toolbar::before,
+.code-toolbar::after,
+.code-toolbar > *:not(.toolbar-item),
+.code-toolbar > span:first-child,
+.code-toolbar > div:first-child,
+.code-toolbar .toolbar-item:first-child,
+.code-toolbar .toolbar-item:last-child,
+.toolbar-item:first-child,
+.toolbar-item:last-child,
+div[data-show-language],
+span[data-show-language],
+.toolbar-item span,
+.toolbar-item .toolbar-item,
+.prism-show-language,
+.show-language,
+[data-show-language],
+div[class*="language-label"],
+span[class*="language-label"],
+div[class*="lang-"],
+span[class*="lang-"] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* 隐藏所有可能的语言标识容器 */
+.code-toolbar *:not(.toolbar-item):not(pre):not(code) {
+  display: none !important;
+}
+
+/* 特别针对白色背景的语言标签 */
+div[style*="background-color: white"],
+div[style*="background: white"],
+span[style*="background-color: white"],
+span[style*="background: white"],
+div[style*="background-color: #fff"],
+div[style*="background: #fff"],
+span[style*="background-color: #fff"],
+span[style*="background: #fff"] {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* 隐藏所有伪元素和箭头 */
+*::before,
+*::after {
+  display: none !important;
+}
+
+/* 确保代码块容器没有额外的子元素 */
+.code-toolbar {
+  position: relative;
+}
+
+.code-toolbar > *:not(pre):not(.toolbar-item) {
+  display: none !important;
+}
