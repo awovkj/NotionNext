@@ -61,6 +61,7 @@
   margin: 0 !important;
   display: flex !important;
   align-items: center !important;
+  position: relative !important;
 }
 
 .toolbar-item > button {
@@ -79,6 +80,7 @@
   align-items: center !important;
   justify-content: center !important;
   position: relative !important;
+  overflow: visible !important;
 }
 
 /* 使用CSS创建简洁的复制图标 - 两个叠加的方框 */
@@ -93,6 +95,7 @@
   top: 6px !important;
   left: 6px !important;
   background: transparent !important;
+  transition: all 0.2s ease !important;
 }
 
 .toolbar-item > button::after {
@@ -106,12 +109,46 @@
   position: absolute !important;
   top: 4px !important;
   left: 4px !important;
+  transition: all 0.2s ease !important;
 }
 
 .toolbar-item > button:hover {
   background: rgba(255, 255, 255, 0.08) !important;
   color: #9ca3af !important;
   border-radius: 3px !important;
+}
+
+/* 复制成功后的提示 - Copied */
+.toolbar-item > button[data-copy-state="copy-success"]::before,
+.toolbar-item > button[data-copy-state="copy-success"]::after {
+  opacity: 0 !important;
+}
+
+/* 显示 "Copied" 文字提示 */
+.toolbar-item[data-copy-state="copy-success"] > button,
+.toolbar-item > button[data-copy-state="copy-success"] {
+  font-size: 9px !important;
+  color: #34d399 !important;
+  font-weight: 600 !important;
+  width: auto !important;
+  min-width: 45px !important;
+  padding: 4px 6px !important;
+  background: rgba(52, 211, 153, 0.1) !important;
+  border: 1px solid rgba(52, 211, 153, 0.3) !important;
+}
+
+/* 使用伪元素显示Copied文本 */
+.toolbar-item > button[data-copy-state="copy-success"]::before {
+  content: 'Copied' !important;
+  display: block !important;
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 9px !important;
+  letter-spacing: 0.3px !important;
+  opacity: 1 !important;
 }
 
 /* 完全重置所有代码块相关样式 */
