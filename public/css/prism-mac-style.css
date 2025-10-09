@@ -206,6 +206,29 @@ pre[class*='language-']::before {
   display: none !important;
 }
 
+/* 完全隐藏所有语言标签相关的元素 */
+.code-toolbar::before,
+.code-toolbar::after,
+.toolbar-item:first-child,
+.toolbar-item:last-child,
+div[data-show-language],
+span[data-show-language],
+.toolbar-item span,
+.toolbar-item .toolbar-item,
+.prism-show-language,
+.show-language,
+[data-show-language] {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* 隐藏可能的白色语言标签框 */
+.code-toolbar > *:first-child:not(.toolbar-item),
+.code-toolbar > span:first-child,
+.code-toolbar > div:first-child {
+  display: none !important;
+}
+
 /* 隐藏滚动条 */
 pre[class*='language-']::-webkit-scrollbar {
   display: none;
