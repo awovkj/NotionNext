@@ -253,6 +253,24 @@ pre[class*='language-']::before,
   overflow: hidden !important;
 }
 
+/* 隐藏代码折叠功能的header（语言标签） */
+.collapse-wrapper .flex.justify-between.items-center,
+.collapse-wrapper > div > div.flex {
+  display: none !important;
+}
+
+/* 展开折叠的代码块面板 */
+.collapse-wrapper .invisible,
+.collapse-wrapper .h-0 {
+  visibility: visible !important;
+  height: auto !important;
+}
+
+/* 移除折叠包装器的边框 */
+.collapse-wrapper .border {
+  border: none !important;
+}
+
 /* 隐藏滚动条 */
 pre[class*='language-']::-webkit-scrollbar {
   display: none;
