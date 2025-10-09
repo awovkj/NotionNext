@@ -255,41 +255,85 @@ pre[class*='language-']::before,
   overflow: hidden !important;
 }
 
-/* 优化折叠header样式 - 深色终端风格 */
-.collapse-wrapper > div {
-  background: transparent !important;
-  border: 1px solid #333 !important;
-  border-radius: 8px !important;
+/* 强制隐藏代码折叠功能的header（语言标签） - 使用最强选择器！ */
+.collapse-wrapper .flex,
+.collapse-wrapper .cursor-pointer,
+.collapse-wrapper .select-none,
+.collapse-wrapper > div > div:first-child,
+.collapse-wrapper div.px-4,
+.collapse-wrapper div.py-2,
+div.flex.justify-between,
+div.items-center.px-4,
+div.cursor-pointer.select-none {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  max-height: 0 !important;
   overflow: hidden !important;
-}
-
-.collapse-wrapper .flex.justify-between.items-center {
-  background: #2d2d2d !important;
-  border-bottom: 1px solid #444 !important;
-  padding: 8px 12px !important;
-  transition: all 0.2s ease !important;
-}
-
-.collapse-wrapper .flex.justify-between.items-center:hover {
-  background: #3a3a3a !important;
-}
-
-.collapse-wrapper h3 {
-  color: #e5e7eb !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  pointer-events: none !important;
   margin: 0 !important;
-  font-family: 'SF Mono', Monaco, monospace !important;
+  padding: 0 !important;
 }
 
-.collapse-wrapper svg {
-  color: #9ca3af !important;
-  transition: transform 0.2s ease !important;
+/* 隐藏包含语言名称的h3标签 - 任何位置 */
+.collapse-wrapper h3,
+h3.text-lg,
+h3.font-medium,
+h3.text-lg.font-medium {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
 }
 
-/* 折叠面板边框 */
-.collapse-wrapper .border-t {
-  border-top: 1px solid #444 !important;
+/* 隐藏折叠箭头SVG - 任何位置 */
+.collapse-wrapper svg,
+svg.rotate-0,
+svg.rotate-180,
+svg.w-5.h-5,
+svg.transform {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* 使用属性选择器精确匹配header元素 */
+div[class*="flex"][class*="justify-between"][class*="items-center"],
+div[class*="cursor-pointer"][class*="select-none"][class*="px-4"],
+.collapse-wrapper > div > div[class*="flex"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* 展开折叠的代码块面板 */
+.collapse-wrapper .invisible,
+.collapse-wrapper .h-0 {
+  visibility: visible !important;
+  height: auto !important;
+}
+
+/* 移除折叠包装器的边框和内边距 */
+.collapse-wrapper .border,
+.collapse-wrapper > div {
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* 确保代码块直接可见 */
+.collapse-wrapper .code-toolbar {
+  position: relative !important;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* 隐藏滚动条 */
