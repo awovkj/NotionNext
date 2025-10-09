@@ -30,10 +30,10 @@
   margin-bottom: 0;
 }
 
-/* 复制按钮放到Mac标题栏右上角！*/
+/* 复制按钮放到代码内容区域右上角！*/
 .code-toolbar > .toolbar {
   position: absolute !important;
-  top: 6px !important;
+  top: 40px !important; /* 在Mac标题栏下方 */
   right: 12px !important;
   background: transparent !important;
   border: none !important;
@@ -46,11 +46,6 @@
 
 .code-toolbar:hover > .toolbar {
   opacity: 1 !important;
-}
-
-/* 在折叠模式下，复制按钮左移以避免与折叠按钮重叠 */
-.collapse-wrapper .code-toolbar > .toolbar {
-  right: 50px !important;
 }
 
 /* 显示工具栏按钮 - 悬停时显示 */
