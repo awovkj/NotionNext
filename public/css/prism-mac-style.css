@@ -34,7 +34,7 @@
 .code-toolbar > .toolbar {
   position: absolute !important;
   top: 0 !important;
-  right: 72px !important; /* 调整位置，使其在折叠按钮左侧 */
+  right: 36px !important; /* 调整位置，使其在折叠按钮左侧 */
   height: 32px !important;
   background: transparent !important;
   border: none !important;
