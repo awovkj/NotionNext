@@ -30,34 +30,50 @@
   margin-bottom: 0;
 }
 
-/* 显示工具栏按钮 - 悬停时显示 */
-.toolbar-item {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  position: absolute;
-  top: 8px;
-  right: 40px;
-  z-index: 20;
+/* 完全隐藏toolbar容器 - 将复制按钮放到右上角！*/
+.code-toolbar > .toolbar {
+  position: absolute !important;
+  top: 6px !important;
+  right: 12px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+  z-index: 150 !important; /* 高于pre-mac的z-index */
 }
 
-.code-toolbar:hover .toolbar-item {
-  opacity: 1;
+.code-toolbar:hover > .toolbar {
+  opacity: 1 !important;
+}
+
+/* 显示工具栏按钮 - 悬停时显示 */
+.toolbar-item {
+  opacity: 1 !important;
+  transition: opacity 0.3s ease;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 .toolbar-item > button {
-  background: rgba(42, 42, 42, 0.8);
-  border: 1px solid #555;
-  border-radius: 4px;
-  color: #e5e7eb;
-  padding: 4px 8px;
-  font-size: 12px;
-  margin-left: 4px;
-  transition: all 0.2s ease;
+  background: rgba(70, 70, 70, 0.9) !important;
+  border: 1px solid #666 !important;
+  border-radius: 4px !important;
+  color: #e5e7eb !important;
+  padding: 3px 8px !important;
+  font-size: 11px !important;
+  margin: 0 !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3) !important;
 }
 
 .toolbar-item > button:hover {
-  background: rgba(42, 42, 42, 1);
-  border-color: #777;
+  background: rgba(90, 90, 90, 1) !important;
+  border-color: #888 !important;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4) !important;
 }
 
 /* 完全重置所有代码块相关样式 */
@@ -87,18 +103,20 @@ code[class*='language-'] {
 
 /* 终端标题栏 */
 .pre-mac {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  height: 32px;
-  background: #2d2d2d;
-  border-bottom: 1px solid #444;
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  z-index: 10;
-  border-radius: 8px 8px 0 0;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  height: 32px !important;
+  background: #2d2d2d !important;
+  border-bottom: 1px solid #444 !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 12px !important;
+  z-index: 100 !important;
+  border-radius: 8px 8px 0 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
 }
 
 /* 终端控制按钮 */
@@ -188,22 +206,134 @@ pre[class*='language-'] code .token.punctuation {
 }
 
 /* 隐藏所有不需要的元素 */
-.code-toolbar::before {
-  display: none;
+.code-toolbar::before,
+.code-toolbar::after {
+  display: none !important;
+}
+
+/* 完全重置toolbar容器内所有直接子元素（除了pre和pre-mac） */
+.code-toolbar > *:not(pre):not(.pre-mac) {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.code-toolbar:hover > *:not(pre):not(.pre-mac) {
+  opacity: 1 !important;
 }
 
 /* 隐藏PrismJS show-language插件生成的元素 */
 .code-toolbar .toolbar-item:first-child,
 .code-toolbar .toolbar-item[data-show-language],
 .code-toolbar .toolbar-item .show-language,
-.prism-show-language {
+.prism-show-language,
+[data-show-language] {
   display: none !important;
 }
 
 /* 隐藏语言标签 */
 code[class*='language-']::before,
-pre[class*='language-']::before {
+pre[class*='language-']::before,
+.code-toolbar::before,
+.toolbar::before {
   display: none !important;
+}
+
+/* 强制隐藏所有可能的span和div（语言标签） */
+.code-toolbar > span:not(.pre-mac > span),
+.code-toolbar > div:not(.toolbar):not(.pre-mac) {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+/* 强制隐藏代码折叠功能的header（语言标签） - 使用最强选择器！ */
+.collapse-wrapper .flex,
+.collapse-wrapper .cursor-pointer,
+.collapse-wrapper .select-none,
+.collapse-wrapper > div > div:first-child,
+.collapse-wrapper div.px-4,
+.collapse-wrapper div.py-2,
+div.flex.justify-between,
+div.items-center.px-4,
+div.cursor-pointer.select-none {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 隐藏包含语言名称的h3标签 - 任何位置 */
+.collapse-wrapper h3,
+h3.text-lg,
+h3.font-medium,
+h3.text-lg.font-medium {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+
+/* 隐藏折叠箭头SVG - 任何位置 */
+.collapse-wrapper svg,
+svg.rotate-0,
+svg.rotate-180,
+svg.w-5.h-5,
+svg.transform {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* 使用属性选择器精确匹配header元素 */
+div[class*="flex"][class*="justify-between"][class*="items-center"],
+div[class*="cursor-pointer"][class*="select-none"][class*="px-4"],
+.collapse-wrapper > div > div[class*="flex"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  max-height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+/* 展开折叠的代码块面板 */
+.collapse-wrapper .invisible,
+.collapse-wrapper .h-0 {
+  visibility: visible !important;
+  height: auto !important;
+}
+
+/* 移除折叠包装器的边框和内边距 */
+.collapse-wrapper .border,
+.collapse-wrapper > div {
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* 确保代码块直接可见 */
+.collapse-wrapper .code-toolbar {
+  position: relative !important;
+  display: block !important;
+  visibility: visible !important;
 }
 
 /* 隐藏滚动条 */
