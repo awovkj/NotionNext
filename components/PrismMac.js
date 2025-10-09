@@ -228,7 +228,7 @@ function renderPrismMac(codeLineNumbers) {
   if (codeToolBars) {
     Array.from(codeToolBars).forEach(item => {
       const existPreMac = item.getElementsByClassName('pre-mac')
-      if (existPreMac.length < codeToolBars.length) {
+      if (existPreMac.length === 0) {
         const preMac = document.createElement('div')
         preMac.classList.add('pre-mac')
         preMac.innerHTML = '<span></span><span></span><span></span>'
