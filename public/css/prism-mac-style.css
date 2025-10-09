@@ -206,6 +206,28 @@ pre[class*='language-']::before {
   display: none !important;
 }
 
+/* 强制隐藏所有可能的toolbar子元素（除了pre-mac和复制按钮） */
+.code-toolbar > div:not(.pre-mac),
+.code-toolbar > span:not(.pre-mac) {
+  position: absolute !important;
+  right: 8px !important;
+  top: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  color: transparent !important;
+}
+
+/* 隐藏toolbar的第一个和最后一个span（通常是语言标签） */
+.code-toolbar > span:first-of-type:not(.toolbar-item):not(.pre-mac),
+.code-toolbar > span:last-of-type:not(.toolbar-item):not(.pre-mac),
+.code-toolbar > div:first-of-type:not(.toolbar-item):not(.pre-mac) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 /* 隐藏滚动条 */
 pre[class*='language-']::-webkit-scrollbar {
   display: none;
