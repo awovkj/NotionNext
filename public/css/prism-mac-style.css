@@ -30,7 +30,7 @@
   margin-bottom: 0;
 }
 
-/* 复制按钮 - 在折叠按钮左侧 */
+/* 工具栏容器 - 将复制按钮放在折叠按钮左侧 */
 .code-toolbar > .toolbar {
   position: absolute !important;
   top: 0 !important;
@@ -51,28 +51,16 @@
   opacity: 1 !important;
 }
 
-/* 工具栏按钮 - 终端风格设计 */
-.toolbar-item {
-  opacity: 1 !important;
-  transition: opacity 0.3s ease;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  position: relative !important;
-}
-
+/* Mac风格浅灰图标的复制按钮 */
 .toolbar-item > button {
   background: transparent !important;
   border: none !important;
-  border-radius: 3px !important;
-  color: #6b7280 !important;
+  border-radius: 4px !important;
+  color: #cbd5e1 !important; /* 浅灰图标颜色 */
   padding: 4px !important;
-  font-size: 0 !important; /* 隐藏文字 */
-  width: 20px !important;
-  height: 20px !important;
+  font-size: 0 !important;
+  width: 22px !important;
+  height: 22px !important;
   margin: 0 !important;
   transition: all 0.2s ease !important;
   cursor: pointer !important;
@@ -80,52 +68,48 @@
   align-items: center !important;
   justify-content: center !important;
   position: relative !important;
-  overflow: visible !important;
 }
 
-/* 使用CSS创建简洁的复制图标 - 两个叠加的方框 */
+/* 双文件夹图标样式 */
 .toolbar-item > button::before {
   content: '' !important;
-  display: block !important;
-  width: 10px !important;
-  height: 10px !important;
-  border: 1.5px solid currentColor !important;
-  border-radius: 1px !important;
   position: absolute !important;
-  top: 6px !important;
+  width: 10px !important;
+  height: 12px !important;
+  border: 1.5px solid currentColor !important;
+  border-radius: 2px !important;
+  top: 4px !important;
   left: 6px !important;
   background: transparent !important;
-  transition: all 0.2s ease !important;
+  box-sizing: border-box !important;
+  transform: translate(2px, 2px);
 }
 
 .toolbar-item > button::after {
   content: '' !important;
-  display: block !important;
-  width: 10px !important;
-  height: 10px !important;
-  border: 1.5px solid currentColor !important;
-  border-radius: 1px !important;
-  background: #2d2d2d !important;
   position: absolute !important;
-  top: 4px !important;
+  width: 10px !important;
+  height: 12px !important;
+  border: 1.5px solid currentColor !important;
+  border-radius: 2px !important;
+  top: 2px !important;
   left: 4px !important;
-  transition: all 0.2s ease !important;
+  background: transparent !important;
+  box-sizing: border-box !important;
 }
 
+/* 悬停时高亮 */
 .toolbar-item > button:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #9ca3af !important;
-  border-radius: 3px !important;
+  color: #e5e7eb !important;
+  background: rgba(255,255,255,0.05) !important;
 }
 
-/* 复制成功后的提示 - Copied! */
+/* 复制成功状态 */
 .toolbar-item > button[data-copy-state="copy-success"]::before,
 .toolbar-item > button[data-copy-state="copy-success"]::after {
-  opacity: 0 !important;
+  display: none !important;
 }
 
-/* 显示 "Copied!" 文字提示 */
-.toolbar-item[data-copy-state="copy-success"] > button,
 .toolbar-item > button[data-copy-state="copy-success"] {
   font-size: 9px !important;
   color: #34d399 !important;
@@ -138,7 +122,6 @@
   animation: copiedFade 1s ease-out forwards !important;
 }
 
-/* 使用伪元素显示 Copied! 文本 */
 .toolbar-item > button[data-copy-state="copy-success"]::before {
   content: 'Copied!' !important;
   display: block !important;
@@ -168,7 +151,7 @@
   }
 }
 
-/* 完全重置所有代码块相关样式 */
+/* 完全重置所有代码块样式 */
 .notion .notion-code,
 .notion-code,
 pre[class*='language-'],
@@ -183,17 +166,7 @@ code[class*='language-'] {
   position: relative;
 }
 
-/* 特别处理原始的notion-code容器 */
-.notion-code {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-/* 终端标题栏 */
+/* Mac终端标题栏 */
 .pre-mac {
   position: absolute !important;
   left: 0 !important;
@@ -211,7 +184,7 @@ code[class*='language-'] {
   box-sizing: border-box !important;
 }
 
-/* 终端控制按钮 */
+/* Mac终端三个圆点 */
 .pre-mac > span {
   width: 12px;
   height: 12px;
@@ -223,50 +196,43 @@ code[class*='language-'] {
 .pre-mac > span:nth-child(1) {
   background: #ff5f57;
 }
-
 .pre-mac > span:nth-child(2) {
   background: #ffbd2e;
 }
-
 .pre-mac > span:nth-child(3) {
   background: #28ca42;
 }
 
-/* 去掉标题文字 */
-.pre-mac::after {
-  display: none;
-}
-
-/* 响应式设计 */
+/* 响应式 */
 @media (max-width: 768px) {
   .code-toolbar {
     border-radius: 8px;
     margin-bottom: 0.75rem;
   }
-  
+
   pre[class*='language-'] {
     border-radius: 0 0 8px 8px;
     padding-top: 2rem !important;
   }
-  
+
   .pre-mac {
     height: 2rem;
     padding: 0 0.75rem;
     border-radius: 8px 8px 0 0;
   }
-  
+
   .pre-mac > span {
     width: 10px;
     height: 10px;
     margin-right: 6px;
   }
-  
+
   .pre-mac::after {
     font-size: 12px;
   }
 }
 
-/* 终端代码内容 */
+/* 代码内容 */
 pre[class*='language-'] > code {
   padding: 12px 16px !important;
   padding-top: 32px !important;
@@ -280,87 +246,18 @@ pre[class*='language-'] > code {
   border: none !important;
 }
 
-/* 简化终端风格语法高亮 */
-pre[class*='language-'] code .token {
-  color: #e5e7eb !important;
-}
-
+/* 简化高亮颜色 */
 pre[class*='language-'] code .token.function {
   color: #f472b6 !important;
 }
-
 pre[class*='language-'] code .token.string {
   color: #34d399 !important;
 }
-
 pre[class*='language-'] code .token.punctuation {
   color: #f472b6 !important;
 }
 
-/* 隐藏所有不需要的元素 */
-.code-toolbar::before,
-.code-toolbar::after {
-  display: none !important;
-}
-
-/* 完全重置toolbar容器内所有直接子元素（除了pre和pre-mac） */
-.code-toolbar > *:not(pre):not(.pre-mac) {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  opacity: 0 !important;
-  transition: opacity 0.3s ease !important;
-}
-
-.code-toolbar:hover > *:not(pre):not(.pre-mac) {
-  opacity: 1 !important;
-}
-
-/* 隐藏PrismJS show-language插件生成的元素 */
-.code-toolbar .toolbar-item:first-child,
-.code-toolbar .toolbar-item[data-show-language],
-.code-toolbar .toolbar-item .show-language,
-.prism-show-language,
-[data-show-language] {
-  display: none !important;
-}
-
-/* 隐藏语言标签 */
-code[class*='language-']::before,
-pre[class*='language-']::before,
-.code-toolbar::before,
-.toolbar::before {
-  display: none !important;
-}
-
-/* 强制隐藏所有可能的span和div（语言标签） */
-.code-toolbar > span:not(.pre-mac > span),
-.code-toolbar > div:not(.toolbar):not(.pre-mac) {
-  display: none !important;
-  visibility: hidden !important;
-  width: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
-}
-
-/* 折叠样式 - 折叠按钮在Mac标题栏右端 */
-.collapse-wrapper {
-  position: relative !important;
-}
-
-.collapse-wrapper > div {
-  background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  overflow: visible !important;
-  position: relative !important;
-}
-
-/* 将折叠header放到Mac标题栏内 */
+/* 折叠按钮样式 */
 .collapse-wrapper .flex.justify-between.items-center {
   position: absolute !important;
   top: 0 !important;
@@ -384,7 +281,6 @@ pre[class*='language-']::before,
   border-radius: 4px !important;
 }
 
-/* 隐藏语言标签文字，只显示箭头 */
 .collapse-wrapper h3 {
   display: none !important;
 }
@@ -400,25 +296,9 @@ pre[class*='language-']::before,
   flex-shrink: 0 !important;
 }
 
-/* 折叠面板 - 移除上边框 */
-.collapse-wrapper .border-t {
-  border-top: none !important;
-}
-
-/* 代码块在折叠面板内 */
-.collapse-wrapper .code-toolbar {
-  position: relative !important;
-  margin: 0 !important;
-  border: none !important;
-}
-
-/* Mac标题栏在折叠模式下 - 给折叠按钮留出空间 */
+/* Mac标题栏在折叠模式下留空间 */
 .collapse-wrapper .pre-mac {
   padding-right: 50px !important;
-}
-
-.collapse-wrapper .pre-mac > span {
-  pointer-events: auto !important;
 }
 
 /* 隐藏滚动条 */
