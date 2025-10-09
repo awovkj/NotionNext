@@ -8,8 +8,8 @@ const CONFIG = {
 
   // 首页顶部通知条滚动内容，如不需要可以留空 []
   HEO_NOTICE_BAR: [
-    { title: '𝓦𝓮𝓵𝓬𝓸𝓶𝓮 𝓽𝓸 𝓶𝔂 𝓑𝓵𝓸𝓰', url: 'https://blog.tangly1024.com' },
-    { title: '再多一眼看一眼就会爆炸~', url: 'https://docs.tangly1024.com' }
+    { title: '𝓦𝓮𝓵𝓬𝓸𝓶𝓮 𝓽𝓸 𝓶𝔂 𝓑𝓵𝓸𝓰', url: '' },
+    { title: '再多一眼看一眼就会爆炸~', url: '' }
   ],
 
   // 英雄区左右侧组件颠倒位置
@@ -23,7 +23,7 @@ const CONFIG = {
   HEO_HERO_TITLE_3: '相逢何必曾相识',
   HEO_HERO_TITLE_4: 'hhh~',
   HEO_HERO_TITLE_5: '再近一点靠近点快被融化~',
-  HEO_HERO_TITLE_LINK: 'https://tangly1024.com',
+  HEO_HERO_TITLE_LINK: '',
   // 英雄区遮罩文字
   HEO_HERO_COVER_TITLE: '让我看看!!!',
 
@@ -116,7 +116,7 @@ const CONFIG = {
     }
   ],
 
-  HEO_SOCIAL_CARD: true, // 是否显示右侧，点击加入社群按钮
+  HEO_SOCIAL_CARD: false, // 是否显示右侧，点击加入社群按钮
   HEO_SOCIAL_CARD_TITLE_1: '交流频道',
   HEO_SOCIAL_CARD_TITLE_2: '加入我们的社群讨论分享',
   HEO_SOCIAL_CARD_TITLE_3: '点击加入社群',
