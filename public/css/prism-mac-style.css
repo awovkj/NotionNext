@@ -421,3 +421,74 @@ pre[class*='language-']::before,
 pre[class*='language-']::-webkit-scrollbar {
   display: none;
 }
+/* ─── 美化代码语法高亮 ─── */
+pre[class*='language-'] code .token.comment,
+pre[class*='language-'] code .token.prolog,
+pre[class*='language-'] code .token.doctype,
+pre[class*='language-'] code .token.cdata {
+  color: #546e7a !important; /* 灰蓝，注释 */
+  font-style: italic !important;
+}
+
+pre[class*='language-'] code .token.punctuation {
+  color: #ff9cac !important; /* 粉色标点符号 */
+}
+
+pre[class*='language-'] code .token.namespace {
+  opacity: 0.7 !important;
+}
+
+pre[class*='language-'] code .token.property,
+pre[class*='language-'] code .token.tag,
+pre[class*='language-'] code .token.constant,
+pre[class*='language-'] code .token.symbol,
+pre[class*='language-'] code .token.deleted {
+  color: #82aaff !important; /* 蓝色属性/标签 */
+}
+
+pre[class*='language-'] code .token.boolean,
+pre[class*='language-'] code .token.number {
+  color: #f78c6c !important; /* 橙色数字/布尔值 */
+}
+
+pre[class*='language-'] code .token.selector,
+pre[class*='language-'] code .token.attr-name,
+pre[class*='language-'] code .token.string,
+pre[class*='language-'] code .token.char,
+pre[class*='language-'] code .token.builtin,
+pre[class*='language-'] code .token.inserted {
+  color: #c3e88d !important; /* 绿色字符串 */
+}
+
+pre[class*='language-'] code .token.operator,
+pre[class*='language-'] code .token.entity,
+pre[class*='language-'] code .token.url,
+pre[class*='language-'] code .token.variable {
+  color: #ff9cac !important; /* 粉红操作符 */
+}
+
+pre[class*='language-'] code .token.atrule,
+pre[class*='language-'] code .token.attr-value,
+pre[class*='language-'] code .token.keyword {
+  color: #c792ea !important; /* 紫色关键字 */
+}
+
+pre[class*='language-'] code .token.function {
+  color: #f78c6c !important; /* 橙粉函数名 */
+}
+
+pre[class*='language-'] code .token.class-name {
+  color: #89ddff !important; /* 青蓝类名 */
+}
+
+pre[class*='language-'] code .token.regex,
+pre[class*='language-'] code .token.important {
+  color: #ff5370 !important;
+}
+
+pre[class*='language-'] code .token.bold {
+  font-weight: bold !important;
+}
+pre[class*='language-'] code .token.italic {
+  font-style: italic !important;
+}
