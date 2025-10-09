@@ -261,11 +261,16 @@ pre[class*='language-']::before,
 }
 
 /* 优化折叠样式 - 将header移到Mac标题栏右侧 */
+.collapse-wrapper {
+  position: relative !important;
+}
+
 .collapse-wrapper > div {
   background: transparent !important;
   border: none !important;
   border-radius: 0 !important;
   overflow: visible !important;
+  position: relative !important;
 }
 
 /* 将折叠header放到Mac标题栏的右侧 */
@@ -273,7 +278,6 @@ pre[class*='language-']::before,
   position: absolute !important;
   top: 0 !important;
   right: 0 !important;
-  left: auto !important;
   height: 32px !important;
   background: transparent !important;
   border: none !important;
@@ -281,9 +285,11 @@ pre[class*='language-']::before,
   z-index: 110 !important;
   cursor: pointer !important;
   display: flex !important;
+  justify-content: flex-end !important;
   align-items: center !important;
   gap: 8px !important;
   transition: all 0.2s ease !important;
+  border-radius: 0 8px 0 0 !important;
 }
 
 .collapse-wrapper .flex.justify-between.items-center:hover {
@@ -298,6 +304,9 @@ pre[class*='language-']::before,
   font-family: 'SF Mono', Monaco, monospace !important;
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .collapse-wrapper svg {
@@ -305,6 +314,9 @@ pre[class*='language-']::before,
   width: 16px !important;
   height: 16px !important;
   transition: transform 0.2s ease !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* 折叠面板 - 移除上边框 */
@@ -315,10 +327,12 @@ pre[class*='language-']::before,
 /* 确保代码块的pre-mac与折叠header不冲突 */
 .collapse-wrapper .code-toolbar {
   position: relative !important;
+  margin-top: 0 !important;
 }
 
 .collapse-wrapper .pre-mac {
   pointer-events: none !important;
+  padding-right: 140px !important; /* 给折叠按钮留出空间 */
 }
 
 .collapse-wrapper .pre-mac > span {
