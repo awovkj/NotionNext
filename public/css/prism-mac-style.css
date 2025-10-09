@@ -206,62 +206,6 @@ pre[class*='language-']::before {
   display: none !important;
 }
 
-/* 完全隐藏所有语言标签相关的元素 */
-.code-toolbar::before,
-.code-toolbar::after,
-.toolbar-item:first-child,
-.toolbar-item:last-child,
-div[data-show-language],
-span[data-show-language],
-.toolbar-item span,
-.toolbar-item .toolbar-item,
-.prism-show-language,
-.show-language,
-[data-show-language] {
-  display: none !important;
-  visibility: hidden !important;
-}
-
-/* 隐藏可能的白色语言标签框 */
-.code-toolbar > *:first-child:not(.toolbar-item),
-.code-toolbar > span:first-child,
-.code-toolbar > div:first-child {
-  display: none !important;
-}
-
-/* 彻底隐藏白色语言标签框 - 针对所有可能的容器 */
-.code-toolbar,
-.toolbar-item,
-div[class*="language"],
-span[class*="language"],
-div[data-language],
-span[data-language] {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* 隐藏所有可能显示语言名称的元素 */
-.code-toolbar *:not(.toolbar-item) {
-  display: none !important;
-}
-
-/* 特别针对白色背景的语言标签 */
-div[style*="background"]:has(span),
-span[style*="background"],
-div[class*="label"]:has(span),
-span[class*="label"] {
-  display: none !important;
-  background: transparent !important;
-}
-
-/* 隐藏所有包含向上箭头的元素 */
-span:has(::after),
-div:has(::after),
-*::after {
-  display: none !important;
-}
-
 /* 隐藏滚动条 */
 pre[class*='language-']::-webkit-scrollbar {
   display: none;
