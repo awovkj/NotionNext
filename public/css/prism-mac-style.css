@@ -34,7 +34,7 @@
 .code-toolbar > .toolbar {
   position: absolute !important;
   top: 0 !important;
-  right: 38px !important; /* 与折叠按钮适当分开 */
+  right: 45px !important; /* 与折叠按钮适当分开 */
   height: 32px !important;
   background: transparent !important;
   border: none !important;
