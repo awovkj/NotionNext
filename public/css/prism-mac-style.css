@@ -35,8 +35,8 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   position: absolute;
-  top: 8px;
-  right: 40px;
+  top: 6px;
+  right: 8px;
   z-index: 20;
 }
 
@@ -45,19 +45,20 @@
 }
 
 .toolbar-item > button {
-  background: rgba(42, 42, 42, 0.8);
+  background: rgba(42, 42, 42, 0.9);
   border: 1px solid #555;
   border-radius: 4px;
   color: #e5e7eb;
-  padding: 4px 8px;
-  font-size: 12px;
-  margin-left: 4px;
+  padding: 4px 10px;
+  font-size: 11px;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 .toolbar-item > button:hover {
-  background: rgba(42, 42, 42, 1);
-  border-color: #777;
+  background: rgba(60, 60, 60, 1);
+  border-color: #888;
+  color: #fff;
 }
 
 /* 完全重置所有代码块相关样式 */
@@ -192,17 +193,25 @@ pre[class*='language-'] code .token.punctuation {
   display: none;
 }
 
-/* 隐藏PrismJS show-language插件生成的元素 */
+/* 隐藏PrismJS show-language插件生成的所有语言标签元素 */
 .code-toolbar .toolbar-item:first-child,
 .code-toolbar .toolbar-item[data-show-language],
 .code-toolbar .toolbar-item .show-language,
-.prism-show-language {
+.prism-show-language,
+.toolbar .toolbar-item:not(:last-child) {
   display: none !important;
 }
 
 /* 隐藏语言标签 */
 code[class*='language-']::before,
-pre[class*='language-']::before {
+pre[class*='language-']::before,
+.code-toolbar::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* 隐藏任何可能显示语言的标签 */
+[class*='language-']:not(code):not(pre)::before {
   display: none !important;
 }
 

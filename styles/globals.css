@@ -129,6 +129,20 @@ nav {
   pointer-events: none;
 }
 
+/* 隐藏所有代码块语言标签 */
+.toolbar .toolbar-item:first-child,
+div[class*='show-language'],
+span[class*='show-language'] {
+  display: none !important;
+}
+
+/* 优化复制按钮样式 */
+.toolbar-item button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .fireworks {
   position: fixed;
   left: 0;
