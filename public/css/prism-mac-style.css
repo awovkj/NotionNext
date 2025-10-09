@@ -30,27 +30,22 @@
   margin-bottom: 0;
 }
 
-/* 完全隐藏toolbar容器 - 将复制按钮放到折叠按钮右侧！*/
+/* 复制按钮放到Mac标题栏右上角！*/
 .code-toolbar > .toolbar {
   position: absolute !important;
   top: 6px !important;
-  right: 100px !important; /* 给折叠按钮留出空间 */
+  right: 12px !important;
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
   margin: 0 !important;
   opacity: 0 !important;
   transition: opacity 0.3s ease !important;
-  z-index: 120 !important; /* 在pre-mac和折叠header之间 */
+  z-index: 150 !important; /* 高于所有元素 */
 }
 
 .code-toolbar:hover > .toolbar {
   opacity: 1 !important;
-}
-
-/* 在折叠模式下，调整复制按钮位置 */
-.collapse-wrapper .code-toolbar > .toolbar {
-  right: 120px !important; /* 折叠模式下需要更多空间 */
 }
 
 /* 显示工具栏按钮 - 悬停时显示 */
@@ -260,45 +255,43 @@ pre[class*='language-']::before,
   overflow: hidden !important;
 }
 
-/* 优化折叠样式 - 将header移到Mac标题栏右侧 */
+/* 折叠样式 - 折叠按钮在代码块上方独立一行 */
 .collapse-wrapper {
   position: relative !important;
 }
 
 .collapse-wrapper > div {
   background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  overflow: visible !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
   position: relative !important;
 }
 
-/* 将折叠header放到Mac标题栏的右侧 */
+/* 折叠header - 在代码块上方独立一行 */
 .collapse-wrapper .flex.justify-between.items-center {
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-  height: 32px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 12px !important;
-  z-index: 110 !important;
+  position: relative !important;
+  width: 100% !important;
+  height: auto !important;
+  background: #2d2d2d !important;
+  border-bottom: 1px solid #444 !important;
+  padding: 8px 12px !important;
+  z-index: 10 !important;
   cursor: pointer !important;
   display: flex !important;
-  justify-content: flex-end !important;
+  justify-content: space-between !important;
   align-items: center !important;
-  gap: 8px !important;
   transition: all 0.2s ease !important;
-  border-radius: 0 8px 0 0 !important;
+  border-radius: 8px 8px 0 0 !important;
 }
 
 .collapse-wrapper .flex.justify-between.items-center:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
+  background: #3a3a3a !important;
 }
 
 .collapse-wrapper h3 {
-  color: #9ca3af !important;
-  font-size: 12px !important;
+  color: #e5e7eb !important;
+  font-size: 13px !important;
   font-weight: 500 !important;
   margin: 0 !important;
   font-family: 'SF Mono', Monaco, monospace !important;
@@ -311,12 +304,13 @@ pre[class*='language-']::before,
 
 .collapse-wrapper svg {
   color: #9ca3af !important;
-  width: 16px !important;
-  height: 16px !important;
+  width: 18px !important;
+  height: 18px !important;
   transition: transform 0.2s ease !important;
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
+  flex-shrink: 0 !important;
 }
 
 /* 折叠面板 - 移除上边框 */
@@ -324,15 +318,18 @@ pre[class*='language-']::before,
   border-top: none !important;
 }
 
-/* 确保代码块的pre-mac与折叠header不冲突 */
+/* 代码块在折叠面板内 */
 .collapse-wrapper .code-toolbar {
   position: relative !important;
-  margin-top: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 0 8px 8px !important;
+  border: none !important;
 }
 
+/* Mac标题栏在折叠模式下的样式 */
 .collapse-wrapper .pre-mac {
-  pointer-events: none !important;
-  padding-right: 140px !important; /* 给折叠按钮留出空间 */
+  border-radius: 0 !important;
+  border-bottom: 1px solid #444 !important;
 }
 
 .collapse-wrapper .pre-mac > span {
