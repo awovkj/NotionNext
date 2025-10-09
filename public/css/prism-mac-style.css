@@ -30,11 +30,11 @@
   margin-bottom: 0;
 }
 
-/* 复制按钮 - 终端风格图标，与折叠按钮适当分开 */
+/* 复制按钮 - 在折叠按钮左侧 */
 .code-toolbar > .toolbar {
   position: absolute !important;
   top: 0 !important;
-  right: 38px !important; /* 与折叠按钮适当分开 */
+  right: 72px !important; /* 调整位置，使其在折叠按钮左侧 */
   height: 32px !important;
   background: transparent !important;
   border: none !important;
@@ -118,28 +118,29 @@
   border-radius: 3px !important;
 }
 
-/* 复制成功后的提示 - Copied */
+/* 复制成功后的提示 - Copied! */
 .toolbar-item > button[data-copy-state="copy-success"]::before,
 .toolbar-item > button[data-copy-state="copy-success"]::after {
   opacity: 0 !important;
 }
 
-/* 显示 "Copied" 文字提示 */
+/* 显示 "Copied!" 文字提示 */
 .toolbar-item[data-copy-state="copy-success"] > button,
 .toolbar-item > button[data-copy-state="copy-success"] {
   font-size: 9px !important;
   color: #34d399 !important;
   font-weight: 600 !important;
   width: auto !important;
-  min-width: 45px !important;
+  min-width: 48px !important;
   padding: 4px 6px !important;
   background: rgba(52, 211, 153, 0.1) !important;
   border: 1px solid rgba(52, 211, 153, 0.3) !important;
+  animation: copiedFade 1s ease-out forwards !important;
 }
 
-/* 使用伪元素显示Copied文本 */
+/* 使用伪元素显示 Copied! 文本 */
 .toolbar-item > button[data-copy-state="copy-success"]::before {
-  content: 'Copied' !important;
+  content: 'Copied!' !important;
   display: block !important;
   position: static !important;
   width: auto !important;
@@ -149,6 +150,22 @@
   font-size: 9px !important;
   letter-spacing: 0.3px !important;
   opacity: 1 !important;
+}
+
+/* 复制成功动画 */
+@keyframes copiedFade {
+  0% {
+    background: rgba(52, 211, 153, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    background: rgba(52, 211, 153, 0.15);
+    transform: scale(1.1);
+  }
+  100% {
+    background: transparent;
+    transform: scale(1);
+  }
 }
 
 /* 完全重置所有代码块相关样式 */
