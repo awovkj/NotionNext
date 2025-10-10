@@ -150,7 +150,7 @@ const CONFIG = {
   HEO_ARTICLE_RECOMMEND: true, // 文章关联推荐
 
   HEO_WIDGET_LATEST_POSTS: true, // 显示最新文章卡
-  HEO_WIDGET_ANALYTICS: false, // 显示统计卡
+  HEO_WIDGET_ANALYTICS: true, // 显示统计卡
   HEO_WIDGET_TO_TOP: true,
   HEO_WIDGET_TO_COMMENT: true, // 跳到评论区
   HEO_WIDGET_DARK_MODE: true, // 夜间模式
