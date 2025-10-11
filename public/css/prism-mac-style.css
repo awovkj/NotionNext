@@ -1,159 +1,20 @@
 /**
  * @author https://github.com/txs
  * 当配置文件 CODE_MAC_BAR 开启时，此样式会被动态引入，将开启代码组件左上角的mac图标
- * 美化版本 - 更加精致的Mac风格设计
+ * 优化版本 - 精简高效的Mac风格设计
  **/
 
-/* 完全隐藏原始的notion-code样式 */
+/* ==================== 基础重置 ==================== */
 .notion-code {
   background: transparent !important;
   border: none !important;
   padding: 0 !important;
   margin: 0 !important;
   border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
-/* 终端风格代码工具栏 */
-.code-toolbar {
-  position: relative;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  background: #1a1a1a;
-  border: 1px solid #333;
-  overflow: hidden;
-}
-
-.collapse-wrapper .code-toolbar {
-  margin-bottom: 0;
-}
-
-/* 复制按钮 - 终端风格图标，与折叠按钮适当分开 */
-.code-toolbar > .toolbar {
-  position: absolute !important;
-  top: 0 !important;
-  right: 38px !important; /* 与折叠按钮适当分开 */
-  height: 32px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 4px !important;
-  margin: 0 !important;
-  opacity: 0.7 !important;
-  transition: opacity 0.3s ease !important;
-  z-index: 110 !important;
-  display: flex !important;
-  align-items: center !important;
-}
-
-.code-toolbar:hover > .toolbar {
-  opacity: 1 !important;
-}
-
-/* 工具栏按钮 - 终端风格设计 */
-.toolbar-item {
-  opacity: 1 !important;
-  transition: opacity 0.3s ease;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  position: relative !important;
-}
-
-.toolbar-item > button {
-  background: transparent !important;
-  border: none !important;
-  border-radius: 3px !important;
-  color: #6b7280 !important;
-  padding: 4px !important;
-  font-size: 0 !important; /* 隐藏文字 */
-  width: 20px !important;
-  height: 20px !important;
-  margin: 0 !important;
-  transition: all 0.2s ease !important;
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
-  overflow: visible !important;
-}
-
-/* 使用CSS创建简洁的复制图标 - 两个叠加的方框 */
-.toolbar-item > button::before {
-  content: '' !important;
-  display: block !important;
-  width: 10px !important;
-  height: 10px !important;
-  border: 1.5px solid currentColor !important;
-  border-radius: 1px !important;
-  position: absolute !important;
-  top: 6px !important;
-  left: 6px !important;
-  background: transparent !important;
-  transition: all 0.2s ease !important;
-}
-
-.toolbar-item > button::after {
-  content: '' !important;
-  display: block !important;
-  width: 10px !important;
-  height: 10px !important;
-  border: 1.5px solid currentColor !important;
-  border-radius: 1px !important;
-  background: #2d2d2d !important;
-  position: absolute !important;
-  top: 4px !important;
-  left: 4px !important;
-  transition: all 0.2s ease !important;
-}
-
-.toolbar-item > button:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #9ca3af !important;
-  border-radius: 3px !important;
-}
-
-/* 复制成功后的提示 - Copied */
-.toolbar-item > button[data-copy-state="copy-success"]::before,
-.toolbar-item > button[data-copy-state="copy-success"]::after {
-  opacity: 0 !important;
-}
-
-/* 显示 "Copied" 文字提示 */
-.toolbar-item[data-copy-state="copy-success"] > button,
-.toolbar-item > button[data-copy-state="copy-success"] {
-  font-size: 9px !important;
-  color: #34d399 !important;
-  font-weight: 600 !important;
-  width: auto !important;
-  min-width: 45px !important;
-  padding: 4px 6px !important;
-  background: rgba(52, 211, 153, 0.1) !important;
-  border: 1px solid rgba(52, 211, 153, 0.3) !important;
-}
-
-/* 使用伪元素显示Copied文本 */
-.toolbar-item > button[data-copy-state="copy-success"]::before {
-  content: 'Copied' !important;
-  display: block !important;
-  position: static !important;
-  width: auto !important;
-  height: auto !important;
-  border: none !important;
-  background: transparent !important;
-  font-size: 9px !important;
-  letter-spacing: 0.3px !important;
-  opacity: 1 !important;
-}
-
-/* 完全重置所有代码块相关样式 */
 .notion .notion-code,
-.notion-code,
 pre[class*='language-'],
 code[class*='language-'] {
   margin: 0 !important;
@@ -166,61 +27,247 @@ code[class*='language-'] {
   position: relative;
 }
 
-/* 特别处理原始的notion-code容器 */
-.notion-code {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+/* ==================== 代码工具栏 ==================== */
+.code-toolbar {
+  position: relative;
+  padding: 0;
+  margin: 0 0 1rem;
+  width: 100%;
+  border-radius: 8px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  overflow: hidden;
 }
 
-/* 终端标题栏 */
+.collapse-wrapper .code-toolbar {
+  margin-bottom: 0;
+  border: none;
+}
+
+/* 隐藏不需要的元素 */
+.code-toolbar::before,
+.code-toolbar::after,
+code[class*='language-']::before,
+pre[class*='language-']::before,
+.toolbar::before {
+  display: none !important;
+}
+
+.code-toolbar > span:not(.pre-mac > span),
+.code-toolbar > div:not(.toolbar):not(.pre-mac) {
+  display: none !important;
+}
+
+/* ==================== Mac标题栏 ==================== */
 .pre-mac {
-  position: absolute !important;
-  left: 0 !important;
-  top: 0 !important;
-  right: 0 !important;
-  height: 32px !important;
-  background: #2d2d2d !important;
-  border-bottom: 1px solid #444 !important;
-  display: flex !important;
-  align-items: center !important;
-  padding: 0 12px !important;
-  z-index: 100 !important;
-  border-radius: 8px 8px 0 0 !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 32px;
+  background: #2d2d2d;
+  border-bottom: 1px solid #444;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  margin: 0;
+  box-sizing: border-box;
+  z-index: 100;
 }
 
-/* 终端控制按钮 */
 .pre-mac > span {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   margin-right: 8px;
-  float: left;
+  flex-shrink: 0;
 }
 
-.pre-mac > span:nth-child(1) {
-  background: #ff5f57;
+.pre-mac > span:nth-child(1) { background: #ff5f57; }
+.pre-mac > span:nth-child(2) { background: #ffbd2e; }
+.pre-mac > span:nth-child(3) { background: #28ca42; }
+
+.collapse-wrapper .pre-mac {
+  padding-right: 50px;
 }
 
-.pre-mac > span:nth-child(2) {
-  background: #ffbd2e;
+.collapse-wrapper .pre-mac > span {
+  pointer-events: auto;
 }
 
-.pre-mac > span:nth-child(3) {
-  background: #28ca42;
+/* ==================== 复制按钮 ==================== */
+.code-toolbar > .toolbar {
+  position: absolute;
+  top: 0;
+  right: 38px;
+  height: 32px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  z-index: 110;
 }
 
-/* 去掉标题文字 */
-.pre-mac::after {
+.code-toolbar:hover > .toolbar {
+  opacity: 1;
+}
+
+.toolbar-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.toolbar-item > button {
+  width: 20px;
+  height: 20px;
+  padding: 4px;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: #6b7280;
+  font-size: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.toolbar-item > button::before,
+.toolbar-item > button::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid currentColor;
+  border-radius: 1px;
+  position: absolute;
+  transition: all 0.2s ease;
+}
+
+.toolbar-item > button::before {
+  top: 6px;
+  left: 6px;
+  background: transparent;
+}
+
+.toolbar-item > button::after {
+  top: 4px;
+  left: 4px;
+  background: #2d2d2d;
+}
+
+.toolbar-item > button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #9ca3af;
+}
+
+/* 复制成功提示 */
+.toolbar-item > button[data-copy-state="copy-success"] {
+  width: auto;
+  min-width: 45px;
+  padding: 4px 6px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+}
+
+.toolbar-item > button[data-copy-state="copy-success"]::before {
+  content: 'Copied';
+  position: static;
+  width: auto;
+  height: auto;
+  border: none;
+  background: transparent;
+  font-size: 9px;
+  letter-spacing: 0.3px;
+  opacity: 1;
+}
+
+.toolbar-item > button[data-copy-state="copy-success"]::after {
   display: none;
 }
 
-/* 响应式设计 */
+/* ==================== 折叠功能 ==================== */
+.collapse-wrapper {
+  position: relative;
+}
+
+.collapse-wrapper > div {
+  background: transparent;
+  border: none;
+  overflow: visible;
+  position: relative;
+}
+
+.collapse-wrapper .flex.justify-between.items-center {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 32px;
+  padding: 0 12px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 105;
+  transition: background 0.2s ease;
+}
+
+.collapse-wrapper .flex.justify-between.items-center:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+.collapse-wrapper h3 {
+  display: none;
+}
+
+.collapse-wrapper svg {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.collapse-wrapper .border-t {
+  border-top: none;
+}
+
+/* ==================== 代码内容 ==================== */
+pre[class*='language-'] > code {
+  padding: 12px 16px;
+  padding-top: 32px;
+  line-height: 1.4;
+  font-size: 14px;
+  background: transparent;
+  color: #e5e7eb;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  display: block;
+  margin: 0;
+  border: none;
+}
+
+/* 语法高亮 */
+pre[class*='language-'] code .token { color: #e5e7eb; }
+pre[class*='language-'] code .token.function { color: #f472b6; }
+pre[class*='language-'] code .token.string { color: #34d399; }
+pre[class*='language-'] code .token.punctuation { color: #f472b6; }
+
+/* 隐藏滚动条 */
+pre[class*='language-']::-webkit-scrollbar {
+  display: none;
+}
+
+/* ==================== 响应式设计 ==================== */
 @media (max-width: 768px) {
   .code-toolbar {
     border-radius: 8px;
@@ -243,168 +290,13 @@ code[class*='language-'] {
     height: 10px;
     margin-right: 6px;
   }
-  
-  .pre-mac::after {
-    font-size: 12px;
-  }
 }
 
-/* 终端代码内容 */
-pre[class*='language-'] > code {
-  padding: 12px 16px !important;
-  padding-top: 32px !important;
-  line-height: 1.4;
-  font-size: 14px;
-  background: transparent !important;
-  color: #e5e7eb !important;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
-  display: block !important;
-  margin: 0 !important;
-  border: none !important;
-}
-
-/* 简化终端风格语法高亮 */
-pre[class*='language-'] code .token {
-  color: #e5e7eb !important;
-}
-
-pre[class*='language-'] code .token.function {
-  color: #f472b6 !important;
-}
-
-pre[class*='language-'] code .token.string {
-  color: #34d399 !important;
-}
-
-pre[class*='language-'] code .token.punctuation {
-  color: #f472b6 !important;
-}
-
-/* 隐藏所有不需要的元素 */
-.code-toolbar::before,
-.code-toolbar::after {
-  display: none !important;
-}
-
-/* 完全重置toolbar容器内所有直接子元素（除了pre和pre-mac） */
-.code-toolbar > *:not(pre):not(.pre-mac) {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  opacity: 0 !important;
-  transition: opacity 0.3s ease !important;
-}
-
-.code-toolbar:hover > *:not(pre):not(.pre-mac) {
-  opacity: 1 !important;
-}
-
-/* 隐藏PrismJS show-language插件生成的元素 */
+/* ==================== 隐藏show-language插件 ==================== */
 .code-toolbar .toolbar-item:first-child,
 .code-toolbar .toolbar-item[data-show-language],
 .code-toolbar .toolbar-item .show-language,
 .prism-show-language,
 [data-show-language] {
   display: none !important;
-}
-
-/* 隐藏语言标签 */
-code[class*='language-']::before,
-pre[class*='language-']::before,
-.code-toolbar::before,
-.toolbar::before {
-  display: none !important;
-}
-
-/* 强制隐藏所有可能的span和div（语言标签） */
-.code-toolbar > span:not(.pre-mac > span),
-.code-toolbar > div:not(.toolbar):not(.pre-mac) {
-  display: none !important;
-  visibility: hidden !important;
-  width: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
-}
-
-/* 折叠样式 - 折叠按钮在Mac标题栏右端 */
-.collapse-wrapper {
-  position: relative !important;
-}
-
-.collapse-wrapper > div {
-  background: transparent !important;
-  border: none !important;
-  border-radius: 0 !important;
-  overflow: visible !important;
-  position: relative !important;
-}
-
-/* 将折叠header放到Mac标题栏内 */
-.collapse-wrapper .flex.justify-between.items-center {
-  position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
-  height: 32px !important;
-  background: transparent !important;
-  border: none !important;
-  padding: 0 12px !important;
-  z-index: 105 !important;
-  cursor: pointer !important;
-  display: flex !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
-  gap: 6px !important;
-  transition: all 0.2s ease !important;
-  pointer-events: auto !important;
-}
-
-.collapse-wrapper .flex.justify-between.items-center:hover {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border-radius: 4px !important;
-}
-
-/* 隐藏语言标签文字，只显示箭头 */
-.collapse-wrapper h3 {
-  display: none !important;
-}
-
-.collapse-wrapper svg {
-  color: #9ca3af !important;
-  width: 16px !important;
-  height: 16px !important;
-  transition: transform 0.2s ease !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  flex-shrink: 0 !important;
-}
-
-/* 折叠面板 - 移除上边框 */
-.collapse-wrapper .border-t {
-  border-top: none !important;
-}
-
-/* 代码块在折叠面板内 */
-.collapse-wrapper .code-toolbar {
-  position: relative !important;
-  margin: 0 !important;
-  border: none !important;
-}
-
-/* Mac标题栏在折叠模式下 - 给折叠按钮留出空间 */
-.collapse-wrapper .pre-mac {
-  padding-right: 50px !important;
-}
-
-.collapse-wrapper .pre-mac > span {
-  pointer-events: auto !important;
-}
-
-/* 隐藏滚动条 */
-pre[class*='language-']::-webkit-scrollbar {
-  display: none;
 }

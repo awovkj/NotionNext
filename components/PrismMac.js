@@ -102,58 +102,86 @@ const loadPrismThemeCSS = (
   }
 }
 
-/*
+/**
  * 将代码块转为可折叠对象
  */
 const renderCollapseCode = (codeCollapse, codeCollapseExpandDefault) => {
   if (!codeCollapse) {
     return
   }
+  
   const codeBlocks = document.querySelectorAll('.code-toolbar')
+  if (!codeBlocks.length) {
+    return
+  }
+
+  const fragment = document.createDocumentFragment()
+  
   for (const codeBlock of codeBlocks) {
-    // 判断当前元素是否被包裹
-    if (codeBlock.closest('.collapse-wrapper')) {
-      continue // 如果被包裹了，跳过当前循环
-    }
+    try {
+      // 判断当前元素是否已被包裹
+      if (codeBlock.closest('.collapse-wrapper')) {
+        continue
+      }
 
-    const code = codeBlock.querySelector('code')
-    const language = code.getAttribute('class').match(/language-(\w+)/)[1]
+      const code = codeBlock.querySelector('code')
+      if (!code) continue
+      
+      const classMatch = code.getAttribute('class')?.match(/language-(\w+)/)
+      const language = classMatch ? classMatch[1] : 'code'
 
-    const collapseWrapper = document.createElement('div')
-    collapseWrapper.className = 'collapse-wrapper w-full py-2'
-    const panelWrapper = document.createElement('div')
-    panelWrapper.className =
-      'border dark:border-gray-600 rounded-md hover:border-indigo-500 duration-200 transition-colors'
+      // 创建折叠结构
+      const collapseWrapper = document.createElement('div')
+      collapseWrapper.className = 'collapse-wrapper w-full py-2'
+      
+      const panelWrapper = document.createElement('div')
+      panelWrapper.className =
+        'border dark:border-gray-600 rounded-md hover:border-indigo-500 duration-200 transition-colors'
 
-    const header = document.createElement('div')
-    header.className =
-      'flex justify-between items-center px-4 py-2 cursor-pointer select-none'
-    header.innerHTML = `<h3 class="text-lg font-medium">${language}</h3><svg class="transition-all duration-200 w-5 h-5 transform rotate-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.293 6.293a1 1 0 0 1 1.414 0L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414z" clip-rule="evenodd"/></svg>`
+      const header = document.createElement('div')
+      header.className =
+        'flex justify-between items-center px-4 py-2 cursor-pointer select-none'
+      header.innerHTML = `<h3 class="text-lg font-medium">${language}</h3><svg class="transition-all duration-200 w-5 h-5 transform rotate-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6.293 6.293a1 1 0 0 1 1.414 0L10 8.586l2.293-2.293a1 1 0 0 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414z" clip-rule="evenodd"/></svg>`
 
-    const panel = document.createElement('div')
-    panel.className =
-      'invisible h-0 transition-transform duration-200 border-t border-gray-300'
+      const panel = document.createElement('div')
+      panel.className =
+        'invisible h-0 transition-transform duration-200 border-t border-gray-300'
 
-    panelWrapper.appendChild(header)
-    panelWrapper.appendChild(panel)
-    collapseWrapper.appendChild(panelWrapper)
+      // 组装DOM结构
+      panelWrapper.appendChild(header)
+      panelWrapper.appendChild(panel)
+      collapseWrapper.appendChild(panelWrapper)
 
-    codeBlock.parentNode.insertBefore(collapseWrapper, codeBlock)
-    panel.appendChild(codeBlock)
+      // 插入到DOM
+      const parent = codeBlock.parentNode
+      if (parent) {
+        parent.insertBefore(collapseWrapper, codeBlock)
+        panel.appendChild(codeBlock)
 
-    function collapseCode() {
-      panel.classList.toggle('invisible')
-      panel.classList.toggle('h-0')
-      panel.classList.toggle('h-auto')
-      header.querySelector('svg').classList.toggle('rotate-180')
-      panelWrapper.classList.toggle('border-gray-300')
-    }
+        // 折叠切换函数
+        const collapseCode = () => {
+          panel.classList.toggle('invisible')
+          panel.classList.toggle('h-0')
+          panel.classList.toggle('h-auto')
+          const svg = header.querySelector('svg')
+          if (svg) {
+            svg.classList.toggle('rotate-180')
+          }
+          panelWrapper.classList.toggle('border-gray-300')
+        }
 
-    // 点击后折叠展开代码
-    header.addEventListener('click', collapseCode)
-    // 是否自动展开
-    if (codeCollapseExpandDefault) {
-      header.click()
+        // 添加点击事件
+        header.addEventListener('click', collapseCode, { passive: true })
+        
+        // 是否自动展开
+        if (codeCollapseExpandDefault) {
+          requestAnimationFrame(() => {
+            header.click()
+          })
+        }
+      }
+    } catch (err) {
+      console.warn('折叠代码块失败:', err)
     }
   }
 }
@@ -201,13 +229,20 @@ const renderMermaid = mermaidCDN => {
   }
 }
 
+/**
+ * 渲染PrismMac样式
+ */
 function renderPrismMac(codeLineNumbers) {
   const container = document?.getElementById('notion-article')
+  if (!container) {
+    console.warn('未找到 #notion-article 容器')
+    return
+  }
 
-  // Add line numbers
+  // 添加行号
   if (codeLineNumbers) {
-    const codeBlocks = container?.getElementsByTagName('pre')
-    if (codeBlocks) {
+    const codeBlocks = container.getElementsByTagName('pre')
+    if (codeBlocks && codeBlocks.length > 0) {
       Array.from(codeBlocks).forEach(item => {
         if (!item.classList.contains('line-numbers')) {
           item.classList.add('line-numbers')
@@ -216,29 +251,35 @@ function renderPrismMac(codeLineNumbers) {
       })
     }
   }
-  // 重新渲染之前检查所有的多余text
 
+  // 高亮代码
   try {
-    Prism.highlightAll()
+    if (typeof Prism !== 'undefined' && Prism.highlightAll) {
+      Prism.highlightAll()
+    }
   } catch (err) {
-    console.log('代码渲染', err)
+    console.warn('代码高亮失败:', err)
   }
 
-  const codeToolBars = container?.getElementsByClassName('code-toolbar')
-  // Add pre-mac element for Mac Style UI
-  if (codeToolBars) {
+  // 添加Mac风格标题栏
+  const codeToolBars = container.getElementsByClassName('code-toolbar')
+  if (codeToolBars && codeToolBars.length > 0) {
     Array.from(codeToolBars).forEach(item => {
-      const existPreMac = item.getElementsByClassName('pre-mac')
-      if (existPreMac.length === 0) {
-        const preMac = document.createElement('div')
-        preMac.classList.add('pre-mac')
-        preMac.innerHTML = '<span></span><span></span><span></span>'
-        item?.appendChild(preMac, item)
+      try {
+        const existPreMac = item.getElementsByClassName('pre-mac')
+        if (existPreMac.length === 0) {
+          const preMac = document.createElement('div')
+          preMac.className = 'pre-mac'
+          preMac.innerHTML = '<span></span><span></span><span></span>'
+          item.appendChild(preMac)
+        }
+      } catch (err) {
+        console.warn('添加Mac标题栏失败:', err)
       }
     })
   }
 
-  // 折叠代码行号bug
+  // 修复行号样式bug
   if (codeLineNumbers) {
     fixCodeLineStyle()
   }
@@ -249,26 +290,46 @@ function renderPrismMac(codeLineNumbers) {
  * 在此手动resize计算
  */
 const fixCodeLineStyle = () => {
+  const article = document.querySelector('#notion-article')
+  if (!article) {
+    return
+  }
+
   const observer = new MutationObserver(mutationsList => {
     for (const m of mutationsList) {
       if (m.target.nodeName === 'DETAILS') {
         const preCodes = m.target.querySelectorAll('pre.notion-code')
         for (const preCode of preCodes) {
-          Prism.plugins.lineNumbers.resize(preCode)
+          try {
+            if (Prism?.plugins?.lineNumbers?.resize) {
+              Prism.plugins.lineNumbers.resize(preCode)
+            }
+          } catch (err) {
+            console.warn('行号调整失败:', err)
+          }
         }
       }
     }
   })
-  observer.observe(document.querySelector('#notion-article'), {
+  
+  observer.observe(article, {
     attributes: true,
     subtree: true
   })
-  setTimeout(() => {
+
+  // 初始化时调整行号
+  requestAnimationFrame(() => {
     const preCodes = document.querySelectorAll('pre.notion-code')
     for (const preCode of preCodes) {
-      Prism.plugins.lineNumbers.resize(preCode)
+      try {
+        if (Prism?.plugins?.lineNumbers?.resize) {
+          Prism.plugins.lineNumbers.resize(preCode)
+        }
+      } catch (err) {
+        console.warn('行号初始化失败:', err)
+      }
     }
-  }, 10)
+  })
 }
 
 export default PrismMac
