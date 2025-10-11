@@ -98,12 +98,21 @@ const nextConfig = {
 
   // 构建优化
   swcMinify: true,
+  compiler: {
+    // 生产环境移除console
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn']
+    } : false,
+  },
   modularizeImports: {
     '@heroicons/react/24/outline': {
       transform: '@heroicons/react/24/outline/{{member}}'
     },
     '@heroicons/react/24/solid': {
       transform: '@heroicons/react/24/solid/{{member}}'
+    },
+    'lodash': {
+      transform: 'lodash/{{member}}'
     }
   },
   // 多语言， 在export时禁用
@@ -289,21 +298,53 @@ const nextConfig = {
       // 生产环境优化
       config.optimization = {
         ...config.optimization,
+        minimize: true,
         splitChunks: {
           chunks: 'all',
           cacheGroups: {
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
+            default: false,
+            vendors: false,
+            // React及相关库
+            react: {
+              name: 'react',
               chunks: 'all',
+              test: /[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/,
+              priority: 40,
+              enforce: true,
             },
+            // Notion相关库
+            notion: {
+              name: 'notion',
+              chunks: 'all',
+              test: /[\\/]node_modules[\\/](notion-client|notion-utils|react-notion-x)[\\/]/,
+              priority: 35,
+              enforce: true,
+            },
+            // 第三方库
+            vendor: {
+              name: 'vendor',
+              chunks: 'all',
+              test: /[\\/]node_modules[\\/]/,
+              priority: 20,
+              minChunks: 1,
+              reuseExistingChunk: true,
+            },
+            // 公共模块
             common: {
               name: 'common',
               minChunks: 2,
               chunks: 'all',
+              priority: 10,
+              reuseExistingChunk: true,
               enforce: true,
             },
           },
+          maxInitialRequests: 25,
+          maxAsyncRequests: 25,
+          minSize: 20000,
+        },
+        runtimeChunk: {
+          name: 'runtime',
         },
       }
     }
@@ -324,7 +365,16 @@ const nextConfig = {
   experimental: {
     scrollRestoration: true,
     // 性能优化实验性功能
-    optimizePackageImports: ['@heroicons/react', 'lodash']
+    optimizePackageImports: [
+      '@heroicons/react',
+      'lodash',
+      'react-icons',
+      '@headlessui/react'
+    ],
+    // 优化字体加载
+    optimizeFonts: true,
+    // 优化CSS
+    optimizeCss: true,
   },
   exportPathMap: function (
     defaultPathMap,
