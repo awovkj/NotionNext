@@ -38,6 +38,8 @@ const NotionPage = ({ post, className }) => {
 
   // 页面文章发生变化时会执行的勾子
   useEffect(() => {
+    let targetBlankTimer
+
     // 相册视图点击禁止跳转，只能放大查看图片
     if (POST_DISABLE_GALLERY_CLICK) {
       // 针对页面中的gallery视图，点击后是放大图片还是跳转到gallery的内部页面
@@ -48,6 +50,10 @@ const NotionPage = ({ post, className }) => {
     if (POST_DISABLE_DATABASE_CLICK) {
       processDisableDatabaseUrl()
     }
+
+    targetBlankTimer = setTimeout(() => {
+      applyTargetBlankToArticleLinks()
+    }, 200)
 
     /**
      * 放大查看图片时替换成高清图像
@@ -83,6 +89,9 @@ const NotionPage = ({ post, className }) => {
 
     return () => {
       observer.disconnect()
+      if (targetBlankTimer) {
+        clearTimeout(targetBlankTimer)
+      }
     }
   }, [post])
 
@@ -174,6 +183,60 @@ const processGalleryImg = zoom => {
       }
     }
   }, 800)
+}
+
+const applyTargetBlankToArticleLinks = () => {
+  if (!isBrowser) {
+    return
+  }
+
+  const articleElement = document.getElementById('notion-article')
+  if (!articleElement) {
+    return
+  }
+
+  const anchors = articleElement.querySelectorAll('a[href]')
+  anchors.forEach(anchor => {
+    const hrefValue = anchor.getAttribute('href')
+    if (!hrefValue) {
+      return
+    }
+
+    const trimmedHref = hrefValue.trim()
+    if (trimmedHref.length === 0) {
+      return
+    }
+
+    const lowerHref = trimmedHref.toLowerCase()
+    if (
+      lowerHref.startsWith('#') ||
+      lowerHref.startsWith('mailto:') ||
+      lowerHref.startsWith('tel:') ||
+      lowerHref.startsWith('javascript:')
+    ) {
+      return
+    }
+
+    let url
+    try {
+      url = new URL(trimmedHref, window.location.origin)
+    } catch (error) {
+      return
+    }
+
+    if (url.origin === window.location.origin) {
+      return
+    }
+
+    anchor.setAttribute('target', '_blank')
+
+    const relAttribute = anchor.getAttribute('rel') || ''
+    const relValues = relAttribute.split(/\s+/).filter(Boolean)
+    const relSet = new Set(relValues)
+    relSet.add('noopener')
+    relSet.add('noreferrer')
+    anchor.setAttribute('rel', Array.from(relSet).join(' '))
+  })
 }
 
 /**
