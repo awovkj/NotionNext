@@ -101,6 +101,10 @@ const NotionPage = ({ post, className }) => {
   }, [post])
 
   useEffect(() => {
+    ensureExternalLinksOpenInNewTab()
+  }, [post])
+
+  useEffect(() => {
     // Spoiler文本功能
     if (SPOILER_TEXT_TAG) {
       import('lodash/escapeRegExp').then(escapeRegExp => {
@@ -189,6 +193,65 @@ const processGalleryImg = zoom => {
       }
     }
   }, 800)
+}
+
+const ensureExternalLinksOpenInNewTab = () => {
+  if (!isBrowser) {
+    return
+  }
+
+  setTimeout(() => {
+    const container = document.getElementById('notion-article')
+    if (!container) {
+      return
+    }
+
+    const origin = window.location.origin
+    const anchors = container.querySelectorAll('.notion a[href]')
+    anchors.forEach(anchor => {
+      const href = anchor.getAttribute('href')
+      if (!href) {
+        return
+      }
+
+      if (shouldOpenInSameTab(href, origin)) {
+        anchor.removeAttribute('target')
+        anchor.removeAttribute('rel')
+        return
+      }
+
+      anchor.setAttribute('target', '_blank')
+      anchor.setAttribute('rel', 'noopener noreferrer')
+    })
+  }, 0)
+}
+
+const shouldOpenInSameTab = (href, origin) => {
+  const value = href.trim()
+  if (!value) {
+    return true
+  }
+
+  const lowerHref = value.toLowerCase()
+  if (
+    lowerHref.startsWith('#') ||
+    lowerHref.startsWith('mailto:') ||
+    lowerHref.startsWith('tel:') ||
+    lowerHref.startsWith('javascript:')
+  ) {
+    return true
+  }
+
+  if (value.startsWith('/')) {
+    return true
+  }
+
+  try {
+    const url = new URL(value, origin)
+    return url.origin === origin
+  } catch (error) {
+    return false
+  }
 }
 
 /**
