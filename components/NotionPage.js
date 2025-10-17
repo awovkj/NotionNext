@@ -143,6 +143,7 @@ const NotionPage = ({ post, className }) => {
           Code,
           Collection,
           Equation,
+          Link: LinkC,
           Modal,
           Pdf,
           Tweet
