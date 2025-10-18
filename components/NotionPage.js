@@ -126,6 +126,15 @@ const NotionPage = ({ post, className }) => {
       elements?.forEach(element => {
         element?.remove()
       })
+  const links = document.querySelectorAll('a[href]')
+      links.forEach(link => {
+        const href = link.getAttribute('href')
+        // 检查是否为外部链接（不是以/或#开头，也不是相对路径）
+        if (href && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('.')) {
+          link.setAttribute('target', '_blank')
+          link.setAttribute('rel', 'noopener noreferrer')
+        }
+      })    
     }, 1000) // 1000 毫秒 = 1 秒
 
     // 清理定时器，防止组件卸载时执行
