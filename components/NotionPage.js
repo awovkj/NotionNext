@@ -6,22 +6,7 @@ import 'katex/dist/katex.min.css'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { NotionRenderer } from 'react-notion-x'
-import Link from 'next/link'
 
-const LinkC = ({ href, children, ...rest }) => {
-  const isInternalLink = href && (href.startsWith('/') || href.startsWith('#'))
-
-  if (isInternalLink) {
-    return (
-      <Link href={href} passHref>
-        <a {...rest}>{children}</a>
-      </Link>
-    )
-  }
-
-  // 外部链接在新标签页打开
-  return <a href={href} target='_blank' rel='noopener noreferrer' {...rest}>{children}</a>
-}
 
 /**
  * 整个站点的核心组件
@@ -126,6 +111,7 @@ const NotionPage = ({ post, className }) => {
       elements?.forEach(element => {
         element?.remove()
       })
+      //新标签页打开
   const links = document.querySelectorAll('a[href]')
       links.forEach(link => {
         const href = link.getAttribute('href')
