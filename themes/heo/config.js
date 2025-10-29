@@ -125,8 +125,9 @@ const CONFIG = {
   // 底部统计面板文案
   HEO_POST_COUNT_TITLE: '文章数:',
   HEO_SITE_TIME_TITLE: '建站天数:',
-  HEO_SITE_VISIT_TITLE: '访问量:',
-  HEO_SITE_VISITOR_TITLE: '访客数:',
+  HEO_SITE_VISIT_TITLE: '本站总访问量:',
+  HEO_SITE_VISITOR_TITLE: '本站总访客数:',
+  HEO_PAGE_PV_TITLE: '本页总阅读量:',
 
   // *****  以下配置无效，只是预留开发 ****
   // 菜单配置

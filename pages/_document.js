@@ -63,6 +63,9 @@ class MyDocument extends Document {
 
           {/* 预先设置深色模式，避免闪烁 */}
           <script dangerouslySetInnerHTML={{ __html: darkModeScript }} />
+          
+          {/* 不蒜子统计 */}
+          <script async src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js" />
         </Head>
 
         <body>
