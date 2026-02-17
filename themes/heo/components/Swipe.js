@@ -29,7 +29,7 @@ export function Swipe({ items }) {
         <div
           onClick={() => handleClick(item)}
           key={index}
-          className={`whitespace-nowrap absolute top-0 bottom-0 w-full h-full flex justify-center items-center line-clamp-1 transform transition-transform duration-500 ${
+          className={`text-xl whitespace-nowrap absolute top-0 bottom-0 w-full h-full flex justify-center items-center line-clamp-1 transform transition-transform duration-500 ${
             index === activeIndex
               ? 'translate-y-0 slide-in'
               : 'translate-y-full slide-out'
