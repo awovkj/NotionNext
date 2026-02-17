@@ -1,4 +1,4 @@
-import { LAYOUT_MAPPINGS } from '@/blog.config'
+import BLOG, { LAYOUT_MAPPINGS } from '@/blog.config'
 import * as ThemeComponents from '@theme-components'
 import { getQueryVariable } from '../lib/utils'
 
