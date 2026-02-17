@@ -5,6 +5,7 @@ import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import CONFIG from '../config'
+import { AnalyticsCard } from './AnalyticsCard'
 import Announcement from './Announcement'
 import Card from './Card'
 
@@ -30,7 +31,8 @@ export function InfoCard(props) {
         <GreetingsWords />
         {/* 头像 */}
         <div
-          className={`${isSlugPage ? 'absolute right-0 -mt-8 -mr-6 hover:opacity-0 hover:scale-150 blur' : 'cursor-pointer'} justify-center items-center flex dark:text-gray-100 transform transitaion-all duration-200`}>
+          className={`${isSlugPage ? 'absolute right-0 -mt-8 -mr-6 hover:opacity-0 hover:scale-150 blur' : 'cursor-pointer'} justify-center items-center flex dark:text-gray-100 transform transitaion-all duration-200`}
+        >
           <LazyImage
             src={siteInfo?.icon}
             className='rounded-full'
@@ -41,6 +43,8 @@ export function InfoCard(props) {
       </div>
 
       <h2 className='text-3xl font-extrabold mt-3'>{siteConfig('AUTHOR')}</h2>
+
+      <AnalyticsCard {...props} />
 
       {/* 公告栏 */}
       <Announcement post={notice} style={{ color: 'white !important' }} />
@@ -85,7 +89,8 @@ function MoreButton() {
       <div
         className={
           'group bg-indigo-400 dark:bg-yellow-500 hover:bg-white dark:hover:bg-black hover:text-black dark:hover:text-white flex items-center transition-colors duration-200 py-2 px-3 rounded-full space-x-1'
-        }>
+        }
+      >
         <ArrowRightCircle
           className={
             'group-hover:stroke-black dark:group-hover:stroke-white w-6 h-6 transition-all duration-100'
@@ -112,7 +117,8 @@ function GreetingsWords() {
   return (
     <div
       onClick={handleChangeGreeting}
-      className=' select-none cursor-pointer py-1 px-2 bg-indigo-400 hover:bg-indigo-50  hover:text-indigo-950 dark:bg-yellow-500 dark:hover:text-white dark:hover:bg-black text-sm rounded-lg  duration-200 transition-colors'>
+      className=' select-none cursor-pointer py-1 px-2 bg-indigo-400 hover:bg-indigo-50  hover:text-indigo-950 dark:bg-yellow-500 dark:hover:text-white dark:hover:bg-black text-sm rounded-lg  duration-200 transition-colors'
+    >
       {greeting}
     </div>
   )
