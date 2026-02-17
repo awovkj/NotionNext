@@ -33,10 +33,8 @@ const locales = (function () {
 // 编译前执行
 // eslint-disable-next-line no-unused-vars
 const preBuild = (function () {
-  if (
-    !process.env.npm_lifecycle_event === 'export' &&
-    !process.env.npm_lifecycle_event === 'build'
-  ) {
+  const lifecycle = process.env.npm_lifecycle_event
+  if (lifecycle !== 'export' && lifecycle !== 'build') {
     return
   }
   // 删除 public/sitemap.xml 文件 ； 否则会和/pages/sitemap.xml.js 冲突。

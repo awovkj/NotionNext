@@ -131,36 +131,35 @@ const ExternalPlugin = props => {
   const UMAMI_HOST = siteConfig('UMAMI_HOST', null, NOTION_CONFIG)
   const UMAMI_ID = siteConfig('UMAMI_ID', null, NOTION_CONFIG)
 
-  // 自定义样式css和js引入
-  if (isBrowser) {
-    // 初始化AOS动画
-    // 静态导入本地自定义样式
+  useEffect(() => {
+    if (!isBrowser) {
+      return
+    }
     loadExternalResource('/css/custom.css', 'css')
     loadExternalResource('/js/custom.js', 'js')
+  }, [])
 
-    // 自动添加图片阴影
+  useEffect(() => {
+    if (!isBrowser) {
+      return
+    }
     if (IMG_SHADOW) {
       loadExternalResource('/css/img-shadow.css', 'css')
     }
-
     if (ANIMATE_CSS_URL) {
       loadExternalResource(ANIMATE_CSS_URL, 'css')
     }
-
-    // 导入外部自定义脚本
     if (CUSTOM_EXTERNAL_JS && CUSTOM_EXTERNAL_JS.length > 0) {
       for (const url of CUSTOM_EXTERNAL_JS) {
         loadExternalResource(url, 'js')
       }
     }
-
-    // 导入外部自定义样式
     if (CUSTOM_EXTERNAL_CSS && CUSTOM_EXTERNAL_CSS.length > 0) {
       for (const url of CUSTOM_EXTERNAL_CSS) {
         loadExternalResource(url, 'css')
       }
     }
-  }
+  }, [ANIMATE_CSS_URL, CUSTOM_EXTERNAL_CSS, CUSTOM_EXTERNAL_JS, IMG_SHADOW])
 
   const router = useRouter()
   useEffect(() => {
@@ -175,16 +174,15 @@ const ExternalPlugin = props => {
       // 映射url
       convertInnerUrl({ allPages: props?.allNavPages, lang: lang })
     }, 500)
-  }, [router])
+  }, [ADSENSE_GOOGLE_ID, lang, props?.allNavPages, router.asPath])
 
   useEffect(() => {
     // 执行注入脚本
     // eslint-disable-next-line no-eval
     if (GLOBAL_JS && GLOBAL_JS.trim() !== '') {
-      // console.log('Inject JS:', GLOBAL_JS);
+      eval(GLOBAL_JS)
     }
-    eval(GLOBAL_JS)
-  })
+  }, [GLOBAL_JS])
 
   if (DISABLE_PLUGIN) {
     return null
