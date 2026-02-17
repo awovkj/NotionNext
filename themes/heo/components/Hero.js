@@ -94,7 +94,7 @@ function Banner(props) {
           <br />
           {siteConfig('HEO_HERO_TITLE_2', null, CONFIG)}
         </div>
-        <div className='text-sm text-gray-600  dark:text-gray-200'>
+        <div className='text-lg text-gray-600  dark:text-gray-200'>
           {siteConfig('HEO_HERO_TITLE_3', null, CONFIG)}
         </div>
       </div>
