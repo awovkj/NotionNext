@@ -24,7 +24,7 @@ const BLOG = {
     'Notion, 博客, Blog, ctf, 网络安全, 𝓪𝔀𝓸𝓿𝓴𝓳', // 网站关键词 英文逗号隔开
   BLOG_FAVICON:
     process.env.NEXT_PUBLIC_FAVICON ||
-    'https://bed.510517.xyz/file/1752850826852_favicon.ico', // blog favicon 配置, 默认使用 /public/favicon.ico，支持在线图片，如 https://img.imesong.com/favicon.png
+    'https://tutu.510517.xyz/202602171755274.png', // blog favicon 配置, 默认使用 /public/favicon.ico，支持在线图片，如 https://img.imesong.com/favicon.png
   BEI_AN: process.env.NEXT_PUBLIC_BEI_AN || '', // 备案号 闽ICP备XXXXXX
   BEI_AN_LINK:
     process.env.NEXT_PUBLIC_BEI_AN_LINK || 'https://beian.miit.gov.cn/', // 备案查询链接，如果用了萌备等备案请在这里填写
