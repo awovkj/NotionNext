@@ -9,9 +9,7 @@ import 'react-notion-x/src/styles.css' // 原版的react-notion-x
 import useAdjustStyle from '@/hooks/useAdjustStyle'
 import { GlobalContextProvider } from '@/lib/global'
 import { getBaseLayoutByTheme } from '@/themes/theme'
-import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
-import { getQueryParam } from '../lib/utils'
 
 // 各种扩展插件 这个要阻塞引入
 import BLOG from '@/blog.config'
@@ -33,14 +31,9 @@ const MyApp = ({ Component, pageProps }) => {
   // 一些可能出现 bug 的样式，可以统一放入该钩子进行调整
   useAdjustStyle()
 
-  const route = useRouter()
   const theme = useMemo(() => {
-    return (
-      getQueryParam(route.asPath, 'theme') ||
-      pageProps?.NOTION_CONFIG?.THEME ||
-      BLOG.THEME
-    )
-  }, [route])
+    return pageProps?.NOTION_CONFIG?.THEME || BLOG.THEME
+  }, [pageProps?.NOTION_CONFIG?.THEME])
 
   // 整体布局
   const GLayout = useCallback(

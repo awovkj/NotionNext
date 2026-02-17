@@ -1,10 +1,6 @@
 import { siteConfigMap } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
-import { getQueryParam } from '@/lib/utils'
-import { THEMES } from '@/themes/theme'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import Select from './Select'
 
 /**
  *
@@ -12,13 +8,8 @@ import Select from './Select'
  */
 const DebugPanel = () => {
   const [show, setShow] = useState(false)
-  const { theme, switchTheme, locale } = useGlobal()
-  const router = useRouter()
-  const currentTheme = getQueryParam(router.asPath, 'theme') || theme
+  const { locale } = useGlobal()
   const [siteConfig, updateSiteConfig] = useState({})
-
-  // 主题下拉框
-  const themeOptions = THEMES?.map(t => ({ value: t, text: t }))
 
   useEffect(() => {
     updateSiteConfig(Object.assign({}, siteConfigMap()))
@@ -26,15 +17,6 @@ const DebugPanel = () => {
 
   function toggleShow() {
     setShow(!show)
-  }
-
-  function handleChangeDebugTheme() {
-    switchTheme()
-  }
-
-  function handleUpdateDebugTheme(newTheme) {
-    const query = { ...router.query, theme: newTheme }
-    router.push({ pathname: router.pathname, query })
   }
 
   function filterResult(text) {
@@ -56,7 +38,8 @@ const DebugPanel = () => {
         <div
           style={{ writingMode: 'vertical-lr' }}
           className={`bg-black text-xs text-white shadow-2xl p-1.5 rounded-l-xl cursor-pointer ${show ? 'right-96' : 'right-0'} fixed bottom-72 duration-200 z-50`}
-          onClick={toggleShow}>
+          onClick={toggleShow}
+        >
           {show ? (
             <i className='fas fa-times'>&nbsp;{locale.COMMON.DEBUG_CLOSE}</i>
           ) : (
@@ -67,21 +50,10 @@ const DebugPanel = () => {
 
       {/* 调试侧拉抽屉 */}
       <div
-        className={` ${show ? 'shadow-card w-96 right-0 ' : '-right-96 invisible w-0'} overflow-y-scroll h-full p-5 bg-white fixed bottom-0 z-50 duration-200`}>
+        className={` ${show ? 'shadow-card w-96 right-0 ' : '-right-96 invisible w-0'} overflow-y-scroll h-full p-5 bg-white fixed bottom-0 z-50 duration-200`}
+      >
         <div className='flex justify-between space-x-1 my-5'>
-          <div className='flex-col px-5'>
-            <Select
-              label={locale.COMMON.THEME_SWITCH}
-              value={currentTheme}
-              options={themeOptions}
-              onChange={handleUpdateDebugTheme}
-            />
-            <div
-              className='p-2 cursor-pointer'
-              onClick={handleChangeDebugTheme}>
-              <i className='fas fa-sync' />
-            </div>
-          </div>
+          <div className='flex-col px-5' />
 
           <div className='p-2'>
             <i className='fas fa-times' onClick={toggleShow} />

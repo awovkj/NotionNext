@@ -27,21 +27,15 @@ You can set up your personal website in just a few minutes. Here is the link to 
   </a>
 </p>
 
-
 [中文文档](./README.md) | README in English
 
 <hr/>
 
 A static blog system built with NextJS and Notion API, deployed on Vercel. Designed for Notion and all creators.
 
-
 ## Preview
 
-Live Demo：[https://preview.tangly1024.com/](https://preview.tangly1024.com/) ，Project supports switching between multiple themes. Can't find a theme you like? How about [contributing](/CONTRIBUTING.md) one?~
-
-| Next | Medium | Hexo | Fukasawa |
-|--|--|--|--|
-| <img src='./docs/theme-next.png' width='300'/> [NEXT](https://preview.tangly1024.com/?theme=next)  | <img src='./docs/theme-medium.png' width='300'/> [MEDIUM](https://preview.tangly1024.com/?theme=medium) | <img src='./docs/theme-hexo.png' width='300'/> [HEXO](https://preview.tangly1024.com/?theme=hexo) | <img src='./docs/theme-fukasawa.png' width='300'/> [FUKASAWA](https://preview.tangly1024.com/?theme=fukasawa) |
+Live Demo：[https://preview.tangly1024.com/](https://preview.tangly1024.com/) (this repository now keeps only the heo theme).
 
 ## Acknowledgements
 
@@ -64,7 +58,6 @@ This project exists thanks to all the people who contribute.
 - **Rendering Tool**: [React-notion-x](https://github.com/NotionX/react-notion-x)
 - **COMMENT**: [Twikoo](https://github.com/imaegoo/twikoo), [Giscus](https://giscus.app/zh-CN), [Gitalk](https://gitalk.github.io), [Cusdis](https://cusdis.com), [Utterances](https://utteranc.es)
 - **ICON**: [Fontawesome](https://fontawesome.com/v6/icons/)
-
 
 ## License
 

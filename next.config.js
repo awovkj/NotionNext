@@ -9,8 +9,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: BLOG.BUNDLE_ANALYZER
 })
 
-// 扫描项目 /themes下的目录名
-const themes = scanSubdirectories(path.resolve(__dirname, 'themes'))
 // 检测用户开启的多语言
 const locales = (function () {
   // 根据BLOG_NOTION_PAGE_ID 检查支持多少种语言数据.
@@ -54,27 +52,6 @@ const preBuild = (function () {
     console.log('Deleted existing sitemap.xml from root directory')
   }
 })()
-
-/**
- * 扫描指定目录下的文件夹名，用于获取所有主题
- * @param {*} directory
- * @returns
- */
-function scanSubdirectories(directory) {
-  const subdirectories = []
-
-  fs.readdirSync(directory).forEach(file => {
-    const fullPath = path.join(directory, file)
-    const stats = fs.statSync(fullPath)
-    if (stats.isDirectory()) {
-      subdirectories.push(file)
-    }
-
-    // subdirectories.push(file)
-  })
-
-  return subdirectories
-}
 
 /**
  * @type {import('next').NextConfig}
@@ -220,55 +197,55 @@ const nextConfig = {
                   'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
               }
               // 安全头部 相关配置，谨慎开启
-            //   { key: 'X-Frame-Options', value: 'DENY' },
-            //   { key: 'X-Content-Type-Options', value: 'nosniff' },
-            //   { key: 'X-XSS-Protection', value: '1; mode=block' },
-            //   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-            //   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-            //   {
-            //     key: 'Strict-Transport-Security',
-            //     value: 'max-age=31536000; includeSubDomains; preload'
-            //   },
-            //   {
-            //     key: 'Content-Security-Policy',
-            //     value: [
-            //       "default-src 'self'",
-            //       "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com",
-            //       "style-src 'self' 'unsafe-inline' *.googleapis.com *.gstatic.com",
-            //       "img-src 'self' data: blob: *.notion.so *.unsplash.com *.githubusercontent.com *.gravatar.com",
-            //       "font-src 'self' *.googleapis.com *.gstatic.com",
-            //       "connect-src 'self' *.google-analytics.com *.googletagmanager.com",
-            //       "frame-src 'self' *.youtube.com *.vimeo.com",
-            //       "object-src 'none'",
-            //       "base-uri 'self'",
-            //       "form-action 'self'"
-            //     ].join('; ')
-            //   },
+              //   { key: 'X-Frame-Options', value: 'DENY' },
+              //   { key: 'X-Content-Type-Options', value: 'nosniff' },
+              //   { key: 'X-XSS-Protection', value: '1; mode=block' },
+              //   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+              //   { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+              //   {
+              //     key: 'Strict-Transport-Security',
+              //     value: 'max-age=31536000; includeSubDomains; preload'
+              //   },
+              //   {
+              //     key: 'Content-Security-Policy',
+              //     value: [
+              //       "default-src 'self'",
+              //       "script-src 'self' 'unsafe-inline' 'unsafe-eval' *.googleapis.com *.gstatic.com *.google-analytics.com *.googletagmanager.com",
+              //       "style-src 'self' 'unsafe-inline' *.googleapis.com *.gstatic.com",
+              //       "img-src 'self' data: blob: *.notion.so *.unsplash.com *.githubusercontent.com *.gravatar.com",
+              //       "font-src 'self' *.googleapis.com *.gstatic.com",
+              //       "connect-src 'self' *.google-analytics.com *.googletagmanager.com",
+              //       "frame-src 'self' *.youtube.com *.vimeo.com",
+              //       "object-src 'none'",
+              //       "base-uri 'self'",
+              //       "form-action 'self'"
+              //     ].join('; ')
+              //   },
 
-            //   // CORS 配置（更严格）
-            //   { key: 'Access-Control-Allow-Credentials', value: 'false' },
-            //   {
-            //     key: 'Access-Control-Allow-Origin',
-            //     value: process.env.NODE_ENV === 'production'
-            //       ? siteConfig('LINK') || 'https://yourdomain.com'
-            //       : '*'
-            //   },
-            //   { key: 'Access-Control-Max-Age', value: '86400' }
+              //   // CORS 配置（更严格）
+              //   { key: 'Access-Control-Allow-Credentials', value: 'false' },
+              //   {
+              //     key: 'Access-Control-Allow-Origin',
+              //     value: process.env.NODE_ENV === 'production'
+              //       ? siteConfig('LINK') || 'https://yourdomain.com'
+              //       : '*'
+              //   },
+              //   { key: 'Access-Control-Max-Age', value: '86400' }
             ]
-          },
-            //   {
-            //     source: '/api/:path*',
-            //     headers: [
-            //       // API 特定的安全头部
-            //       { key: 'X-Frame-Options', value: 'DENY' },
-            //       { key: 'X-Content-Type-Options', value: 'nosniff' },
-            //       { key: 'Cache-Control', value: 'no-store, max-age=0' },
-            //       {
-            //         key: 'Access-Control-Allow-Methods',
-            //         value: 'GET,POST,PUT,DELETE,OPTIONS'
-            //       }
-            //     ]
-            //   }
+          }
+          //   {
+          //     source: '/api/:path*',
+          //     headers: [
+          //       // API 特定的安全头部
+          //       { key: 'X-Frame-Options', value: 'DENY' },
+          //       { key: 'X-Content-Type-Options', value: 'nosniff' },
+          //       { key: 'Cache-Control', value: 'no-store, max-age=0' },
+          //       {
+          //         key: 'Access-Control-Allow-Methods',
+          //         value: 'GET,POST,PUT,DELETE,OPTIONS'
+          //       }
+          //     ]
+          //   }
         ]
       },
   webpack: (config, { dev, isServer }) => {
@@ -285,7 +262,7 @@ const nextConfig = {
     )
 
     // 性能优化配置
-    if (!dev) {
+    if (!dev && !isServer) {
       // 生产环境优化
       config.optimization = {
         ...config.optimization,
@@ -295,16 +272,16 @@ const nextConfig = {
             vendor: {
               test: /[\\/]node_modules[\\/]/,
               name: 'vendors',
-              chunks: 'all',
+              chunks: 'all'
             },
             common: {
               name: 'common',
               minChunks: 2,
               chunks: 'all',
-              enforce: true,
-            },
-          },
-        },
+              enforce: true
+            }
+          }
+        }
       }
     }
 
@@ -337,10 +314,6 @@ const nextConfig = {
     delete pages['/sitemap.xml']
     delete pages['/auth']
     return pages
-  },
-  publicRuntimeConfig: {
-    // 这里的配置既可以服务端获取到，也可以在浏览器端获取到
-    THEMES: themes
   }
 }
 
