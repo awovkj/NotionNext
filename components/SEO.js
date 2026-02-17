@@ -107,7 +107,10 @@ const SEO = props => {
         name='viewport'
         content='width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0'
       />
-      <meta name='robots' content='follow, index, max-snippet:-1, max-image-preview:large, max-video-preview:-1' />
+      <meta
+        name='robots'
+        content='follow, index, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
+      />
       <meta charSet='UTF-8' />
       <meta name='format-detection' content='telephone=no' />
       <meta name='mobile-web-app-capable' content='yes' />
@@ -153,8 +156,14 @@ const SEO = props => {
 
       {/* Twitter Card 元数据 */}
       <meta name='twitter:card' content='summary_large_image' />
-      <meta name='twitter:site' content={siteConfig('TWITTER_SITE', '@NotionNext')} />
-      <meta name='twitter:creator' content={siteConfig('TWITTER_CREATOR', '@NotionNext')} />
+      <meta
+        name='twitter:site'
+        content={siteConfig('TWITTER_SITE', '@NotionNext')}
+      />
+      <meta
+        name='twitter:creator'
+        content={siteConfig('TWITTER_CREATOR', '@NotionNext')}
+      />
       <meta name='twitter:title' content={title} />
       <meta name='twitter:description' content={description} />
       <meta name='twitter:image' content={image} />
@@ -197,7 +206,9 @@ const SEO = props => {
       <script
         type='application/ld+json'
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateStructuredData(meta, siteInfo, url, image, AUTHOR))
+          __html: JSON.stringify(
+            generateStructuredData(meta, siteInfo, url, image, AUTHOR)
+          )
         }}
       />
 
@@ -205,10 +216,11 @@ const SEO = props => {
       <link rel='dns-prefetch' href='//fonts.googleapis.com' />
       <link rel='dns-prefetch' href='//www.google-analytics.com' />
       <link rel='dns-prefetch' href='//www.googletagmanager.com' />
-      <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
-
-      {/* 预加载关键资源 */}
-      <link rel='preload' href='/fonts/inter-var.woff2' as='font' type='font/woff2' crossOrigin='anonymous' />
+      <link
+        rel='preconnect'
+        href='https://fonts.gstatic.com'
+        crossOrigin='anonymous'
+      />
 
       {children}
     </Head>

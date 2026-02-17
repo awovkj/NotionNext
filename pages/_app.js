@@ -16,11 +16,17 @@ import BLOG from '@/blog.config'
 import ExternalPlugins from '@/components/ExternalPlugins'
 import SEO from '@/components/SEO'
 import { zhCN } from '@clerk/localizations'
+import localFont from 'next/font/local'
 import dynamic from 'next/dynamic'
 // import { ClerkProvider } from '@clerk/nextjs'
 const ClerkProvider = dynamic(() =>
   import('@clerk/nextjs').then(m => m.ClerkProvider)
 )
+
+const hhhFont = localFont({
+  src: '../hhh.ttf',
+  display: 'swap'
+})
 
 /**
  * App挂载DOM 入口文件
@@ -46,13 +52,15 @@ const MyApp = ({ Component, pageProps }) => {
 
   const enableClerk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   const content = (
-    <GlobalContextProvider {...pageProps}>
-      <GLayout {...pageProps}>
-        <SEO {...pageProps} />
-        <Component {...pageProps} />
-      </GLayout>
-      <ExternalPlugins {...pageProps} />
-    </GlobalContextProvider>
+    <div className={hhhFont.className}>
+      <GlobalContextProvider {...pageProps}>
+        <GLayout {...pageProps}>
+          <SEO {...pageProps} />
+          <Component {...pageProps} />
+        </GLayout>
+        <ExternalPlugins {...pageProps} />
+      </GlobalContextProvider>
+    </div>
   )
   return (
     <>
