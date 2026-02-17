@@ -25,7 +25,8 @@ const ClerkProvider = dynamic(() =>
 
 const hhhFont = localFont({
   src: '../hhh.ttf',
-  display: 'swap'
+  display: 'swap',
+  variable: '--font-hhh'
 })
 
 /**
@@ -52,7 +53,7 @@ const MyApp = ({ Component, pageProps }) => {
 
   const enableClerk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
   const content = (
-    <div className={hhhFont.className}>
+    <div className={`${hhhFont.className} ${hhhFont.variable}`}>
       <GlobalContextProvider {...pageProps}>
         <GLayout {...pageProps}>
           <SEO {...pageProps} />
