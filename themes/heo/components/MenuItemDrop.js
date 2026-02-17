@@ -11,6 +11,7 @@ export const MenuItemDrop = ({ link }) => {
 
   return (
     <div
+      className='relative'
       onMouseOver={() => changeShow(true)}
       onMouseOut={() => changeShow(false)}
     >
@@ -40,7 +41,7 @@ export const MenuItemDrop = ({ link }) => {
       {hasSubMenu && (
         <ul
           style={{ backdropFilter: 'blur(3px)' }}
-          className={`${show ? 'visible opacity-100 top-14 pointer-events-auto' : 'invisible opacity-0 top-20 pointer-events-none'} drop-shadow-md rounded-xl bg-white dark:bg-[#1e1e1e] transition-all duration-300 z-20 absolute flex items-center px-1 py-1 whitespace-nowrap`}
+          className={`${show ? 'visible opacity-100 pointer-events-auto translate-y-0' : 'invisible opacity-0 pointer-events-none translate-y-2'} left-1/2 -translate-x-1/2 top-full mt-2 drop-shadow-md rounded-xl bg-white dark:bg-[#1e1e1e] transition-all duration-300 z-20 absolute flex items-center px-1 py-1 whitespace-nowrap`}
         >
           {link.subMenus.map((sLink, index) => {
             return (
