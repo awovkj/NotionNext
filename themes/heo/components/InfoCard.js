@@ -5,7 +5,6 @@ import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import CONFIG from '../config'
-import { AnalyticsCard } from './AnalyticsCard'
 import Announcement from './Announcement'
 import Card from './Card'
 
@@ -43,8 +42,6 @@ export function InfoCard(props) {
       </div>
 
       <h2 className='text-3xl font-extrabold mt-3'>{siteConfig('AUTHOR')}</h2>
-
-      <AnalyticsCard {...props} />
 
       {/* 公告栏 */}
       <Announcement post={notice} style={{ color: 'white !important' }} />
