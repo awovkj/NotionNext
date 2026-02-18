@@ -39,7 +39,10 @@
     "setup-hooks": "node scripts/setup-git-hooks.js install",
     "remove-hooks": "node scripts/setup-git-hooks.js remove",
     "check-hooks": "node scripts/setup-git-hooks.js check",
-    "validate": "npm run quality"
+    "validate": "npm run quality",
+    "cf:build": "npm run export",
+    "cf:deploy": "npm run cf:build && npx wrangler deploy",
+    "cf:dev": "npm run cf:build && npx wrangler dev"
   },
   "dependencies": {
     "@clerk/localizations": "^3.17.1",

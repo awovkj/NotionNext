@@ -33,6 +33,40 @@ You can set up your personal website in just a few minutes. Here is the link to 
 
 A static blog system built with NextJS and Notion API, deployed on Vercel. Designed for Notion and all creators.
 
+## Cloudflare Workers Deployment (Static Export)
+
+This project now supports deployment to Cloudflare Workers using static assets from the `out/` directory.
+
+### 1) Login to Cloudflare (first time only)
+
+```bash
+npx wrangler login
+```
+
+### 2) Build static output
+
+```bash
+npm run cf:build
+```
+
+### 3) Deploy to Workers
+
+```bash
+npm run cf:deploy
+```
+
+### Local preview (optional)
+
+```bash
+npm run cf:dev
+```
+
+### Notes
+
+- Uses `wrangler.toml` in the project root.
+- Static assets directory is `./out`.
+- For blog-style routing, `not_found_handling = "404-page"` is used.
+
 ## Preview
 
 Live Demo：[https://preview.tangly1024.com/](https://preview.tangly1024.com/) (this repository now keeps only the heo theme).
