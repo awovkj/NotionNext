@@ -3,7 +3,6 @@ import * as ThemeComponents from '@theme-components'
 import { getQueryVariable } from '../lib/utils'
 
 export const THEMES = ['heo']
-
 /**
  * 获取主题配置
  * @param {string} themeQuery - 主题查询参数（支持多个主题用逗号分隔）
