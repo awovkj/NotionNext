@@ -7,7 +7,6 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { NotionRenderer } from 'react-notion-x'
 
-
 /**
  * 整个站点的核心组件
  * 将Notion数据渲染成网页
@@ -89,14 +88,12 @@ const NotionPage = ({ post, className }) => {
   useEffect(() => {
     // Spoiler文本功能
     if (SPOILER_TEXT_TAG) {
-      import('lodash/escapeRegExp').then(escapeRegExp => {
-        Promise.all([
-          loadExternalResource('/js/spoilerText.js', 'js'),
-          loadExternalResource('/css/spoiler-text.css', 'css')
-        ]).then(() => {
-          window.textToSpoiler &&
-            window.textToSpoiler(escapeRegExp.default(SPOILER_TEXT_TAG))
-        })
+      Promise.all([
+        loadExternalResource('/js/spoilerText.js', 'js'),
+        loadExternalResource('/css/spoiler-text.css', 'css')
+      ]).then(() => {
+        window.textToSpoiler &&
+          window.textToSpoiler(escapeRegExp(SPOILER_TEXT_TAG))
       })
     }
 
@@ -112,15 +109,20 @@ const NotionPage = ({ post, className }) => {
         element?.remove()
       })
       //新标签页打开
-  const links = document.querySelectorAll('a[href]')
+      const links = document.querySelectorAll('a[href]')
       links.forEach(link => {
         const href = link.getAttribute('href')
         // 检查是否为外部链接（不是以/或#开头，也不是相对路径）
-        if (href && !href.startsWith('/') && !href.startsWith('#') && !href.startsWith('.')) {
+        if (
+          href &&
+          !href.startsWith('/') &&
+          !href.startsWith('#') &&
+          !href.startsWith('.')
+        ) {
           link.setAttribute('target', '_blank')
           link.setAttribute('rel', 'noopener noreferrer')
         }
-      })    
+      })
     }, 1000) // 1000 毫秒 = 1 秒
 
     // 清理定时器，防止组件卸载时执行
@@ -133,7 +135,8 @@ const NotionPage = ({ post, className }) => {
   return (
     <div
       id='notion-article'
-      className={`mx-auto overflow-hidden ${className || ''}`}>
+      className={`mx-auto overflow-hidden ${className || ''}`}
+    >
       <NotionRenderer
         recordMap={post?.blockMap}
         mapPageUrl={mapPageUrl}
@@ -153,7 +156,6 @@ const NotionPage = ({ post, className }) => {
     </div>
   )
 }
-
 
 /**
  * 页面的数据库链接禁止跳转，只能查看
@@ -216,6 +218,10 @@ const autoScrollToHash = () => {
 const mapPageUrl = id => {
   // return 'https://www.notion.so/' + id.replace(/-/g, '')
   return '/' + id.replace(/-/g, '')
+}
+
+const escapeRegExp = value => {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 }
 
 /**
