@@ -3,6 +3,8 @@ const fs = require('fs')
 const path = require('path')
 const BLOG = require('./blog.config')
 const { extractLangPrefix } = require('./lib/utils/pageId')
+const isAnalyzeBuild = process.env.ANALYZE === 'true'
+const isExportBuild = Boolean(process.env.EXPORT) && !isAnalyzeBuild
 
 // 打包时是否分析代码
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -33,7 +35,11 @@ const locales = (function () {
 // 编译前执行
 ;(function () {
   const lifecycle = process.env.npm_lifecycle_event
-  if (lifecycle !== 'export' && lifecycle !== 'build') {
+  if (
+    lifecycle !== 'export' &&
+    lifecycle !== 'build' &&
+    lifecycle !== 'bundle-report'
+  ) {
     return
   }
   // 删除 public/sitemap.xml 文件 ； 否则会和/pages/sitemap.xml.js 冲突。
@@ -58,7 +64,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true
   },
-  output: process.env.EXPORT
+  output: isExportBuild
     ? 'export'
     : process.env.NEXT_BUILD_STANDALONE === 'true'
       ? 'standalone'
@@ -73,7 +79,7 @@ const nextConfig = {
   // 构建优化
   swcMinify: true,
   // 多语言， 在export时禁用
-  i18n: process.env.EXPORT
+  i18n: isExportBuild
     ? undefined
     : {
         defaultLocale: BLOG.LANG,
@@ -107,7 +113,7 @@ const nextConfig = {
   },
 
   // 默认将feed重定向至 /public/rss/feed.xml
-  redirects: process.env.EXPORT
+  redirects: isExportBuild
     ? undefined
     : () => {
         return [
@@ -119,7 +125,7 @@ const nextConfig = {
         ]
       },
   // 重写url
-  rewrites: process.env.EXPORT
+  rewrites: isExportBuild
     ? undefined
     : () => {
         // 处理多语言重定向
@@ -166,7 +172,7 @@ const nextConfig = {
           }
         ]
       },
-  headers: process.env.EXPORT
+  headers: isExportBuild
     ? undefined
     : () => {
         return [

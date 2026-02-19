@@ -51,7 +51,9 @@ const MyApp = ({ Component, pageProps }) => {
     [theme]
   )
 
-  const enableClerk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+  const enableClerk =
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+    process.env.ANALYZE !== 'true'
   const content = (
     <div className={`${hhhFont.className} ${hhhFont.variable}`}>
       <GlobalContextProvider {...pageProps}>

@@ -8,6 +8,10 @@ const filterDOMProps = props => {
 }
 
 const SmartLink = ({ href, children, ...rest }) => {
+  if (!href) {
+    return <>{children}</>
+  }
+
   const LINK = siteConfig('LINK')
 
   // 获取 URL 字符串用于判断是否是外链
@@ -35,7 +39,8 @@ const SmartLink = ({ href, children, ...rest }) => {
         href={externalUrl}
         target='_blank'
         rel='noopener noreferrer'
-        {...filterDOMProps(rest)}>
+        {...filterDOMProps(rest)}
+      >
         {children}
       </a>
     )

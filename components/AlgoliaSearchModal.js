@@ -2,13 +2,14 @@ import replaceSearchResult from '@/components/Mark'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import algoliasearch from 'algoliasearch'
-import throttle from 'lodash/throttle'
+import throttle from 'lodash.throttle'
 import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
 import {
   Fragment,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState
 } from 'react'
@@ -96,7 +97,8 @@ export default function AlgoliaSearchModal({ cRef }) {
     'enter',
     e => {
       if (isInputFocused && searchResults.length > 0) {
-        onJumpSearchResult(index)
+        e.preventDefault()
+        onJumpSearchResult()
       }
     },
     { enableOnFormTags: true }
@@ -124,7 +126,7 @@ export default function AlgoliaSearchModal({ cRef }) {
    */
   useEffect(() => {
     setIsModalOpen(false)
-  }, [router])
+  }, [router.asPath])
 
   /**
    * 自动聚焦搜索框
@@ -150,11 +152,13 @@ export default function AlgoliaSearchModal({ cRef }) {
     }
   })
 
-  const client = algoliasearch(
-    siteConfig('ALGOLIA_APP_ID'),
-    siteConfig('ALGOLIA_SEARCH_ONLY_APP_KEY')
-  )
-  const index = client.initIndex(siteConfig('ALGOLIA_INDEX'))
+  const index = useMemo(() => {
+    const client = algoliasearch(
+      siteConfig('ALGOLIA_APP_ID'),
+      siteConfig('ALGOLIA_SEARCH_ONLY_APP_KEY')
+    )
+    return client.initIndex(siteConfig('ALGOLIA_INDEX'))
+  }, [])
 
   /**
    * 搜索
@@ -179,7 +183,6 @@ export default function AlgoliaSearchModal({ cRef }) {
       setTotalPage(nbPages)
       setTotalHit(nbHits)
       setSearchResults(hits)
-      setIsLoading(false)
       const doms = document
         .getElementById('search-wrapper')
         .getElementsByClassName('replace')
@@ -196,6 +199,8 @@ export default function AlgoliaSearchModal({ cRef }) {
       }, 200) // 延时高亮
     } catch (error) {
       console.error('Algolia search error:', error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -208,6 +213,16 @@ export default function AlgoliaSearchModal({ cRef }) {
 
   // 用于存储搜索延迟的计时器
   const searchTimer = useRef(null)
+
+  useEffect(() => {
+    const throttledSearch = throttledHandleInputChange.current
+    return () => {
+      if (searchTimer.current) {
+        clearTimeout(searchTimer.current)
+      }
+      throttledSearch.cancel()
+    }
+  }, [])
 
   // 修改input的onChange事件处理函数
   const handleInputChange = e => {
@@ -247,12 +262,14 @@ export default function AlgoliaSearchModal({ cRef }) {
       id='search-wrapper'
       className={`${
         isModalOpen ? 'opacity-100' : 'invisible opacity-0 pointer-events-none'
-      } z-30 fixed h-screen w-screen left-0 top-0 sm:mt-[10vh] flex items-start justify-center mt-0`}>
+      } z-30 fixed h-screen w-screen left-0 top-0 sm:mt-[10vh] flex items-start justify-center mt-0`}
+    >
       {/* 模态框 */}
       <div
         className={`${
           isModalOpen ? 'opacity-100' : 'invisible opacity-0 translate-y-10'
-        } max-h-[80vh] flex flex-col justify-between w-full min-h-[10rem] h-full md:h-fit max-w-xl dark:bg-hexo-black-gray dark:border-gray-800 bg-white dark:bg- p-5 rounded-lg z-50 shadow border hover:border-blue-600 duration-300 transition-all `}>
+        } max-h-[80vh] flex flex-col justify-between w-full min-h-[10rem] h-full md:h-fit max-w-xl dark:bg-hexo-black-gray dark:border-gray-800 bg-white dark:bg- p-5 rounded-lg z-50 shadow border hover:border-blue-600 duration-300 transition-all `}
+      >
         <div className='flex justify-between items-center'>
           <div className='text-2xl text-blue-600 dark:text-yellow-600 font-bold'>
             搜索
@@ -260,14 +277,15 @@ export default function AlgoliaSearchModal({ cRef }) {
           <div>
             <i
               className='text-gray-600 fa-solid fa-xmark p-1 cursor-pointer hover:text-blue-600'
-              onClick={closeModal}></i>
+              onClick={closeModal}
+            ></i>
           </div>
         </div>
 
         <input
           type='text'
           placeholder='在这里输入搜索关键词...'
-          onChange={e => handleInputChange(e)}
+          onChange={handleInputChange}
           onFocus={() => setIsInputFocused(true)} // 聚焦时
           onBlur={() => setIsInputFocused(false)} // 失去焦点时
           className='text-black dark:text-gray-200 bg-gray-50 dark:bg-gray-600 outline-blue-500 w-full px-4 my-2 py-1 mb-4 border rounded-md'
@@ -295,9 +313,11 @@ export default function AlgoliaSearchModal({ cRef }) {
               onClick={() => onJumpSearchResult(index)}
               className={`cursor-pointer replace my-2 p-2 duration-100 
               rounded-lg
-              ${activeIndex === index ? 'bg-blue-600 dark:bg-yellow-600' : ''}`}>
+              ${activeIndex === index ? 'bg-blue-600 dark:bg-yellow-600' : ''}`}
+            >
               <a
-                className={`${activeIndex === index ? ' text-white' : ' text-black dark:text-gray-300 '}`}>
+                className={`${activeIndex === index ? ' text-white' : ' text-black dark:text-gray-300 '}`}
+              >
                 {result.title}
               </a>
             </li>
@@ -361,11 +381,13 @@ function TagGroups() {
             passHref
             key={index}
             href={`/tag/${encodeURIComponent(tag.name)}`}
-            className={'cursor-pointer inline-block whitespace-nowrap'}>
+            className={'cursor-pointer inline-block whitespace-nowrap'}
+          >
             <div
               className={
                 'flex items-center text-black dark:text-gray-300 hover:bg-blue-600 dark:hover:bg-yellow-600 hover:scale-110 hover:text-white rounded-lg px-2 py-0.5 duration-150 transition-all'
-              }>
+              }
+            >
               <div className='text-lg'>{tag.name} </div>
               {tag.count ? (
                 <sup className='relative ml-1'>{tag.count}</sup>
@@ -401,7 +423,8 @@ function Pagination(props) {
           <div
             onClick={() => switchPage(i)}
             className={`text-center cursor-pointer w-6 h-6 ${classNames}`}
-            key={i}>
+            key={i}
+          >
             {i + 1}
           </div>
         )
