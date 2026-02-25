@@ -32,19 +32,34 @@ const isTenantAdminRoute = createRouteMatcher([
  * @param ev
  * @returns
  */
+// UUID 重定向映射表进程级缓存：同一进程内只取一次，不同请求内共享
+let _redirectJsonCache: Record<string, string> | null = null
+let _redirectJsonCacheTime = 0
+const REDIRECT_CACHE_TTL_MS = 5 * 60 * 1000 // 5 分钟
+
+async function getRedirectJson(origin: string): Promise<Record<string, string>> {
+  const now = Date.now()
+  if (_redirectJsonCache && now - _redirectJsonCacheTime < REDIRECT_CACHE_TTL_MS) {
+    return _redirectJsonCache
+  }
+  try {
+    const response = await fetch(`${origin}/redirect.json`)
+    if (response.ok) {
+      _redirectJsonCache = (await response.json()) as Record<string, string>
+      _redirectJsonCacheTime = now
+      return _redirectJsonCache
+    }
+  } catch (err) {
+    console.error('Error fetching redirect.json:', err)
+  }
+  return _redirectJsonCache ?? {}
+}
+
 // eslint-disable-next-line @typescript-eslint/require-await, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
 const noAuthMiddleware = async (req: NextRequest, ev: any) => {
   // 如果没有配置 Clerk 相关环境变量，返回一个默认响应或者继续处理请求
   if (BLOG['UUID_REDIRECT']) {
-    let redirectJson: Record<string, string> = {}
-    try {
-      const response = await fetch(`${req.nextUrl.origin}/redirect.json`)
-      if (response.ok) {
-        redirectJson = (await response.json()) as Record<string, string>
-      }
-    } catch (err) {
-      console.error('Error fetching static file:', err)
-    }
+    const redirectJson = await getRedirectJson(req.nextUrl.origin)
     let lastPart = getLastPartOfUrl(req.nextUrl.pathname) as string
     if (checkStrIsNotionId(lastPart)) {
       lastPart = idToUuid(lastPart)

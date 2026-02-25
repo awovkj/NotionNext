@@ -1,5 +1,17 @@
 // 注: process.env.XX是Vercel的环境变量，配置方式见：https://docs.tangly1024.com/article/how-to-config-notion-next#c4768010ae7d44609b744e79e2f9959a
 
+/**
+ * 安全解析布尔环境变量
+ * 当环境变量未设置时返回 defaultVal（true/false）
+ * 当环境变量为 'false'/'0'/'no' 时返回 false，其余非空字符串返回 true
+ * @param {string|undefined} envVal
+ * @param {boolean} defaultVal
+ * @returns {boolean}
+ */
+function envBool(envVal, defaultVal) {
+  if (envVal === undefined || envVal === null || envVal === '') return defaultVal
+  return envVal !== 'false' && envVal !== '0' && envVal !== 'no'
+}
 const BLOG = {
   API_BASE_URL:
     process.env.API_BASE_URL || 'https://bubble-scorpio-8bf.notion.site/api/v3', // API默认请求地址,可以配置成自己的地址例如：https://[xxxxx].notion.site/api/v3
@@ -10,7 +22,7 @@ const BLOG = {
   LANG: process.env.NEXT_PUBLIC_LANG || 'zh-CN', // e.g 'zh-CN','en-US'  see /lib/lang.js for more.
   SINCE: process.env.NEXT_PUBLIC_SINCE || '', // e.g if leave this empty, current year will be used.
 
-  PSEUDO_STATIC: process.env.NEXT_PUBLIC_PSEUDO_STATIC || true, // 伪静态路径，开启后所有文章URL都以 .html 结尾。
+  PSEUDO_STATIC: envBool(process.env.NEXT_PUBLIC_PSEUDO_STATIC, true), // 伪静态路径，开启后所有文章URL都以 .html 结尾。
   NEXT_REVALIDATE_SECOND: process.env.NEXT_PUBLIC_REVALIDATE_SECOND || 60, // 更新缓存间隔 单位(秒)；即每个页面有60秒的纯静态期、此期间无论多少次访问都不会抓取notion数据；调大该值有助于节省Vercel资源、同时提升访问速率，但也会使文章更新有延迟。
   APPEARANCE: process.env.NEXT_PUBLIC_APPEARANCE || 'light', // ['light', 'dark', 'auto'], // light 日间模式 ， dark夜间模式， auto根据时间和主题自动夜间模式
   APPEARANCE_DARK_TIME: process.env.NEXT_PUBLIC_APPEARANCE_DARK_TIME || [18, 6], // 夜间模式起至时间，false时关闭根据时间自动切换夜间模式
@@ -30,7 +42,7 @@ const BLOG = {
   BEI_AN_GONGAN: process.env.NEXT_PUBLIC_BEI_AN_GONGAN || '', // 公安备案号，例如 '浙公网安备3xxxxxxxx8号'
 
   // RSS订阅
-  ENABLE_RSS: process.env.NEXT_PUBLIC_ENABLE_RSS || false, // 是否开启RSS订阅功能
+  ENABLE_RSS: envBool(process.env.NEXT_PUBLIC_ENABLE_RSS, false), // 是否开启RSS订阅功能
 
   // 其它复杂配置
   // 原配置文件过长，且并非所有人都会用到，故此将配置拆分到/conf/目录下, 按需找到对应文件并修改即可
@@ -58,20 +70,19 @@ const BLOG = {
   CUSTOM_EXTERNAL_CSS: [''], // e.g. ['http://xx.com/style.css','http://xx.com/style.css']
 
   // 自定义菜单
-  CUSTOM_MENU: process.env.NEXT_PUBLIC_CUSTOM_MENU || true, // 支持Menu类型的菜单，替代了3.12版本前的Page类型
+  CUSTOM_MENU: envBool(process.env.NEXT_PUBLIC_CUSTOM_MENU, true), // 支持Menu类型的菜单，替代了3.12版本前的Page类型
 
   // 文章列表相关设置
-  CAN_COPY: process.env.NEXT_PUBLIC_CAN_COPY || true, // 是否允许复制页面内容 默认允许，如果设置为false、则全栈禁止复制内容。
+  CAN_COPY: envBool(process.env.NEXT_PUBLIC_CAN_COPY, true), // 是否允许复制页面内容 默认允许，如果设置为false、则全栈禁止复制内容。
 
-  LAYOUT_SIDEBAR_REVERSE:
-    process.env.NEXT_PUBLIC_LAYOUT_SIDEBAR_REVERSE || false,
+  LAYOUT_SIDEBAR_REVERSE: envBool(process.env.NEXT_PUBLIC_LAYOUT_SIDEBAR_REVERSE, false),
 
   GREETING_WORDS:
     process.env.NEXT_PUBLIC_GREETING_WORDS ||
     'Hi，我是一个程序员, Hi，我是一个打工人,Hi，我是一个干饭人,欢迎来到我的博客🎉',
 
   // uuid重定向至 slug
-  UUID_REDIRECT: process.env.UUID_REDIRECT || false
+  UUID_REDIRECT: envBool(process.env.UUID_REDIRECT, false)
 }
 
 module.exports = BLOG

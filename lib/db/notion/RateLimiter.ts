@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 interface QueueItem<T> {
+  key: string
   requestFunc: () => Promise<T>
   resolve: (value: T) => void
   reject: (err: any) => void
@@ -65,7 +66,7 @@ export class RateLimiter {
     }
 
     return new Promise((resolve, reject) => {
-      this.queue.push({ requestFunc, resolve, reject })
+      this.queue.push({ key, requestFunc, resolve, reject })
       if (!this.isProcessing) this.processQueue()
     })
   }
@@ -91,8 +92,8 @@ export class RateLimiter {
       const waitTime = Math.max(0, minInterval - (now - this.lastRequestTime))
       if (waitTime > 0) await new Promise(res => setTimeout(res, waitTime))
 
-      const { requestFunc, resolve, reject } = this.queue.shift()!
-      const key = crypto.randomUUID()
+      const { key, requestFunc, resolve, reject } = this.queue.shift()!
+      // 用原始 key 追踪 inflight，保证 enqueue() 冻结检测正确
       this.inflight.add(key)
 
       try {
