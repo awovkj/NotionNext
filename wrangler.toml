@@ -1,6 +1,9 @@
 name = "notion-next"
 compatibility_date = "2026-02-18"
 
+# Cloudflare Pages 部署配置说明：
+# 控制台「构建命令」必须设为: npm run cf:build
+# 控制台「部署命令」设为:             npx wrangler deploy
 [assets]
 directory = "./out"
 not_found_handling = "404-page"
