@@ -8,12 +8,12 @@ import { useEffect, useState } from 'react'
  */
 const DebugPanel = () => {
   const [show, setShow] = useState(false)
-  const { locale } = useGlobal()
+  const { locale, NOTION_CONFIG, siteInfo } = useGlobal()
   const [siteConfig, updateSiteConfig] = useState({})
 
   useEffect(() => {
-    updateSiteConfig(Object.assign({}, siteConfigMap()))
-  }, [])
+    updateSiteConfig(siteConfigMap({ ...NOTION_CONFIG, _siteInfo: siteInfo }))
+  }, [NOTION_CONFIG, siteInfo])
 
   function toggleShow() {
     setShow(!show)
