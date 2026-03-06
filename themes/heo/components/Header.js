@@ -17,6 +17,7 @@ import SlideOver from './SlideOver'
  * @returns
  */
 const Header = props => {
+  const { forceHideOnHome = false } = props
   const [fixedNav, setFixedNav] = useState(false)
   const [textWhite, setTextWhite] = useState(false)
   const [navBgWhite, setBgWhite] = useState(false)
@@ -133,7 +134,7 @@ const Header = props => {
       `}</style>
 
       {/* fixed时留白高度 */}
-      {fixedNav && !document?.querySelector('#post-bg') && (
+      {fixedNav && !forceHideOnHome && !document?.querySelector('#post-bg') && (
         <div className='h-16'></div>
       )}
 
@@ -141,9 +142,10 @@ const Header = props => {
       <nav
         id='nav'
         className={`z-20 h-16 top-0 w-full duration-300 transition-all
-            ${fixedNav ? 'fixed' : 'relative bg-transparent'} 
+            ${fixedNav ? 'fixed' : 'relative'} 
             ${textWhite ? 'text-white ' : 'text-black dark:text-white'}  
-            ${navBgWhite ? 'bg-white dark:bg-[#18171d] shadow' : 'bg-transparent'}`}
+            bg-white dark:bg-[#18171d] shadow
+            ${forceHideOnHome ? ' opacity-0 pointer-events-none -translate-y-4' : 'opacity-100 translate-y-0'}`}
       >
         <div className='flex h-full mx-auto justify-between items-center max-w-[86rem] px-6'>
           {/* 左侧logo */}

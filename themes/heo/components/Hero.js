@@ -5,7 +5,7 @@ import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import SmartLink from '@/components/SmartLink'
 import { useRouter } from 'next/router'
-import { useImperativeHandle, useRef, useState } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import CONFIG from '../config'
 
 /**
@@ -17,25 +17,107 @@ import CONFIG from '../config'
  */
 const Hero = props => {
   const HEO_HERO_REVERSE = siteConfig('HEO_HERO_REVERSE', false, CONFIG)
+  const HERO_BG_IMAGE = 'https://tutu.510517.xyz/202602171655982.webp'
+  const typingPhrases = [
+    siteConfig('HEO_HERO_TITLE_1', '', CONFIG),
+    siteConfig('HEO_HERO_TITLE_3', '', CONFIG),
+    '记录技术与生活',
+    '分享思考与实践'
+  ].filter(Boolean)
+  const [typingText, setTypingText] = useState('')
+  const [typingIndex, setTypingIndex] = useState(0)
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  useEffect(() => {
+    if (!typingPhrases.length) return
+    const current = typingPhrases[typingIndex % typingPhrases.length]
+    const nextText = isDeleting
+      ? current.slice(0, Math.max(typingText.length - 1, 0))
+      : current.slice(0, Math.min(typingText.length + 1, current.length))
+
+    const isTypingEnd = !isDeleting && typingText.length >= current.length
+    const isDeletingEnd = isDeleting && typingText.length === 0
+    const delay = isTypingEnd ? 1200 : isDeleting ? 45 : 90
+
+    const timer = setTimeout(() => {
+      setTypingText(nextText)
+      if (isTypingEnd) {
+        setIsDeleting(true)
+      } else if (isDeletingEnd) {
+        setIsDeleting(false)
+        setTypingIndex(i => (i + 1) % typingPhrases.length)
+      }
+    }, delay)
+
+    return () => clearTimeout(timer)
+  }, [typingPhrases, typingIndex, typingText, isDeleting])
+
+  const handleScrollDown = () => {
+    if (typeof window === 'undefined') return
+    const target = document.getElementById('hero')
+    if (!target) return
+    const top = target.getBoundingClientRect().top + window.scrollY - 80
+    window.scrollTo({ top, behavior: 'smooth' })
+  }
+
   return (
-    <div
-      id='hero-wrapper'
-      className='recent-top-post-group w-full overflow-hidden select-none px-5 mb-4'
-    >
+    <div id='hero-wrapper' className='w-full select-none relative'>
+      {/* 全局背景图 - 固定在整个页面底部 */}
       <div
-        id='hero'
-        style={{ zIndex: 1 }}
-        className={`${HEO_HERO_REVERSE ? 'xl:flex-row-reverse' : ''}
-           recent-post-top rounded-[12px] 2xl:px-5 recent-top-post-group max-w-[86rem] overflow-x-scroll w-full mx-auto flex-row flex-nowrap flex relative`}
+        className='fixed inset-0 -z-50'
+        style={{
+          backgroundImage: `url(${HERO_BG_IMAGE})`,
+          backgroundPosition: 'center',
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+
+      <div
+        className='heo-home-hero-intro relative h-[100vh] min-h-[36rem] overflow-hidden'
       >
-        {/* 左侧banner组 */}
-        <BannerGroup {...props} />
+        <div className='relative z-10 h-full flex flex-col items-center justify-center px-6 text-center text-white'>
+          <h1 className='text-4xl md:text-6xl font-extrabold tracking-wide drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] text-white'>
+            {siteConfig('HEO_HERO_TITLE_1', '', CONFIG)}
+          </h1>
+          <div className='mt-5 text-lg md:text-2xl text-white min-h-[2.25rem] md:min-h-[2.6rem] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]'>
+            {typingText}
+            <span className='heo-typing-caret'>|</span>
+          </div>
+          <button
+            type='button'
+            onClick={handleScrollDown}
+            className='absolute bottom-10 md:bottom-12 text-white hover:text-gray-200 transition-colors duration-300 drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]'
+          >
+            <div className='text-xs tracking-[0.25em] uppercase mb-2'>
+              Scroll Down
+            </div>
+            <div className='text-3xl animate-bounce leading-none'>⌄</div>
+          </button>
+        </div>
+      </div>
 
-        {/* 中间留白 */}
-        <div className='px-1.5 h-full'></div>
+      <div
+        id='hero-main'
+        className='recent-top-post-group relative w-full overflow-hidden px-5 mb-4 py-4 bg-transparent'
+        style={{ backgroundColor: 'transparent' }}
+      >
+        <div
+          id='hero'
+          style={{ zIndex: 1 }}
+          className={`${HEO_HERO_REVERSE ? 'xl:flex-row-reverse' : ''}
+           recent-post-top rounded-[12px] 2xl:px-5 recent-top-post-group max-w-[86rem] overflow-x-scroll w-full mx-auto flex-row flex-nowrap flex relative bg-transparent`}
+        >
+          {/* 左侧banner组 */}
+          <BannerGroup {...props} />
 
-        {/* 右侧置顶文章组 */}
-        <TopGroup {...props} />
+          {/* 中间留白 */}
+          <div className='px-1.5 h-full'></div>
+
+          {/* 右侧置顶文章组 */}
+          <TopGroup {...props} />
+        </div>
       </div>
     </div>
   )
@@ -47,10 +129,9 @@ const Hero = props => {
  */
 function BannerGroup(props) {
   return (
-    // 左侧英雄区
     <div
       id='bannerGroup'
-      className='flex flex-col justify-between flex-1 mr-2 max-w-[42rem]'
+      className='flex flex-col justify-between flex-1 mr-2 max-w-[42rem] bg-white dark:bg-[#18171d] rounded-xl p-4'
     >
       {/* 动图 */}
       <Banner {...props} />
@@ -83,7 +164,7 @@ function Banner(props) {
     <div
       id='banners'
       onClick={handleClickBanner}
-      className='hidden xl:flex xl:flex-col group h-full bg-white dark:bg-[#1e1e1e] rounded-xl border dark:border-gray-700 mb-3 relative overflow-hidden'
+      className='hidden xl:flex xl:flex-col group h-full bg-white/10 dark:bg-black/10 backdrop-blur-sm rounded-xl border border-white/20 dark:border-gray-700/50 mb-3 relative overflow-hidden'
     >
       <div
         id='banner-title'
@@ -256,7 +337,7 @@ function TopGroup(props) {
               href={`${siteConfig('SUB_PATH', '')}/${p?.slug}`}
               key={index}
             >
-              <div className='cursor-pointer h-[164px] group relative flex flex-col w-52 xl:w-full overflow-hidden shadow bg-white dark:bg-black dark:text-white rounded-xl'>
+              <div className='cursor-pointer h-[164px] group relative flex flex-col w-52 xl:w-full overflow-hidden shadow bg-white/20 dark:bg-black/20 backdrop-blur-sm border border-white/10 dark:border-gray-700/30 rounded-xl'>
                 <LazyImage
                   priority={index === 0}
                   className='h-24 object-cover'
