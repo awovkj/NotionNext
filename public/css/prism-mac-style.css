@@ -21,8 +21,9 @@
   width: 100%;
   border-radius: 8px;
   margin-bottom: 1rem;
-  background: #1a1a1a;
-  border: 1px solid #333;
+  background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.22);
   overflow: hidden;
 }
 
@@ -120,16 +121,16 @@
 /* 悬停时高亮 */
 .toolbar-item > button:hover {
   color: #e5e7eb !important;
-  background: rgba(255,255,255,0.05) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
 }
 
 /* 复制成功状态（显示 Copied!） */
-.toolbar-item > button[data-copy-state="copy-success"]::before,
-.toolbar-item > button[data-copy-state="copy-success"]::after {
+.toolbar-item > button[data-copy-state='copy-success']::before,
+.toolbar-item > button[data-copy-state='copy-success']::after {
   display: none !important;
 }
 
-.toolbar-item > button[data-copy-state="copy-success"] {
+.toolbar-item > button[data-copy-state='copy-success'] {
   font-size: 9px !important;
   color: #34d399 !important;
   font-weight: 600 !important;
@@ -141,7 +142,7 @@
   animation: copiedFade 1s ease-out forwards !important;
 }
 
-.toolbar-item > button[data-copy-state="copy-success"]::before {
+.toolbar-item > button[data-copy-state='copy-success']::before {
   content: 'Copied!' !important;
   display: block !important;
   position: static !important;
@@ -181,18 +182,10 @@ code[class*='language-'] {
   color: #e5e7eb !important;
   border: none !important;
   border-radius: 0 !important;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
+  font-family:
+    'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New',
+    monospace !important;
   position: relative;
-}
-
-/* 特别处理原始的notion-code容器 */
-.notion-code {
-  background: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
 }
 
 /* 终端标题栏 */
@@ -245,24 +238,24 @@ code[class*='language-'] {
     border-radius: 8px;
     margin-bottom: 0.75rem;
   }
-  
+
   pre[class*='language-'] {
     border-radius: 0 0 8px 8px;
     padding-top: 2rem !important;
   }
-  
+
   .pre-mac {
     height: 2rem;
     padding: 0 0.75rem;
     border-radius: 8px 8px 0 0;
   }
-  
+
   .pre-mac > span {
     width: 10px;
     height: 10px;
     margin-right: 6px;
   }
-  
+
   .pre-mac::after {
     font-size: 12px;
   }
@@ -272,11 +265,13 @@ code[class*='language-'] {
 pre[class*='language-'] > code {
   padding: 12px 16px !important;
   padding-top: 32px !important;
-  line-height: 1.4;
+  line-height: 1.65;
   font-size: 14px;
   background: transparent !important;
-  color: #e5e7eb !important;
-  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
+  color: #e2e8f0 !important;
+  font-family:
+    'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New',
+    monospace !important;
   display: block !important;
   margin: 0 !important;
   border: none !important;
@@ -286,28 +281,41 @@ pre[class*='language-'] > code {
   word-break: normal !important;
   font-variant-ligatures: none !important;
   -webkit-font-variant-ligatures: none !important;
-  font-feature-settings: "liga" 0, "calt" 0 !important;
+  font-feature-settings:
+    'liga' 0,
+    'calt' 0 !important;
 }
 
-/* 简化终端风格语法高亮 */
-pre[class*='language-'] code .token {
-  color: #e5e7eb !important;
+pre[class*='language-'] {
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.12), transparent 32%),
+    linear-gradient(180deg, #0f172a 0%, #111827 100%) !important;
+}
+
+#notion-article pre[class*='language-'] code .token,
+#notion-article .notion-code code .token {
+  color: #e2e8f0 !important;
 }
 
 /* 确保操作符/标点（比如 ==）可见 */
-pre[class*='language-'] code .token.operator,
-pre[class*='language-'] code .token.punctuation {
-  color: #f472b6 !important;
+#notion-article pre[class*='language-'] code .token.operator,
+#notion-article pre[class*='language-'] code .token.punctuation,
+#notion-article .notion-code code .token.operator,
+#notion-article .notion-code code .token.punctuation {
+  color: #fda4af !important;
   opacity: 1 !important;
 }
 
-/* 更多 token 样式 */
-pre[class*='language-'] code .token.function {
-  color: #f472b6 !important;
+pre[class*='language-'] .line-numbers-rows {
+  border-right: 1px solid rgba(148, 163, 184, 0.14) !important;
 }
 
-pre[class*='language-'] code .token.string {
-  color: #34d399 !important;
+pre[class*='language-'].line-numbers > code {
+  padding-left: 3.75em !important;
+}
+
+pre[class*='language-'].line-numbers .line-numbers-rows > span:before {
+  color: rgba(148, 163, 184, 0.52) !important;
 }
 
 /* 隐藏所有不需要的元素（但不包括 collapse-wrapper，collapse 已用显式样式处理）*/
@@ -328,7 +336,6 @@ pre[class*='language-'] code .token.string {
 /* 隐藏语言标签 */
 code[class*='language-']::before,
 pre[class*='language-']::before,
-.code-toolbar::before,
 .toolbar::before {
   display: none !important;
 }
@@ -408,11 +415,6 @@ pre[class*='language-']::before,
   border: none !important;
 }
 
-/* Mac标题栏在折叠模式下 - 给折叠按钮留出空间 */
-.collapse-wrapper .pre-mac {
-  padding-right: 50px !important;
-}
-
 .collapse-wrapper .pre-mac > span {
   pointer-events: auto !important;
 }
@@ -422,68 +424,98 @@ pre[class*='language-']::-webkit-scrollbar {
   display: none;
 }
 /* ─── 美化代码语法高亮 ─── */
-pre[class*='language-'] code .token.comment,
-pre[class*='language-'] code .token.prolog,
-pre[class*='language-'] code .token.doctype,
-pre[class*='language-'] code .token.cdata {
-  color: #546e7a !important; /* 灰蓝，注释 */
+#notion-article pre[class*='language-'] code .token.comment,
+#notion-article pre[class*='language-'] code .token.prolog,
+#notion-article pre[class*='language-'] code .token.doctype,
+#notion-article pre[class*='language-'] code .token.cdata,
+#notion-article .notion-code code .token.comment,
+#notion-article .notion-code code .token.prolog,
+#notion-article .notion-code code .token.doctype,
+#notion-article .notion-code code .token.cdata {
+  color: #94a3b8 !important;
   font-style: italic !important;
 }
 
-pre[class*='language-'] code .token.punctuation {
-  color: #ff9cac !important; /* 粉色标点符号 */
+#notion-article pre[class*='language-'] code .token.punctuation,
+#notion-article .notion-code code .token.punctuation {
+  color: #fda4af !important;
 }
 
-pre[class*='language-'] code .token.namespace {
+#notion-article pre[class*='language-'] code .token.namespace,
+#notion-article .notion-code code .token.namespace {
   opacity: 0.7 !important;
 }
 
-pre[class*='language-'] code .token.property,
-pre[class*='language-'] code .token.tag,
-pre[class*='language-'] code .token.constant,
-pre[class*='language-'] code .token.symbol,
-pre[class*='language-'] code .token.deleted {
-  color: #82aaff !important; /* 蓝色属性/标签 */
+#notion-article pre[class*='language-'] code .token.property,
+#notion-article pre[class*='language-'] code .token.tag,
+#notion-article pre[class*='language-'] code .token.constant,
+#notion-article pre[class*='language-'] code .token.symbol,
+#notion-article pre[class*='language-'] code .token.deleted,
+#notion-article .notion-code code .token.property,
+#notion-article .notion-code code .token.tag,
+#notion-article .notion-code code .token.constant,
+#notion-article .notion-code code .token.symbol,
+#notion-article .notion-code code .token.deleted {
+  color: #7dd3fc !important;
 }
 
-pre[class*='language-'] code .token.boolean,
-pre[class*='language-'] code .token.number {
-  color: #f78c6c !important; /* 橙色数字/布尔值 */
+#notion-article pre[class*='language-'] code .token.boolean,
+#notion-article pre[class*='language-'] code .token.number,
+#notion-article .notion-code code .token.boolean,
+#notion-article .notion-code code .token.number {
+  color: #f59e0b !important;
 }
 
-pre[class*='language-'] code .token.selector,
-pre[class*='language-'] code .token.attr-name,
-pre[class*='language-'] code .token.string,
-pre[class*='language-'] code .token.char,
-pre[class*='language-'] code .token.builtin,
-pre[class*='language-'] code .token.inserted {
-  color: #c3e88d !important; /* 绿色字符串 */
+#notion-article pre[class*='language-'] code .token.selector,
+#notion-article pre[class*='language-'] code .token.attr-name,
+#notion-article pre[class*='language-'] code .token.string,
+#notion-article pre[class*='language-'] code .token.char,
+#notion-article pre[class*='language-'] code .token.builtin,
+#notion-article pre[class*='language-'] code .token.inserted,
+#notion-article .notion-code code .token.selector,
+#notion-article .notion-code code .token.attr-name,
+#notion-article .notion-code code .token.string,
+#notion-article .notion-code code .token.char,
+#notion-article .notion-code code .token.builtin,
+#notion-article .notion-code code .token.inserted {
+  color: #86efac !important;
 }
 
-pre[class*='language-'] code .token.operator,
-pre[class*='language-'] code .token.entity,
-pre[class*='language-'] code .token.url,
-pre[class*='language-'] code .token.variable {
-  color: #ff9cac !important; /* 粉红操作符 */
+#notion-article pre[class*='language-'] code .token.operator,
+#notion-article pre[class*='language-'] code .token.entity,
+#notion-article pre[class*='language-'] code .token.url,
+#notion-article pre[class*='language-'] code .token.variable,
+#notion-article .notion-code code .token.operator,
+#notion-article .notion-code code .token.entity,
+#notion-article .notion-code code .token.url,
+#notion-article .notion-code code .token.variable {
+  color: #f9a8d4 !important;
 }
 
-pre[class*='language-'] code .token.atrule,
-pre[class*='language-'] code .token.attr-value,
-pre[class*='language-'] code .token.keyword {
-  color: #c792ea !important; /* 紫色关键字 */
+#notion-article pre[class*='language-'] code .token.atrule,
+#notion-article pre[class*='language-'] code .token.attr-value,
+#notion-article pre[class*='language-'] code .token.keyword,
+#notion-article .notion-code code .token.atrule,
+#notion-article .notion-code code .token.attr-value,
+#notion-article .notion-code code .token.keyword {
+  color: #c084fc !important;
 }
 
-pre[class*='language-'] code .token.function {
-  color: #f78c6c !important; /* 橙粉函数名 */
+#notion-article pre[class*='language-'] code .token.function,
+#notion-article .notion-code code .token.function {
+  color: #60a5fa !important;
 }
 
-pre[class*='language-'] code .token.class-name {
-  color: #89ddff !important; /* 青蓝类名 */
+#notion-article pre[class*='language-'] code .token.class-name,
+#notion-article .notion-code code .token.class-name {
+  color: #22d3ee !important;
 }
 
-pre[class*='language-'] code .token.regex,
-pre[class*='language-'] code .token.important {
-  color: #ff5370 !important;
+#notion-article pre[class*='language-'] code .token.regex,
+#notion-article pre[class*='language-'] code .token.important,
+#notion-article .notion-code code .token.regex,
+#notion-article .notion-code code .token.important {
+  color: #fb7185 !important;
 }
 
 pre[class*='language-'] code .token.bold {

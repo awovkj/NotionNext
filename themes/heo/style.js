@@ -31,13 +31,90 @@ const Style = () => {
         color: white !important;
       }
 
-      /* notion-article 正文字体改为黑色并调大 */
+      /* notion-article 正文字体黑色并调大，不覆盖代码高亮 */
       #notion-article {
         color: black !important;
         font-size: 1.125rem !important;
       }
-      #notion-article * {
+      #notion-article .notion-text,
+      #notion-article .notion-text *,
+      #notion-article .notion-h1,
+      #notion-article .notion-h1 *,
+      #notion-article .notion-h2,
+      #notion-article .notion-h2 *,
+      #notion-article .notion-h3,
+      #notion-article .notion-h3 *,
+      #notion-article .notion-quote,
+      #notion-article .notion-quote *,
+      #notion-article .notion-callout-text,
+      #notion-article .notion-callout-text *,
+      #notion-article .notion-simple-table td,
+      #notion-article .notion-simple-table th,
+      #notion-article .notion-table-of-contents-item,
+      #notion-article .notion-table-of-contents-item *,
+      #notion-article .notion-bookmark-title,
+      #notion-article .notion-bookmark-description,
+      #notion-article .notion-bookmark-link div,
+      #notion-article .notion-page-title-text,
+      #notion-article li,
+      #notion-article li *,
+      #notion-article .notion-link {
         color: black !important;
+      }
+
+      /* 代码高亮 - 超亮配色 */
+      #notion-article pre[class*='language-'] code,
+      #notion-article .notion-code code {
+        color: #f8fafc !important;
+      }
+      #notion-article .token.comment,
+      #notion-article .token.prolog,
+      #notion-article .token.doctype,
+      #notion-article .token.cdata {
+        color: #a5b4fc !important;
+      }
+      #notion-article .token.punctuation {
+        color: #f9a8d4 !important;
+      }
+      #notion-article .token.property,
+      #notion-article .token.tag,
+      #notion-article .token.constant,
+      #notion-article .token.symbol,
+      #notion-article .token.deleted {
+        color: #67e8f9 !important;
+      }
+      #notion-article .token.boolean,
+      #notion-article .token.number {
+        color: #fcd34d !important;
+      }
+      #notion-article .token.selector,
+      #notion-article .token.attr-name,
+      #notion-article .token.string,
+      #notion-article .token.char,
+      #notion-article .token.builtin,
+      #notion-article .token.inserted {
+        color: #86efac !important;
+      }
+      #notion-article .token.operator,
+      #notion-article .token.entity,
+      #notion-article .token.url,
+      #notion-article .token.variable {
+        color: #fda4af !important;
+      }
+      #notion-article .token.atrule,
+      #notion-article .token.attr-value,
+      #notion-article .token.keyword {
+        color: #c4b5fd !important;
+      }
+      #notion-article .token.function {
+        color: #93c5fd !important;
+      }
+      #notion-article .token.class-name {
+        color: #5eead4 !important;
+      }
+      #notion-article .token.regex,
+      #notion-article .token.important {
+        color: #fca5a5 !important;
       }
 
       ::-webkit-scrollbar-thumb {
@@ -90,20 +167,6 @@ const Style = () => {
         box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
       }
 
-      .heo-home-hero-intro {
-        position: relative;
-        padding: 0 !important;
-        margin: 0 !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-      }
-
-      .heo-home-hero-main-bg {
-        transform: scale(1.02);
-      }
-
-      /* 确保 hero 区域没有顶部空白 */
       .heo-home-hero-intro {
         position: relative;
         padding: 0 !important;
