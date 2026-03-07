@@ -12,7 +12,9 @@ const Style = () => {
       }
 
       /* 确保页面容器透明 */
-      #theme-heo, #wrapper-outer, #post-outer-wrapper {
+      #theme-heo,
+      #wrapper-outer,
+      #post-outer-wrapper {
         background-color: transparent !important;
       }
 
@@ -29,19 +31,13 @@ const Style = () => {
         color: white !important;
       }
 
-      /* notion-article 字体白色并调大 */
+      /* notion-article 正文字体改为黑色并调大 */
       #notion-article {
-        color: white !important;
+        color: black !important;
         font-size: 1.125rem !important;
       }
       #notion-article * {
-        color: white !important;
-      }
-      .dark #notion-article {
-        color: white !important;
-      }
-      .dark #notion-article * {
-        color: white !important;
+        color: black !important;
       }
 
       ::-webkit-scrollbar-thumb {
