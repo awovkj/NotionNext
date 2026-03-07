@@ -31,9 +31,9 @@ const Style = () => {
         color: white !important;
       }
 
-      /* notion-article 正文字体黑色并调大，不覆盖代码高亮 */
+      /* notion-article 正文字体白色并调大 */
       #notion-article {
-        color: black !important;
+        color: white !important;
         font-size: 1.125rem !important;
       }
       #notion-article .notion-text,
@@ -59,7 +59,7 @@ const Style = () => {
       #notion-article li,
       #notion-article li *,
       #notion-article .notion-link {
-        color: black !important;
+        color: white !important;
       }
 
       /* 代码高亮 - 超亮配色 */
