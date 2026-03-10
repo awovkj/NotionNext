@@ -31,9 +31,9 @@ const Style = () => {
         color: white !important;
       }
 
-      /* notion-article 正文字体白色并调大 */
+      /* notion-article 正文字体默认黑色并调大 */
       #notion-article {
-        color: white !important;
+        color: black !important;
         font-size: 1.125rem !important;
       }
       #notion-article .notion-text,
@@ -59,6 +59,33 @@ const Style = () => {
       #notion-article li,
       #notion-article li *,
       #notion-article .notion-link {
+        color: black !important;
+      }
+
+      .dark #notion-article,
+      .dark #notion-article .notion-text,
+      .dark #notion-article .notion-text *,
+      .dark #notion-article .notion-h1,
+      .dark #notion-article .notion-h1 *,
+      .dark #notion-article .notion-h2,
+      .dark #notion-article .notion-h2 *,
+      .dark #notion-article .notion-h3,
+      .dark #notion-article .notion-h3 *,
+      .dark #notion-article .notion-quote,
+      .dark #notion-article .notion-quote *,
+      .dark #notion-article .notion-callout-text,
+      .dark #notion-article .notion-callout-text *,
+      .dark #notion-article .notion-simple-table td,
+      .dark #notion-article .notion-simple-table th,
+      .dark #notion-article .notion-table-of-contents-item,
+      .dark #notion-article .notion-table-of-contents-item *,
+      .dark #notion-article .notion-bookmark-title,
+      .dark #notion-article .notion-bookmark-description,
+      .dark #notion-article .notion-bookmark-link div,
+      .dark #notion-article .notion-page-title-text,
+      .dark #notion-article li,
+      .dark #notion-article li *,
+      .dark #notion-article .notion-link {
         color: white !important;
       }
 
