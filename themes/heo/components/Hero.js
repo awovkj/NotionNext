@@ -17,7 +17,7 @@ import CONFIG from '../config'
  */
 const Hero = props => {
   const HEO_HERO_REVERSE = siteConfig('HEO_HERO_REVERSE', false, CONFIG)
-  const HERO_BG_IMAGE = 'https://tutu.510517.xyz/202602171655982.webp'
+  const HERO_BG_IMAGE = 'https://tutu.510517.xyz/202508142120117.png'
   const typingPhrases = [
     siteConfig('HEO_HERO_TITLE_1', '', CONFIG),
     siteConfig('HEO_HERO_TITLE_3', '', CONFIG),
