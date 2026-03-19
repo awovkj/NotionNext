@@ -18,7 +18,7 @@ const CONFIG = {
   HEO_HERO_BODY_REVERSE: false,
 
   // 英雄区(首页顶部大卡)
-  HEO_HERO_TITLE_1: '同是天涯沦落人,相逢何必曾相识',
+  HEO_HERO_TITLE_1: '',
   HEO_HERO_TITLE_2: '',
   HEO_HERO_TITLE_3: '',
   HEO_HERO_TITLE_4: 'hhh~',
