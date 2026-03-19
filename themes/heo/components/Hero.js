@@ -18,39 +18,30 @@ import CONFIG from '../config'
 const Hero = props => {
   const HEO_HERO_REVERSE = siteConfig('HEO_HERO_REVERSE', false, CONFIG)
   const HERO_BG_IMAGE = 'https://tutu.510517.xyz/202508142116968.png'
-  const typingPhrases = [
-    siteConfig('HEO_HERO_TITLE_1', '', CONFIG),
-    siteConfig('HEO_HERO_TITLE_3', '', CONFIG),
-    '记录技术与生活',
-    '分享思考与实践'
-  ].filter(Boolean)
+  const fullText = siteConfig('HEO_HERO_TITLE_1', '', CONFIG)
   const [typingText, setTypingText] = useState('')
-  const [typingIndex, setTypingIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
 
   useEffect(() => {
-    if (!typingPhrases.length) return
-    const current = typingPhrases[typingIndex % typingPhrases.length]
-    const nextText = isDeleting
-      ? current.slice(0, Math.max(typingText.length - 1, 0))
-      : current.slice(0, Math.min(typingText.length + 1, current.length))
-
-    const isTypingEnd = !isDeleting && typingText.length >= current.length
-    const isDeletingEnd = isDeleting && typingText.length === 0
-    const delay = isTypingEnd ? 1200 : isDeleting ? 45 : 90
-
+    if (!fullText) return
     const timer = setTimeout(() => {
-      setTypingText(nextText)
-      if (isTypingEnd) {
-        setIsDeleting(true)
-      } else if (isDeletingEnd) {
-        setIsDeleting(false)
-        setTypingIndex(i => (i + 1) % typingPhrases.length)
+      if (!isDeleting) {
+        if (typingText.length < fullText.length) {
+          setTypingText(fullText.slice(0, typingText.length + 1))
+        } else {
+          setTimeout(() => setIsDeleting(true), 1000)
+        }
+      } else {
+        if (typingText.length > 0) {
+          setTypingText(typingText.slice(0, -1))
+        } else {
+          setIsDeleting(false)
+        }
       }
-    }, delay)
+    }, isDeleting ? 50 : 100)
 
     return () => clearTimeout(timer)
-  }, [typingPhrases, typingIndex, typingText, isDeleting])
+  }, [fullText, typingText, isDeleting])
 
   const handleScrollDown = () => {
     if (typeof window === 'undefined') return
@@ -78,13 +69,9 @@ const Hero = props => {
         className='heo-home-hero-intro relative h-[100vh] min-h-[36rem] overflow-hidden'
       >
         <div className='relative z-10 h-full flex flex-col items-center justify-center px-6 text-center text-white'>
-          <h1 className='text-4xl md:text-6xl font-extrabold tracking-wide drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] text-white'>
-            {siteConfig('HEO_HERO_TITLE_1', '', CONFIG)}
+          <h1 className='text-2xl md:text-4xl font-extrabold tracking-wide drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] text-white'>
+            {typingText}<span className='heo-typing-caret'>|</span>
           </h1>
-          <div className='mt-5 text-lg md:text-2xl text-white min-h-[2.25rem] md:min-h-[2.6rem] drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]'>
-            {typingText}
-            <span className='heo-typing-caret'>|</span>
-          </div>
           <button
             type='button'
             onClick={handleScrollDown}
