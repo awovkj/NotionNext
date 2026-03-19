@@ -18,7 +18,7 @@ import CONFIG from '../config'
 const Hero = props => {
   const HEO_HERO_REVERSE = siteConfig('HEO_HERO_REVERSE', false, CONFIG)
   const HERO_BG_IMAGE = 'https://tutu.510517.xyz/202508142116968.png'
-  const fullText = siteConfig('HEO_HERO_TITLE_1', '', CONFIG)
+  const fullText = '同是天涯沦落人,相逢何必曾相识'
   const [typingText, setTypingText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
 
