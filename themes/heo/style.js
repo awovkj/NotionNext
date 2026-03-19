@@ -237,6 +237,11 @@ const Style = () => {
           transform: scale(1.01);
         }
       }
+
+      /* 公告栏卡片中的文字设置为白色 */
+      #announcement-content .notion-text {
+        color: white !important;
+      }
     `}</style>
   )
 }
