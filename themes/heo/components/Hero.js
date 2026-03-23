@@ -69,7 +69,7 @@ const Hero = props => {
         className='heo-home-hero-intro relative h-[100vh] min-h-[36rem] overflow-hidden'
       >
         <div className='relative z-10 h-full flex flex-col items-center justify-center px-6 text-center text-white'>
-          <h1 className='text-4xl md:text-6xl font-extrabold tracking-wide drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] text-white'>
+          <h1 className='text-4xl md:text-6xl font-extrabold tracking-wide drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] text-white -mt-20'>
             {typingText}<span className='heo-typing-caret'>|</span>
           </h1>
           <button
