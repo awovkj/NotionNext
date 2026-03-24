@@ -3,6 +3,39 @@ import Head from 'next/head'
 import { useEffect, useRef, useState } from 'react'
 
 /**
+ * 共享 IntersectionObserver 单例，所有 LazyImage 实例复用同一个 observer
+ * 避免每个图片创建独立 observer 浪费内存
+ */
+let sharedObserver = null
+const observerCallbacks = new Map()
+
+function getSharedObserver() {
+  if (sharedObserver) return sharedObserver
+  if (typeof window === 'undefined' || !window.IntersectionObserver)
+    return null
+
+  sharedObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const callback = observerCallbacks.get(entry.target)
+          if (callback) {
+            callback()
+            observerCallbacks.delete(entry.target)
+            sharedObserver.unobserve(entry.target)
+          }
+        }
+      })
+    },
+    {
+      rootMargin: siteConfig('LAZY_LOAD_THRESHOLD', '200px'),
+      threshold: 0.1
+    }
+  )
+  return sharedObserver
+}
+
+/**
  * 图片懒加载
  * @param {*} param0
  * @returns
@@ -68,65 +101,40 @@ export default function LazyImage({
     const adjustedImageSrc =
       adjustImgSize(src, maxWidth) || defaultPlaceholderSrc
 
+    const loadImage = () => {
+      const img = new Image()
+      if ('decoding' in img) img.decoding = 'async'
+      img.src = adjustedImageSrc
+      img.onload = () => {
+        setCurrentSrc(adjustedImageSrc)
+        handleImageLoaded(adjustedImageSrc)
+      }
+      img.onerror = handleImageError
+    }
+
     // 如果是优先级图片，直接加载
     if (priority) {
-      const img = new Image()
-      img.src = adjustedImageSrc
-      img.onload = () => {
-        setCurrentSrc(adjustedImageSrc)
-        handleImageLoaded(adjustedImageSrc)
-      }
-      img.onerror = handleImageError
+      loadImage()
       return
     }
 
-    // 检查浏览器是否支持IntersectionObserver
-    if (!window.IntersectionObserver) {
-      // 降级处理：直接加载图片
-      const img = new Image()
-      img.src = adjustedImageSrc
-      img.onload = () => {
-        setCurrentSrc(adjustedImageSrc)
-        handleImageLoaded(adjustedImageSrc)
-      }
-      img.onerror = handleImageError
+    const observer = getSharedObserver()
+    // 降级处理：不支持 IntersectionObserver 则直接加载
+    if (!observer) {
+      loadImage()
       return
     }
 
-    const observer = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            // 预加载图片
-            const img = new Image()
-            // 设置图片解码优先级
-            if ('decoding' in img) {
-              img.decoding = 'async'
-            }
-            img.src = adjustedImageSrc
-            img.onload = () => {
-              setCurrentSrc(adjustedImageSrc)
-              handleImageLoaded(adjustedImageSrc)
-            }
-            img.onerror = handleImageError
-
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      {
-        rootMargin: siteConfig('LAZY_LOAD_THRESHOLD', '200px'),
-        threshold: 0.1
-      }
-    )
-
-    if (imageRef.current) {
-      observer.observe(imageRef.current)
+    const el = imageRef.current
+    if (el) {
+      observerCallbacks.set(el, loadImage)
+      observer.observe(el)
     }
 
     return () => {
-      if (imageRef.current) {
-        observer.unobserve(imageRef.current)
+      if (el) {
+        observerCallbacks.delete(el)
+        observer.unobserve(el)
       }
     }
   }, [src, maxWidth, priority])

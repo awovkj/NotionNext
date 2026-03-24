@@ -15,12 +15,23 @@ import { useCallback, useMemo } from 'react'
 import BLOG from '@/blog.config'
 import ExternalPlugins from '@/components/ExternalPlugins'
 import SEO from '@/components/SEO'
-import { zhCN } from '@clerk/localizations'
 import localFont from 'next/font/local'
 import dynamic from 'next/dynamic'
-// import { ClerkProvider } from '@clerk/nextjs'
-const ClerkProvider = dynamic(() =>
-  import('@clerk/nextjs').then(m => m.ClerkProvider)
+// ClerkProvider 与 zhCN 一起延迟加载，未启用 Clerk 时不打包
+const LazyClerkProvider = dynamic(() =>
+  Promise.all([
+    import('@clerk/nextjs'),
+    import('@clerk/localizations')
+  ]).then(([clerk, loc]) => {
+    const { ClerkProvider } = clerk
+    const { zhCN } = loc
+    // 返回一个包装组件
+    const Wrapper = ({ children }) => (
+      <ClerkProvider localization={zhCN}>{children}</ClerkProvider>
+    )
+    Wrapper.displayName = 'ClerkProviderWrapper'
+    return { default: Wrapper }
+  })
 )
 
 const hhhFont = localFont({
@@ -68,7 +79,7 @@ const MyApp = ({ Component, pageProps }) => {
   return (
     <>
       {enableClerk ? (
-        <ClerkProvider localization={zhCN}>{content}</ClerkProvider>
+        <LazyClerkProvider>{content}</LazyClerkProvider>
       ) : (
         content
       )}

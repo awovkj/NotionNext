@@ -19,15 +19,16 @@ const NotionPage = ({ post, className }) => {
   const POST_DISABLE_DATABASE_CLICK = siteConfig('POST_DISABLE_DATABASE_CLICK')
   const SPOILER_TEXT_TAG = siteConfig('SPOILER_TEXT_TAG')
 
-  const zoom =
-    isBrowser &&
-    mediumZoom({
-      //   container: '.notion-viewport',
+  // 惰性初始化 mediumZoom，避免每次渲染都重新创建
+  const zoomRef = useRef(null)
+  if (isBrowser && !zoomRef.current) {
+    zoomRef.current = mediumZoom({
       background: 'rgba(0, 0, 0, 0.2)',
       margin: getMediumZoomMargin()
     })
+  }
 
-  const zoomRef = useRef(zoom ? zoom.clone() : null)
+  const articleRef = useRef(null)
   const IMAGE_ZOOM_IN_WIDTH = siteConfig('IMAGE_ZOOM_IN_WIDTH', 1200)
   // 页面首次打开时执行的勾子
   useEffect(() => {
@@ -50,31 +51,30 @@ const NotionPage = ({ post, className }) => {
 
     /**
      * 放大查看图片时替换成高清图像
+     * 仅监听 #notion-article 容器，避免监听整个 document.body
      */
-    const observer = new MutationObserver((mutationsList, observer) => {
-      mutationsList.forEach(mutation => {
+    const container = articleRef.current
+    if (!container) return
+
+    const observer = new MutationObserver(mutationsList => {
+      for (const mutation of mutationsList) {
         if (
           mutation.type === 'attributes' &&
-          mutation.attributeName === 'class'
+          mutation.attributeName === 'class' &&
+          mutation.target.classList.contains('medium-zoom-image--opened')
         ) {
-          if (mutation.target.classList.contains('medium-zoom-image--opened')) {
-            // 等待动画完成后替换为更高清的图像
-            setTimeout(() => {
-              // 获取该元素的 src 属性
-              const src = mutation?.target?.getAttribute('src')
-              //   替换为更高清的图像
-              mutation?.target?.setAttribute(
-                'src',
-                compressImage(src, IMAGE_ZOOM_IN_WIDTH)
-              )
-            }, 800)
-          }
+          setTimeout(() => {
+            const src = mutation?.target?.getAttribute('src')
+            mutation?.target?.setAttribute(
+              'src',
+              compressImage(src, IMAGE_ZOOM_IN_WIDTH)
+            )
+          }, 800)
         }
-      })
+      }
     })
 
-    // 监视页面元素和属性变化
-    observer.observe(document.body, {
+    observer.observe(container, {
       attributes: true,
       subtree: true,
       attributeFilter: ['class']
@@ -135,6 +135,7 @@ const NotionPage = ({ post, className }) => {
   return (
     <div
       id='notion-article'
+      ref={articleRef}
       className={`mx-auto overflow-hidden ${className || ''}`}
     >
       <NotionRenderer

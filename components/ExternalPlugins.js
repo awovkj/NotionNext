@@ -3,7 +3,7 @@ import { convertInnerUrl } from '@/lib/db/notion/convertInnerUrl'
 import { isBrowser, loadExternalResource } from '@/lib/utils'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { GlobalStyle } from './GlobalStyle'
 import { initGoogleAdsense } from './GoogleAdsense'
 
@@ -22,114 +22,62 @@ const ExternalPlugin = props => {
   // 读取自Notion的配置
   const { NOTION_CONFIG } = props
   const { lang } = useGlobal()
-  const DISABLE_PLUGIN = siteConfig('DISABLE_PLUGIN', null, NOTION_CONFIG)
-  const DEBUG = siteConfig('DEBUG', null, NOTION_CONFIG)
-  const ANALYTICS_ACKEE_TRACKER = siteConfig(
-    'ANALYTICS_ACKEE_TRACKER',
-    null,
-    NOTION_CONFIG
-  )
-  const ANALYTICS_VERCEL = siteConfig('ANALYTICS_VERCEL', null, NOTION_CONFIG)
-  const ANALYTICS_BUSUANZI_ENABLE = siteConfig(
-    'ANALYTICS_BUSUANZI_ENABLE',
-    null,
-    NOTION_CONFIG
-  )
-  const ADSENSE_GOOGLE_ID = siteConfig('ADSENSE_GOOGLE_ID', null, NOTION_CONFIG)
-  const FACEBOOK_APP_ID = siteConfig('FACEBOOK_APP_ID', null, NOTION_CONFIG)
-  const FACEBOOK_PAGE_ID = siteConfig('FACEBOOK_PAGE_ID', null, NOTION_CONFIG)
-  const FIREWORKS = siteConfig('FIREWORKS', null, NOTION_CONFIG)
-  const SAKURA = siteConfig('SAKURA', null, NOTION_CONFIG)
-  const STARRY_SKY = siteConfig('STARRY_SKY', null, NOTION_CONFIG)
-  const MUSIC_PLAYER = siteConfig('MUSIC_PLAYER', null, NOTION_CONFIG)
-  const NEST = siteConfig('NEST', null, NOTION_CONFIG)
-  const FLUTTERINGRIBBON = siteConfig('FLUTTERINGRIBBON', null, NOTION_CONFIG)
-  const COMMENT_TWIKOO_COUNT_ENABLE = siteConfig(
-    'COMMENT_TWIKOO_COUNT_ENABLE',
-    null,
-    NOTION_CONFIG
-  )
-  const RIBBON = siteConfig('RIBBON', null, NOTION_CONFIG)
-  const CUSTOM_RIGHT_CLICK_CONTEXT_MENU = siteConfig(
-    'CUSTOM_RIGHT_CLICK_CONTEXT_MENU',
-    null,
-    NOTION_CONFIG
-  )
-  const CAN_COPY = siteConfig('CAN_COPY', null, NOTION_CONFIG)
-  const WEB_WHIZ_ENABLED = siteConfig('WEB_WHIZ_ENABLED', null, NOTION_CONFIG)
-  const AD_WWADS_BLOCK_DETECT = siteConfig(
-    'AD_WWADS_BLOCK_DETECT',
-    null,
-    NOTION_CONFIG
-  )
-  const CHATBASE_ID = siteConfig('CHATBASE_ID', null, NOTION_CONFIG)
-  const COMMENT_DAO_VOICE_ID = siteConfig(
-    'COMMENT_DAO_VOICE_ID',
-    null,
-    NOTION_CONFIG
-  )
-  const AD_WWADS_ID = siteConfig('AD_WWADS_ID', null, NOTION_CONFIG)
-  const COMMENT_ARTALK_SERVER = siteConfig(
-    'COMMENT_ARTALK_SERVER',
-    null,
-    NOTION_CONFIG
-  )
-  const COMMENT_ARTALK_JS = siteConfig('COMMENT_ARTALK_JS', null, NOTION_CONFIG)
-  const COMMENT_TIDIO_ID = siteConfig('COMMENT_TIDIO_ID', null, NOTION_CONFIG)
-  const COMMENT_GITTER_ROOM = siteConfig(
-    'COMMENT_GITTER_ROOM',
-    null,
-    NOTION_CONFIG
-  )
-  const ANALYTICS_BAIDU_ID = siteConfig(
-    'ANALYTICS_BAIDU_ID',
-    null,
-    NOTION_CONFIG
-  )
-  const ANALYTICS_CNZZ_ID = siteConfig('ANALYTICS_CNZZ_ID', null, NOTION_CONFIG)
-  const ANALYTICS_GOOGLE_ID = siteConfig(
-    'ANALYTICS_GOOGLE_ID',
-    null,
-    NOTION_CONFIG
-  )
-  const MATOMO_HOST_URL = siteConfig('MATOMO_HOST_URL', null, NOTION_CONFIG)
-  const MATOMO_SITE_ID = siteConfig('MATOMO_SITE_ID', null, NOTION_CONFIG)
-  const ANALYTICS_51LA_ID = siteConfig('ANALYTICS_51LA_ID', null, NOTION_CONFIG)
-  const ANALYTICS_51LA_CK = siteConfig('ANALYTICS_51LA_CK', null, NOTION_CONFIG)
-  const DIFY_CHATBOT_ENABLED = siteConfig(
-    'DIFY_CHATBOT_ENABLED',
-    null,
-    NOTION_CONFIG
-  )
-  const TIANLI_KEY = siteConfig('TianliGPT_KEY', null, NOTION_CONFIG)
-  const GLOBAL_JS = siteConfig('GLOBAL_JS', '', NOTION_CONFIG)
-  const CLARITY_ID = siteConfig('CLARITY_ID', null, NOTION_CONFIG)
-  const IMG_SHADOW = siteConfig('IMG_SHADOW', null, NOTION_CONFIG)
-  const ANIMATE_CSS_URL = siteConfig('ANIMATE_CSS_URL', null, NOTION_CONFIG)
-  const MOUSE_FOLLOW = siteConfig('MOUSE_FOLLOW', null, NOTION_CONFIG)
-  const CUSTOM_EXTERNAL_CSS = siteConfig(
-    'CUSTOM_EXTERNAL_CSS',
-    null,
-    NOTION_CONFIG
-  )
-  const CUSTOM_EXTERNAL_JS = siteConfig(
-    'CUSTOM_EXTERNAL_JS',
-    null,
-    NOTION_CONFIG
-  )
-  // 默认关闭NProgress
-  const ENABLE_NPROGRSS = siteConfig('ENABLE_NPROGRSS', false)
-  const COZE_BOT_ID = siteConfig('COZE_BOT_ID')
-  const HILLTOP_ADS_META_ID = siteConfig(
-    'HILLTOP_ADS_META_ID',
-    null,
-    NOTION_CONFIG
-  )
 
-  const ENABLE_ICON_FONT = siteConfig('ENABLE_ICON_FONT', false)
-
-  const UMAMI_HOST = siteConfig('UMAMI_HOST', null, NOTION_CONFIG)
-  const UMAMI_ID = siteConfig('UMAMI_ID', null, NOTION_CONFIG)
+  // 批量读取所有配置项，避免每次渲染重复调用 siteConfig
+  const config = useMemo(() => {
+    const nc = NOTION_CONFIG
+    return {
+      DISABLE_PLUGIN: siteConfig('DISABLE_PLUGIN', null, nc),
+      DEBUG: siteConfig('DEBUG', null, nc),
+      ANALYTICS_ACKEE_TRACKER: siteConfig('ANALYTICS_ACKEE_TRACKER', null, nc),
+      ANALYTICS_VERCEL: siteConfig('ANALYTICS_VERCEL', null, nc),
+      ANALYTICS_BUSUANZI_ENABLE: siteConfig('ANALYTICS_BUSUANZI_ENABLE', null, nc),
+      ADSENSE_GOOGLE_ID: siteConfig('ADSENSE_GOOGLE_ID', null, nc),
+      FACEBOOK_APP_ID: siteConfig('FACEBOOK_APP_ID', null, nc),
+      FACEBOOK_PAGE_ID: siteConfig('FACEBOOK_PAGE_ID', null, nc),
+      FIREWORKS: siteConfig('FIREWORKS', null, nc),
+      SAKURA: siteConfig('SAKURA', null, nc),
+      STARRY_SKY: siteConfig('STARRY_SKY', null, nc),
+      MUSIC_PLAYER: siteConfig('MUSIC_PLAYER', null, nc),
+      NEST: siteConfig('NEST', null, nc),
+      FLUTTERINGRIBBON: siteConfig('FLUTTERINGRIBBON', null, nc),
+      COMMENT_TWIKOO_COUNT_ENABLE: siteConfig('COMMENT_TWIKOO_COUNT_ENABLE', null, nc),
+      RIBBON: siteConfig('RIBBON', null, nc),
+      CUSTOM_RIGHT_CLICK_CONTEXT_MENU: siteConfig('CUSTOM_RIGHT_CLICK_CONTEXT_MENU', null, nc),
+      CAN_COPY: siteConfig('CAN_COPY', null, nc),
+      WEB_WHIZ_ENABLED: siteConfig('WEB_WHIZ_ENABLED', null, nc),
+      AD_WWADS_BLOCK_DETECT: siteConfig('AD_WWADS_BLOCK_DETECT', null, nc),
+      CHATBASE_ID: siteConfig('CHATBASE_ID', null, nc),
+      COMMENT_DAO_VOICE_ID: siteConfig('COMMENT_DAO_VOICE_ID', null, nc),
+      AD_WWADS_ID: siteConfig('AD_WWADS_ID', null, nc),
+      COMMENT_ARTALK_SERVER: siteConfig('COMMENT_ARTALK_SERVER', null, nc),
+      COMMENT_ARTALK_JS: siteConfig('COMMENT_ARTALK_JS', null, nc),
+      COMMENT_TIDIO_ID: siteConfig('COMMENT_TIDIO_ID', null, nc),
+      COMMENT_GITTER_ROOM: siteConfig('COMMENT_GITTER_ROOM', null, nc),
+      ANALYTICS_BAIDU_ID: siteConfig('ANALYTICS_BAIDU_ID', null, nc),
+      ANALYTICS_CNZZ_ID: siteConfig('ANALYTICS_CNZZ_ID', null, nc),
+      ANALYTICS_GOOGLE_ID: siteConfig('ANALYTICS_GOOGLE_ID', null, nc),
+      MATOMO_HOST_URL: siteConfig('MATOMO_HOST_URL', null, nc),
+      MATOMO_SITE_ID: siteConfig('MATOMO_SITE_ID', null, nc),
+      ANALYTICS_51LA_ID: siteConfig('ANALYTICS_51LA_ID', null, nc),
+      ANALYTICS_51LA_CK: siteConfig('ANALYTICS_51LA_CK', null, nc),
+      DIFY_CHATBOT_ENABLED: siteConfig('DIFY_CHATBOT_ENABLED', null, nc),
+      TIANLI_KEY: siteConfig('TianliGPT_KEY', null, nc),
+      GLOBAL_JS: siteConfig('GLOBAL_JS', '', nc),
+      CLARITY_ID: siteConfig('CLARITY_ID', null, nc),
+      IMG_SHADOW: siteConfig('IMG_SHADOW', null, nc),
+      ANIMATE_CSS_URL: siteConfig('ANIMATE_CSS_URL', null, nc),
+      MOUSE_FOLLOW: siteConfig('MOUSE_FOLLOW', null, nc),
+      CUSTOM_EXTERNAL_CSS: siteConfig('CUSTOM_EXTERNAL_CSS', null, nc),
+      CUSTOM_EXTERNAL_JS: siteConfig('CUSTOM_EXTERNAL_JS', null, nc),
+      ENABLE_NPROGRSS: siteConfig('ENABLE_NPROGRSS', false),
+      COZE_BOT_ID: siteConfig('COZE_BOT_ID'),
+      HILLTOP_ADS_META_ID: siteConfig('HILLTOP_ADS_META_ID', null, nc),
+      ENABLE_ICON_FONT: siteConfig('ENABLE_ICON_FONT', false),
+      UMAMI_HOST: siteConfig('UMAMI_HOST', null, nc),
+      UMAMI_ID: siteConfig('UMAMI_ID', null, nc)
+    }
+  }, [NOTION_CONFIG])
 
   useEffect(() => {
     if (!isBrowser) {
@@ -143,30 +91,30 @@ const ExternalPlugin = props => {
     if (!isBrowser) {
       return
     }
-    if (IMG_SHADOW) {
+    if (config.IMG_SHADOW) {
       loadExternalResource('/css/img-shadow.css', 'css')
     }
-    if (ANIMATE_CSS_URL) {
-      loadExternalResource(ANIMATE_CSS_URL, 'css')
+    if (config.ANIMATE_CSS_URL) {
+      loadExternalResource(config.ANIMATE_CSS_URL, 'css')
     }
-    if (CUSTOM_EXTERNAL_JS && CUSTOM_EXTERNAL_JS.length > 0) {
-      for (const url of CUSTOM_EXTERNAL_JS) {
+    if (config.CUSTOM_EXTERNAL_JS && config.CUSTOM_EXTERNAL_JS.length > 0) {
+      for (const url of config.CUSTOM_EXTERNAL_JS) {
         loadExternalResource(url, 'js')
       }
     }
-    if (CUSTOM_EXTERNAL_CSS && CUSTOM_EXTERNAL_CSS.length > 0) {
-      for (const url of CUSTOM_EXTERNAL_CSS) {
+    if (config.CUSTOM_EXTERNAL_CSS && config.CUSTOM_EXTERNAL_CSS.length > 0) {
+      for (const url of config.CUSTOM_EXTERNAL_CSS) {
         loadExternalResource(url, 'css')
       }
     }
-  }, [ANIMATE_CSS_URL, CUSTOM_EXTERNAL_CSS, CUSTOM_EXTERNAL_JS, IMG_SHADOW])
+  }, [config.ANIMATE_CSS_URL, config.CUSTOM_EXTERNAL_CSS, config.CUSTOM_EXTERNAL_JS, config.IMG_SHADOW])
 
   const router = useRouter()
   useEffect(() => {
     // 异步渲染谷歌广告
-    if (ADSENSE_GOOGLE_ID) {
+    if (config.ADSENSE_GOOGLE_ID) {
       setTimeout(() => {
-        initGoogleAdsense(ADSENSE_GOOGLE_ID)
+        initGoogleAdsense(config.ADSENSE_GOOGLE_ID)
       }, 3000)
     }
 
@@ -174,17 +122,17 @@ const ExternalPlugin = props => {
       // 映射url
       convertInnerUrl({ allPages: props?.allNavPages, lang: lang })
     }, 500)
-  }, [ADSENSE_GOOGLE_ID, lang, props?.allNavPages, router.asPath])
+  }, [config.ADSENSE_GOOGLE_ID, lang, props?.allNavPages, router.asPath])
 
   useEffect(() => {
     // 执行注入脚本
     // eslint-disable-next-line no-eval
-    if (GLOBAL_JS && GLOBAL_JS.trim() !== '') {
-      eval(GLOBAL_JS)
+    if (config.GLOBAL_JS && config.GLOBAL_JS.trim() !== '') {
+      eval(config.GLOBAL_JS)
     }
-  }, [GLOBAL_JS])
+  }, [config.GLOBAL_JS])
 
-  if (DISABLE_PLUGIN) {
+  if (config.DISABLE_PLUGIN) {
     return null
   }
 
@@ -192,49 +140,49 @@ const ExternalPlugin = props => {
     <>
       {/* 全局样式嵌入 */}
       <GlobalStyle />
-      {ENABLE_ICON_FONT && <IconFont />}
-      {MOUSE_FOLLOW && <MouseFollow />}
-      {DEBUG && <DebugPanel />}
-      {ANALYTICS_ACKEE_TRACKER && <Ackee />}
-      {ANALYTICS_GOOGLE_ID && <Gtag />}
-      {ANALYTICS_VERCEL && <Analytics />}
-      {ANALYTICS_BUSUANZI_ENABLE && <Busuanzi />}
-      {FACEBOOK_APP_ID && FACEBOOK_PAGE_ID && <Messenger />}
-      {FIREWORKS && <Fireworks />}
-      {SAKURA && <Sakura />}
-      {STARRY_SKY && <StarrySky />}
-      {MUSIC_PLAYER && <MusicPlayer />}
-      {NEST && <Nest />}
-      {FLUTTERINGRIBBON && <FlutteringRibbon />}
-      {COMMENT_TWIKOO_COUNT_ENABLE && <TwikooCommentCounter {...props} />}
-      {RIBBON && <Ribbon />}
-      {DIFY_CHATBOT_ENABLED && <DifyChatbot />}
-      {CUSTOM_RIGHT_CLICK_CONTEXT_MENU && <CustomContextMenu {...props} />}
-      {!CAN_COPY && <DisableCopy />}
-      {WEB_WHIZ_ENABLED && <WebWhiz />}
-      {AD_WWADS_BLOCK_DETECT && <AdBlockDetect />}
-      {TIANLI_KEY && <TianliGPT />}
+      {config.ENABLE_ICON_FONT && <IconFont />}
+      {config.MOUSE_FOLLOW && <MouseFollow />}
+      {config.DEBUG && <DebugPanel />}
+      {config.ANALYTICS_ACKEE_TRACKER && <Ackee />}
+      {config.ANALYTICS_GOOGLE_ID && <Gtag />}
+      {config.ANALYTICS_VERCEL && <Analytics />}
+      {config.ANALYTICS_BUSUANZI_ENABLE && <Busuanzi />}
+      {config.FACEBOOK_APP_ID && config.FACEBOOK_PAGE_ID && <Messenger />}
+      {config.FIREWORKS && <Fireworks />}
+      {config.SAKURA && <Sakura />}
+      {config.STARRY_SKY && <StarrySky />}
+      {config.MUSIC_PLAYER && <MusicPlayer />}
+      {config.NEST && <Nest />}
+      {config.FLUTTERINGRIBBON && <FlutteringRibbon />}
+      {config.COMMENT_TWIKOO_COUNT_ENABLE && <TwikooCommentCounter {...props} />}
+      {config.RIBBON && <Ribbon />}
+      {config.DIFY_CHATBOT_ENABLED && <DifyChatbot />}
+      {config.CUSTOM_RIGHT_CLICK_CONTEXT_MENU && <CustomContextMenu {...props} />}
+      {!config.CAN_COPY && <DisableCopy />}
+      {config.WEB_WHIZ_ENABLED && <WebWhiz />}
+      {config.AD_WWADS_BLOCK_DETECT && <AdBlockDetect />}
+      {config.TIANLI_KEY && <TianliGPT />}
       <VConsole />
-      {ENABLE_NPROGRSS && <LoadingProgress />}
+      {config.ENABLE_NPROGRSS && <LoadingProgress />}
       <AosAnimation />
-      {ANALYTICS_51LA_ID && ANALYTICS_51LA_CK && <LA51 />}
-      {COZE_BOT_ID && <Coze />}
+      {config.ANALYTICS_51LA_ID && config.ANALYTICS_51LA_CK && <LA51 />}
+      {config.COZE_BOT_ID && <Coze />}
 
-      {ANALYTICS_51LA_ID && ANALYTICS_51LA_CK && (
+      {config.ANALYTICS_51LA_ID && config.ANALYTICS_51LA_CK && (
         <>
           <script id='LA_COLLECT' src='//sdk.51.la/js-sdk-pro.min.js' defer />
           {/* <script async dangerouslySetInnerHTML={{
               __html: `
-                    LA.init({id:"${ANALYTICS_51LA_ID}",ck:"${ANALYTICS_51LA_CK}",hashMode:true,autoTrack:true})
+                    LA.init({id:"${config.ANALYTICS_51LA_ID}",ck:"${config.ANALYTICS_51LA_CK}",hashMode:true,autoTrack:true})
                     `
             }} /> */}
         </>
       )}
 
-      {CHATBASE_ID && (
+      {config.CHATBASE_ID && (
         <>
           <script
-            id={CHATBASE_ID}
+            id={config.CHATBASE_ID}
             src='https://www.chatbase.co/embed.min.js'
             defer
           />
@@ -243,7 +191,7 @@ const ExternalPlugin = props => {
             dangerouslySetInnerHTML={{
               __html: `
                     window.chatbaseConfig = {
-                        chatbotId: "${CHATBASE_ID}",
+                        chatbotId: "${config.CHATBASE_ID}",
                         }
                     `
             }}
@@ -251,7 +199,7 @@ const ExternalPlugin = props => {
         </>
       )}
 
-      {CLARITY_ID && (
+      {config.CLARITY_ID && (
         <>
           <script
             async
@@ -270,14 +218,14 @@ const ExternalPlugin = props => {
                   } else {
                     l.head.appendChild(t);
                   }
-                })(window, document, "clarity", "script", "${CLARITY_ID}");
+                })(window, document, "clarity", "script", "${config.CLARITY_ID}");
                 `
             }}
           />
         </>
       )}
 
-      {COMMENT_DAO_VOICE_ID && (
+      {config.COMMENT_DAO_VOICE_ID && (
         <>
           {/* DaoVoice 反馈 */}
           <script
@@ -309,7 +257,7 @@ const ExternalPlugin = props => {
             dangerouslySetInnerHTML={{
               __html: `
              daovoice('init', {
-                app_id: "${COMMENT_DAO_VOICE_ID}"
+                app_id: "${config.COMMENT_DAO_VOICE_ID}"
               });
               daovoice('update');
               `
@@ -319,13 +267,13 @@ const ExternalPlugin = props => {
       )}
 
       {/* HILLTOP广告验证 */}
-      {HILLTOP_ADS_META_ID && (
+      {config.HILLTOP_ADS_META_ID && (
         <Head>
-          <meta name={HILLTOP_ADS_META_ID} content={HILLTOP_ADS_META_ID} />
+          <meta name={config.HILLTOP_ADS_META_ID} content={config.HILLTOP_ADS_META_ID} />
         </Head>
       )}
 
-      {AD_WWADS_ID && (
+      {config.AD_WWADS_ID && (
         <>
           <Head>
             {/* 提前连接到广告服务器 */}
@@ -340,14 +288,14 @@ const ExternalPlugin = props => {
 
       {/* {COMMENT_TWIKOO_ENV_ID && <script defer src={COMMENT_TWIKOO_CDN_URL} />} */}
 
-      {COMMENT_ARTALK_SERVER && <script defer src={COMMENT_ARTALK_JS} />}
+      {config.COMMENT_ARTALK_SERVER && <script defer src={config.COMMENT_ARTALK_JS} />}
 
-      {COMMENT_TIDIO_ID && (
-        <script async src={`//code.tidio.co/${COMMENT_TIDIO_ID}.js`} />
+      {config.COMMENT_TIDIO_ID && (
+        <script async src={`//code.tidio.co/${config.COMMENT_TIDIO_ID}.js`} />
       )}
 
       {/* gitter聊天室 */}
-      {COMMENT_GITTER_ROOM && (
+      {config.COMMENT_GITTER_ROOM && (
         <>
           <script
             src='https://sidecar.gitter.im/dist/sidecar.v1.js'
@@ -359,7 +307,7 @@ const ExternalPlugin = props => {
             dangerouslySetInnerHTML={{
               __html: `
             ((window.gitter = {}).chat = {}).options = {
-              room: '${COMMENT_GITTER_ROOM}'
+              room: '${config.COMMENT_GITTER_ROOM}'
             };
             `
             }}
@@ -368,7 +316,7 @@ const ExternalPlugin = props => {
       )}
 
       {/* 百度统计 */}
-      {ANALYTICS_BAIDU_ID && (
+      {config.ANALYTICS_BAIDU_ID && (
         <script
           async
           dangerouslySetInnerHTML={{
@@ -376,8 +324,8 @@ const ExternalPlugin = props => {
           var _hmt = _hmt || [];
           (function() {
             var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?${ANALYTICS_BAIDU_ID}";
-            var s = document.getElementsByTagName("script")[0]; 
+            hm.src = "https://hm.baidu.com/hm.js?${config.ANALYTICS_BAIDU_ID}";
+            var s = document.getElementsByTagName("script")[0];
             s.parentNode.insertBefore(hm, s);
           })();
           `
@@ -386,33 +334,33 @@ const ExternalPlugin = props => {
       )}
 
       {/* 站长统计 */}
-      {ANALYTICS_CNZZ_ID && (
+      {config.ANALYTICS_CNZZ_ID && (
         <script
           async
           dangerouslySetInnerHTML={{
             __html: `
-          document.write(unescape("%3Cspan style='display:none' id='cnzz_stat_icon_${ANALYTICS_CNZZ_ID}'%3E%3C/span%3E%3Cscript src='https://s9.cnzz.com/z_stat.php%3Fid%3D${ANALYTICS_CNZZ_ID}' type='text/javascript'%3E%3C/script%3E"));
+          document.write(unescape("%3Cspan style='display:none' id='cnzz_stat_icon_${config.ANALYTICS_CNZZ_ID}'%3E%3C/span%3E%3Cscript src='https://s9.cnzz.com/z_stat.php%3Fid%3D${config.ANALYTICS_CNZZ_ID}' type='text/javascript'%3E%3C/script%3E"));
           `
           }}
         />
       )}
 
       {/* UMAMI 统计 */}
-      {UMAMI_ID && (
+      {config.UMAMI_ID && (
         <script
           async
           defer
-          src={UMAMI_HOST}
-          data-website-id={UMAMI_ID}
+          src={config.UMAMI_HOST}
+          data-website-id={config.UMAMI_ID}
         ></script>
       )}
 
       {/* 谷歌统计 */}
-      {ANALYTICS_GOOGLE_ID && (
+      {config.ANALYTICS_GOOGLE_ID && (
         <>
           <script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_GOOGLE_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${config.ANALYTICS_GOOGLE_ID}`}
           />
           <script
             async
@@ -421,7 +369,7 @@ const ExternalPlugin = props => {
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${ANALYTICS_GOOGLE_ID}', {
+                gtag('config', '${config.ANALYTICS_GOOGLE_ID}', {
                   page_path: window.location.pathname,
                 });
               `
@@ -431,7 +379,7 @@ const ExternalPlugin = props => {
       )}
 
       {/* Matomo 统计 */}
-      {MATOMO_HOST_URL && MATOMO_SITE_ID && (
+      {config.MATOMO_HOST_URL && config.MATOMO_SITE_ID && (
         <script
           async
           dangerouslySetInnerHTML={{
@@ -440,9 +388,9 @@ const ExternalPlugin = props => {
               _paq.push(['trackPageView']);
               _paq.push(['enableLinkTracking']);
               (function() {
-                var u="//${MATOMO_HOST_URL}/";
+                var u="//${config.MATOMO_HOST_URL}/";
                 _paq.push(['setTrackerUrl', u+'matomo.php']);
-                _paq.push(['setSiteId', '${MATOMO_SITE_ID}']);
+                _paq.push(['setSiteId', '${config.MATOMO_SITE_ID}']);
                 var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
                 g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
               })();
