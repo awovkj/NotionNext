@@ -15,7 +15,10 @@ const Page = props => {
 
 export async function getStaticPaths({ locale }) {
   const from = 'page-paths'
-  const { postCount, NOTION_CONFIG } = await fetchGlobalAllData({ from, locale })
+  const { postCount, NOTION_CONFIG } = await fetchGlobalAllData({
+    from,
+    locale
+  })
   const totalPages = Math.ceil(
     postCount / siteConfig('POSTS_PER_PAGE', null, NOTION_CONFIG)
   )
@@ -24,7 +27,7 @@ export async function getStaticPaths({ locale }) {
     paths: Array.from({ length: totalPages - 1 }, (_, i) => ({
       params: { page: '' + (i + 2) }
     })),
-    fallback: true
+    fallback: 'blocking'
   }
 }
 

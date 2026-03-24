@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "mcp__sequential-thinking__sequentialthinking",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "mcp__plugin_oh-my-claudecode_t__ast_grep_replace"
     ]
   }
 }
