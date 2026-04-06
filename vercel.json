@@ -1,5 +1,32 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "headers": []
+  "functions": {
+    "pages/api/**/*.js": {
+      "maxDuration": 15
+    },
+    "pages/api/**/*.ts": {
+      "maxDuration": 15
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/health",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    },
+    {
+      "source": "/healthz",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    }
+  ]
 }

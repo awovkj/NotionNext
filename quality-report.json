@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-04-06T10:00:37.990Z",
+  "results": [
+    {
+      "name": "ESLint 配置",
+      "success": true,
+      "type": "config"
+    },
+    {
+      "name": "Prettier 配置",
+      "success": false,
+      "type": "config"
+    },
+    {
+      "name": "TypeScript 配置",
+      "success": true,
+      "type": "config"
+    },
+    {
+      "name": "Next.js 配置",
+      "success": true,
+      "type": "config"
+    },
+    {
+      "name": "Package.json 分析",
+      "success": true,
+      "type": "analysis"
+    },
+    {
+      "name": "ESLint",
+      "success": false,
+      "type": "lint",
+      "error": "Command failed: npx eslint . --ext .js,.jsx,.ts,.tsx --max-warnings 0"
+    },
+    {
+      "name": "TypeScript",
+      "success": true,
+      "type": "type-check",
+      "output": ""
+    },
+    {
+      "name": "Prettier",
+      "success": false,
+      "type": "format",
+      "error": "Command failed: npx prettier --check .\n[\u001b[33mwarn\u001b[39m] \u001b[33mjsxBracketSameLine\u001b[39m is deprecated.\n[\u001b[33mwarn\u001b[39m] .github/ISSUE_TEMPLATE/deployment-error.md\n[\u001b[33mwarn\u001b[39m] .github/workflows/codeql-analysis.yml\n[\u001b[33mwarn\u001b[39m] .github/workflows/docker-ghcr.yaml\n[\u001b[33mwarn\u001b[39m] .github/workflows/pushUrl.yml\n[\u001b[33mwarn\u001b[39m] .github/workflows/sync.yaml\n[\u001b[33mwarn\u001b[39m] blog.config.js\n[\u001b[33mwarn\u001b[39m] components/Ackee.js\n[\u001b[33mwarn\u001b[39m] components/AISummary.js\n[\u001b[33mwarn\u001b[39m] components/AISummary.module.css\n[\u001b[33mwarn\u001b[39m] components/Artalk.js\n[\u001b[33mwarn\u001b[39m] components/ArticleExpirationNotice.js\n[\u001b[33mwarn\u001b[39m] components/Badge.js\n[\u001b[33mwarn\u001b[39m] components/BeiAnGongAn.tsx\n[\u001b[33mwarn\u001b[39m] components/Busuanzi.js\n[\u001b[33mwarn\u001b[39m] components/CanvasEmail.js\n[\u001b[33mwarn\u001b[39m] components/Collapse.js\n[\u001b[33mwarn\u001b[39m] components/Comment.js\n[\u001b[33mwarn\u001b[39m] components/CursorDot.js\n[\u001b[33mwarn\u001b[39m] components/CusdisComponent.js\n[\u001b[33mwarn\u001b[39m] components/DarkModeButton.js\n[\u001b[33mwarn\u001b[39m] components/DifyChatbot.js\n[\u001b[33mwarn\u001b[39m] components/Draggable.js\n[\u001b[33mwarn\u001b[39m] components/Equation.js\n[\u001b[33mwarn\u001b[39m] components/FacebookMessenger.js\n[\u001b[33mwarn\u001b[39m] components/FacebookPage.js\n[\u001b[33mwarn\u001b[39m] components/FlipCard.js\n[\u001b[33mwarn\u001b[39m] components/FullScreenButton.js\n[\u001b[33mwarn\u001b[39m] components/Gitalk.js\n[\u001b[33mwarn\u001b[39m] components/GlobalStyle.js\n[\u001b[33mwarn\u001b[39m] components/HeroIcons.js\n[\u001b[33mwarn\u001b[39m] components/KatexReact.js\n[\u001b[33mwarn\u001b[39m] components/LA51.js\n[\u001b[33mwarn\u001b[39m] components/LazyImage.js\n[\u001b[33mwarn\u001b[39m] components/Loading.js\n[\u001b[33mwarn\u001b[39m] components/LoadingCover.js\n[\u001b[33mwarn\u001b[39m] components/Mark.js\n[\u001b[33mwarn\u001b[39m] components/Notification.js\n[\u001b[33mwarn\u001b[39m] components/NotionIcon.js\n[\u001b[33mwarn\u001b[39m] components/OpenWrite.js\n[\u001b[33mwarn\u001b[39m] components/PoweredBy.js\n[\u001b[33mwarn\u001b[39m] components/PWA.js\n[\u001b[33mwarn\u001b[39m] components/Sakura.js\n[\u001b[33mwarn\u001b[39m] components/Select.js\n[\u001b[33mwarn\u001b[39m] components/ShareButtons.js\n[\u001b[33mwarn\u001b[39m] components/StarrySky.js\n[\u001b[33mwarn\u001b[39m] components/Tabs.js\n[\u001b[33mwarn\u001b[39m] components/TianliGPT.js\n[\u001b[33mwarn\u001b[39m] components/Twikoo.js\n[\u001b[33mwarn\u001b[39m] components/TwikooCommentCount.js\n[\u001b[33mwarn\u001b[39m] components/TwikooCommentCounter.js\n[\u001b[33mwarn\u001b[39m] components/TwikooRecentComments.js\n[\u001b[33mwarn\u001b[39m] components/ui/dashboard/DashboardButton.js\n[\u001b[33mwarn\u001b[39m] components/ui/dashboard/DashboardItemAffliate.js\n[\u001b[33mwarn\u001b[39m] components/ui/dashboard/DashboardItemBalance.js\n[\u001b[33mwarn\u001b[39m] components/ui/dashboard/DashboardItemHome.js\n[\u001b[33mwarn\u001b[39m] components/ui/dashboard/DashboardItemMembership.js\n[\u001b[33mwarn\u001b[39m] components/ui/dashboard/DashboardItemOrder.js\n[\u001b[33mwarn\u001b[39m] components/ui/dashboard/DashboardMenuList.js\n[\u001b[33mwarn\u001b[39m] components/Utterances.js\n[\u001b[33mwarn\u001b[39m] components/ValineComponent.js\n[\u001b[33mwarn\u001b[39m] components/VConsole.js\n[\u001b[33mwarn\u001b[39m] components/Vercel.js\n[\u001b[33mwarn\u001b[39m] components/WalineComponent.js\n[\u001b[33mwarn\u001b[39m] components/WebMention.js\n[\u001b[33mwarn\u001b[39m] components/Webwhiz.js\n[\u001b[33mwarn\u001b[39m] components/WordCount.js\n[\u001b[33mwarn\u001b[39m] conf/analytics.config.js\n[\u001b[33mwarn\u001b[39m] conf/notion.config.js\n[\u001b[33mwarn\u001b[39m] conf/performance.config.js\n[\u001b[33mwarn\u001b[39m] CONTRIBUTING.md\n[\u001b[33mwarn\u001b[39m] DEVELOPMENT.md\n[\u001b[33mwarn\u001b[39m] hooks/useAdjustStyle.js\n[\u001b[33mwarn\u001b[39m] hooks/useWindowSize.ts\n[\u001b[33mwarn\u001b[39m] lib/config.js\n[\u001b[33mwarn\u001b[39m] lib/config/env-validation.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/convertInnerUrl.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/getAllPageIds.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/getMetadata.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/getNotionConfig.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/getPageContentText.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/getPageProperties.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/getPageTableOfContents.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/getPostBlocks.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/mapImage.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/normalizeUtil.js\n[\u001b[33mwarn\u001b[39m] lib/db/notion/RateLimiter.ts\n[\u001b[33mwarn\u001b[39m] lib/db/SiteDataApi.js\n[\u001b[33mwarn\u001b[39m] lib/middleware/security.js\n[\u001b[33mwarn\u001b[39m] lib/plugins/busuanzi.js\n[\u001b[33mwarn\u001b[39m] lib/plugins/gtag.js\n[\u001b[33mwarn\u001b[39m] lib/plugins/mhchem.js\n[\u001b[33mwarn\u001b[39m] lib/site/site.api.ts\n[\u001b[33mwarn\u001b[39m] lib/site/site.service.ts\n[\u001b[33mwarn\u001b[39m] lib/utils/clean.util.ts\n[\u001b[33mwarn\u001b[39m] lib/utils/errorHandler.js\n[\u001b[33mwarn\u001b[39m] lib/utils/index.js\n[\u001b[33mwarn\u001b[39m] lib/utils/lang.js\n[\u001b[33mwarn\u001b[39m] lib/utils/notion.util.js\n[\u001b[33mwarn\u001b[39m] lib/utils/sitemap.js\n[\u001b[33mwarn\u001b[39m] lib/utils/validation.js\n[\u001b[33mwarn\u001b[39m] lighthouserc.js\n[\u001b[33mwarn\u001b[39m] middleware.ts\n[\u001b[33mwarn\u001b[39m] next.config.js\n[\u001b[33mwarn\u001b[39m] OPTIMIZATION_SUMMARY.md\n[\u001b[33mwarn\u001b[39m] pages/_app.js\n[\u001b[33mwarn\u001b[39m] pages/_error.js\n[\u001b[33mwarn\u001b[39m] pages/[prefix]/[slug]/[...suffix].js\n[\u001b[33mwarn\u001b[39m] pages/[prefix]/[slug]/index.js\n[\u001b[33mwarn\u001b[39m] pages/[prefix]/index.js\n[\u001b[33mwarn\u001b[39m] pages/500.js\n[\u001b[33mwarn\u001b[39m] pages/api/subscribe.js\n[\u001b[33mwarn\u001b[39m] pages/category/[category]/page/[page].js\n[\u001b[33mwarn\u001b[39m] pages/category/index.js\n[\u001b[33mwarn\u001b[39m] pages/dashboard/[[...index]].js\n[\u001b[33mwarn\u001b[39m] pages/sitemap.xml.js\n[\u001b[33mwarn\u001b[39m] pages/tag/[tag]/page/[page].js\n[\u001b[33mwarn\u001b[39m] PROJECT_COMPLETION_REPORT.md\n[\u001b[33mwarn\u001b[39m] public/css/spoiler-text.css\n[\u001b[33mwarn\u001b[39m] public/dplayer.htm\n[\u001b[33mwarn\u001b[39m] public/games-external/common/index.htm\n[\u001b[33mwarn\u001b[39m] public/js/aos.js\n[\u001b[33mwarn\u001b[39m] public/js/cusdis.es.js\n[\u001b[33mwarn\u001b[39m] public/js/flutteringRibbon.js\n[\u001b[33mwarn\u001b[39m] public/js/giscus.js\n[\u001b[33mwarn\u001b[39m] public/js/lenis.js\n[\u001b[33mwarn\u001b[39m] public/js/mouse-follow.js\n[\u001b[33mwarn\u001b[39m] public/js/nest.js\n[\u001b[33mwarn\u001b[39m] public/js/ribbon.js\n[\u001b[33mwarn\u001b[39m] public/js/starrySky.js\n[\u001b[33mwarn\u001b[39m] public/js/typed.min.js\n[\u001b[33mwarn\u001b[39m] scripts/dev-tools.js\n[\u001b[33mwarn\u001b[39m] scripts/quality-check.js\n[\u001b[33mwarn\u001b[39m] scripts/setup-git-hooks.js\n[\u001b[33mwarn\u001b[39m] styles/notion.css\n[\u001b[33mwarn\u001b[39m] styles/utility-patterns.css\n[\u001b[33mwarn\u001b[39m] themes/heo/components/AnalyticsCard.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/BlogPostArchive.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/BlogPostCard.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/BlogPostListEmpty.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/BlogPostListPage.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/BlogPostListScroll.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/Card.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/Catalog.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/CategoryBar.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/CategoryGroup.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/DarkModeButton.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/FloatTocButton.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/Hero.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/LatestPostsGroup.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/LatestPostsGroupMini.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/MenuGroupCard.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/MenuItemCollapse.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/MenuListTop.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/NavButtonGroup.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/PaginationNumber.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/PostAdjacent.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/PostCopyright.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/PostHeader.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/PostLock.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/PostRecommend.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/RandomPostButton.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/ReadingProgress.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/SearchButton.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/SearchInput.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/SearchNav.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/SideBar.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/SlideOver.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/SocialButton.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/Swipe.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/TagGroups.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/TagItemMini.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/TouchMeCard.js\n[\u001b[33mwarn\u001b[39m] themes/heo/components/WavesArea.js\n[\u001b[33mwarn\u001b[39m] themes/heo/index.js\n[\u001b[33mwarn\u001b[39m] tsconfig.json\n[\u001b[33mwarn\u001b[39m] Code style issues found in 175 files. Run Prettier with --write to fix.\n"
+    },
+    {
+      "name": "安全检查",
+      "success": false,
+      "type": "security",
+      "error": "Command failed: npm audit --audit-level=moderate\nnpm warn audit 404 Not Found - POST https://registry.npmmirror.com/-/npm/v1/security/advisories/bulk - [NOT_IMPLEMENTED] /-/npm/v1/security/* not implemented yet\nnpm error audit endpoint returned an error\nnpm error A complete log of this run can be found in: C:\\Users\\31373\\AppData\\Local\\npm-cache\\_logs\\2026-04-06T10_00_37_139Z-debug-0.log\n"
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "passed": 5,
+    "failed": 4
+  }
+}

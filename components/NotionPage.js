@@ -7,6 +7,15 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { NotionRenderer } from 'react-notion-x'
 
+const hasCodeBlocks = blockMap => {
+  const blocks = blockMap?.block
+  if (!blocks) {
+    return false
+  }
+
+  return Object.values(blocks).some(block => block?.value?.type === 'code')
+}
+
 /**
  * 整个站点的核心组件
  * 将Notion数据渲染成网页
@@ -30,6 +39,8 @@ const NotionPage = ({ post, className }) => {
 
   const articleRef = useRef(null)
   const IMAGE_ZOOM_IN_WIDTH = siteConfig('IMAGE_ZOOM_IN_WIDTH', 1200)
+  const ADSENSE_GOOGLE_ID = siteConfig('ADSENSE_GOOGLE_ID')
+  const shouldRenderPrism = hasCodeBlocks(post?.blockMap)
   // 页面首次打开时执行的勾子
   useEffect(() => {
     // 检测当前的url并自动滚动到对应目标
@@ -83,7 +94,12 @@ const NotionPage = ({ post, className }) => {
     return () => {
       observer.disconnect()
     }
-  }, [post])
+  }, [
+    IMAGE_ZOOM_IN_WIDTH,
+    POST_DISABLE_DATABASE_CLICK,
+    POST_DISABLE_GALLERY_CLICK,
+    post
+  ])
 
   useEffect(() => {
     // Spoiler文本功能
@@ -127,7 +143,7 @@ const NotionPage = ({ post, className }) => {
 
     // 清理定时器，防止组件卸载时执行
     return () => clearTimeout(timer)
-  }, [post])
+  }, [post, SPOILER_TEXT_TAG])
 
   // const cleanBlockMap = cleanBlocksWithWarn(post?.blockMap);
   // console.log('NotionPage render with post:', post);
@@ -152,8 +168,8 @@ const NotionPage = ({ post, className }) => {
         }}
       />
 
-      <AdEmbed />
-      <PrismMac />
+      {ADSENSE_GOOGLE_ID ? <AdEmbed /> : null}
+      {shouldRenderPrism ? <PrismMac /> : null}
     </div>
   )
 }

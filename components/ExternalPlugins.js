@@ -31,7 +31,11 @@ const ExternalPlugin = props => {
       DEBUG: siteConfig('DEBUG', null, nc),
       ANALYTICS_ACKEE_TRACKER: siteConfig('ANALYTICS_ACKEE_TRACKER', null, nc),
       ANALYTICS_VERCEL: siteConfig('ANALYTICS_VERCEL', null, nc),
-      ANALYTICS_BUSUANZI_ENABLE: siteConfig('ANALYTICS_BUSUANZI_ENABLE', null, nc),
+      ANALYTICS_BUSUANZI_ENABLE: siteConfig(
+        'ANALYTICS_BUSUANZI_ENABLE',
+        null,
+        nc
+      ),
       ADSENSE_GOOGLE_ID: siteConfig('ADSENSE_GOOGLE_ID', null, nc),
       FACEBOOK_APP_ID: siteConfig('FACEBOOK_APP_ID', null, nc),
       FACEBOOK_PAGE_ID: siteConfig('FACEBOOK_PAGE_ID', null, nc),
@@ -41,9 +45,17 @@ const ExternalPlugin = props => {
       MUSIC_PLAYER: siteConfig('MUSIC_PLAYER', null, nc),
       NEST: siteConfig('NEST', null, nc),
       FLUTTERINGRIBBON: siteConfig('FLUTTERINGRIBBON', null, nc),
-      COMMENT_TWIKOO_COUNT_ENABLE: siteConfig('COMMENT_TWIKOO_COUNT_ENABLE', null, nc),
+      COMMENT_TWIKOO_COUNT_ENABLE: siteConfig(
+        'COMMENT_TWIKOO_COUNT_ENABLE',
+        null,
+        nc
+      ),
       RIBBON: siteConfig('RIBBON', null, nc),
-      CUSTOM_RIGHT_CLICK_CONTEXT_MENU: siteConfig('CUSTOM_RIGHT_CLICK_CONTEXT_MENU', null, nc),
+      CUSTOM_RIGHT_CLICK_CONTEXT_MENU: siteConfig(
+        'CUSTOM_RIGHT_CLICK_CONTEXT_MENU',
+        null,
+        nc
+      ),
       CAN_COPY: siteConfig('CAN_COPY', null, nc),
       WEB_WHIZ_ENABLED: siteConfig('WEB_WHIZ_ENABLED', null, nc),
       AD_WWADS_BLOCK_DETECT: siteConfig('AD_WWADS_BLOCK_DETECT', null, nc),
@@ -107,21 +119,38 @@ const ExternalPlugin = props => {
         loadExternalResource(url, 'css')
       }
     }
-  }, [config.ANIMATE_CSS_URL, config.CUSTOM_EXTERNAL_CSS, config.CUSTOM_EXTERNAL_JS, config.IMG_SHADOW])
+  }, [
+    config.ANIMATE_CSS_URL,
+    config.CUSTOM_EXTERNAL_CSS,
+    config.CUSTOM_EXTERNAL_JS,
+    config.IMG_SHADOW
+  ])
 
   const router = useRouter()
   useEffect(() => {
+    let adsenseTimer = null
+    let convertTimer = null
+
     // 异步渲染谷歌广告
     if (config.ADSENSE_GOOGLE_ID) {
-      setTimeout(() => {
+      adsenseTimer = window.setTimeout(() => {
         initGoogleAdsense(config.ADSENSE_GOOGLE_ID)
       }, 3000)
     }
 
-    setTimeout(() => {
+    convertTimer = window.setTimeout(() => {
       // 映射url
       convertInnerUrl({ allPages: props?.allNavPages, lang: lang })
     }, 500)
+
+    return () => {
+      if (adsenseTimer) {
+        window.clearTimeout(adsenseTimer)
+      }
+      if (convertTimer) {
+        window.clearTimeout(convertTimer)
+      }
+    }
   }, [config.ADSENSE_GOOGLE_ID, lang, props?.allNavPages, router.asPath])
 
   useEffect(() => {
@@ -154,10 +183,14 @@ const ExternalPlugin = props => {
       {config.MUSIC_PLAYER && <MusicPlayer />}
       {config.NEST && <Nest />}
       {config.FLUTTERINGRIBBON && <FlutteringRibbon />}
-      {config.COMMENT_TWIKOO_COUNT_ENABLE && <TwikooCommentCounter {...props} />}
+      {config.COMMENT_TWIKOO_COUNT_ENABLE && (
+        <TwikooCommentCounter {...props} />
+      )}
       {config.RIBBON && <Ribbon />}
       {config.DIFY_CHATBOT_ENABLED && <DifyChatbot />}
-      {config.CUSTOM_RIGHT_CLICK_CONTEXT_MENU && <CustomContextMenu {...props} />}
+      {config.CUSTOM_RIGHT_CLICK_CONTEXT_MENU && (
+        <CustomContextMenu {...props} />
+      )}
       {!config.CAN_COPY && <DisableCopy />}
       {config.WEB_WHIZ_ENABLED && <WebWhiz />}
       {config.AD_WWADS_BLOCK_DETECT && <AdBlockDetect />}
@@ -269,7 +302,10 @@ const ExternalPlugin = props => {
       {/* HILLTOP广告验证 */}
       {config.HILLTOP_ADS_META_ID && (
         <Head>
-          <meta name={config.HILLTOP_ADS_META_ID} content={config.HILLTOP_ADS_META_ID} />
+          <meta
+            name={config.HILLTOP_ADS_META_ID}
+            content={config.HILLTOP_ADS_META_ID}
+          />
         </Head>
       )}
 
@@ -288,7 +324,9 @@ const ExternalPlugin = props => {
 
       {/* {COMMENT_TWIKOO_ENV_ID && <script defer src={COMMENT_TWIKOO_CDN_URL} />} */}
 
-      {config.COMMENT_ARTALK_SERVER && <script defer src={config.COMMENT_ARTALK_JS} />}
+      {config.COMMENT_ARTALK_SERVER && (
+        <script defer src={config.COMMENT_ARTALK_JS} />
+      )}
 
       {config.COMMENT_TIDIO_ID && (
         <script async src={`//code.tidio.co/${config.COMMENT_TIDIO_ID}.js`} />

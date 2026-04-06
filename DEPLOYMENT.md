@@ -42,6 +42,49 @@ npm run start
 npm run quality
 ```
 
+## 性能与稳定性优化基线
+
+当前仓库已经补充了适合多平台部署的基础优化，部署时建议遵循以下约束：
+
+- **健康检查**
+  - 动态运行时使用 `/api/health`
+  - 静态导出或纯边缘静态托管使用 `/healthz`
+- **缓存策略**
+  - HTML 与健康检查接口保持 `no-store`
+  - 指纹化静态资源继续交由 Next.js 与平台 CDN 处理
+- **外部依赖**
+  - 推荐配置 `REDIS_URL` 作为跨请求持久缓存
+  - 不要依赖本地文件缓存作为线上运行时主缓存
+- **Notion API 稳定性**
+  - 当前已增加统一超时与有限重试
+  - 若内容请求频繁超时，优先排查 Notion 数据量与 Redis 命中率
+
+## 平台兼容性说明
+
+### 通用建议
+
+- 优先使用 Web 标准能力，不假设边缘运行时拥有完整 Node.js API
+- 避免在中间件和冷启动路径中增加额外网络请求
+- 对广告、统计、代码高亮等非核心能力采用按需加载
+
+### Cloudflare Workers / 静态导出
+
+- 使用 `npm run cf:build` 生成 `out/` 后部署
+- 建议将健康检查指向 `/healthz`
+- 若需要跨请求缓存，请使用外部持久化缓存，不要依赖进程内状态
+
+### EdgeOne / ESA
+
+- 建议使用 `/healthz` 作为最轻量的探活地址
+- 避免在边缘路径上引入文件系统、长时间阻塞请求、或大量并行子请求
+- 缓存策略以静态资源缓存和源站响应头为主
+
+### Vercel
+
+- `vercel.json` 已将 API 最大执行时间限制为 15 秒，避免慢请求长期占用函数实例
+- `/api/health` 与 `/healthz` 均显式禁用缓存，方便外部探针与监控系统使用
+- 如果启用 Redis，优先让数据请求命中 Redis，而不是回退到文件缓存
+
 ## Vercel 部署（推荐）
 
 Vercel 是 Next.js 的官方部署平台，提供最佳的性能和开发体验。
@@ -237,7 +280,7 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - NOTION_PAGE_ID=${NOTION_PAGE_ID}
@@ -249,7 +292,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
     restart: unless-stopped
@@ -292,35 +335,35 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Build
-      run: npm run export
-      env:
-        NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
-        
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./out
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run export
+        env:
+          NOTION_PAGE_ID: ${{ secrets.NOTION_PAGE_ID }}
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
 ```
 
 2. **配置 Secrets**
@@ -385,6 +428,7 @@ NEXT_PUBLIC_ANALYTICS_GOOGLE_ID=G-XXXXXXXXXX
 ### 常见问题
 
 1. **构建失败**
+
    ```bash
    # 清理缓存
    npm run clean
@@ -394,6 +438,7 @@ NEXT_PUBLIC_ANALYTICS_GOOGLE_ID=G-XXXXXXXXXX
    ```
 
 2. **环境变量问题**
+
    ```bash
    # 检查环境变量
    npm run quality
