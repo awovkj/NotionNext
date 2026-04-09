@@ -9,6 +9,11 @@ const Style = () => {
     <style jsx global>{`
       body {
         background-color: transparent !important;
+        background-image: url('https://tutu.510517.xyz/202508142116968.png');
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
       }
 
       /* 确保页面容器透明 */

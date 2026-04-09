@@ -17,7 +17,6 @@ import CONFIG from '../config'
  */
 const Hero = props => {
   const HEO_HERO_REVERSE = siteConfig('HEO_HERO_REVERSE', false, CONFIG)
-  const HERO_BG_IMAGE = 'https://tutu.510517.xyz/202508142116968.png'
   const fullText = '同是天涯沦落人,相逢何必曾相识'
   const [typingText, setTypingText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
@@ -53,18 +52,6 @@ const Hero = props => {
 
   return (
     <div id='hero-wrapper' className='w-full select-none relative'>
-      {/* 全局背景图 - 固定在整个页面底部 */}
-      <div
-        className='fixed inset-0 -z-50'
-        style={{
-          backgroundImage: `url(${HERO_BG_IMAGE})`,
-          backgroundPosition: 'center',
-          backgroundSize: 'cover',
-          backgroundAttachment: 'fixed',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-
       <div
         className='heo-home-hero-intro relative h-[100vh] min-h-[36rem] overflow-hidden'
       >
