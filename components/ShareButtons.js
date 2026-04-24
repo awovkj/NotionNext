@@ -392,16 +392,16 @@ const ShareButtons = ({ post }) => {
                 key={singleService}
                 onClick={() => openRedirectShare('https://link.csdn.net/?target=')}
                 className='cursor-pointer rounded-full mx-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500'>
-                <div className='w-8 h-8 rounded-full items-center justify-center'
-                  style={{backgroundColor: '#ff6a00'}}>
+                <div
+                  className='w-8 h-8 rounded-full flex items-center justify-center'
+                  style={{ backgroundColor: '#ff6a00' }}>
                   <Image
                     src='/svg/csdn.svg'
                     alt='CSDN'
-                    width={28}
-                    height={28}
-                    className='w-5 h-5'
+                    width={22}
+                    height={22}
+                    className='block w-5 h-5 object-contain'
                     loading='lazy'
-                    style={{ transform: 'translateY(3px)' }}
                   />
                 </div>
               </button>
@@ -413,14 +413,15 @@ const ShareButtons = ({ post }) => {
                 key={singleService}
                 onClick={() => openRedirectShare('https://link.juejin.cn/?target=')}
                 className='cursor-pointer rounded-full mx-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500'>
-                <div className='w-8 h-8 rounded-full flex items-center justify-center'
-                     style={{ backgroundColor: '#5dade2' }}>
+                <div
+                  className='w-8 h-8 rounded-full flex items-center justify-center'
+                  style={{ backgroundColor: '#1e80ff' }}>
                   <Image
                     src='/svg/juejin.svg'
                     alt='掘金'
-                    width={24}
-                    height={24}
-                    className='w-5 h-5'
+                    width={20}
+                    height={20}
+                    className='block w-5 h-5 object-contain'
                     loading='lazy'
                   />
                 </div>

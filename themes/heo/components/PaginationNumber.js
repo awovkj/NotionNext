@@ -47,23 +47,26 @@ const PaginationNumber = ({ page, totalPage }) => {
       {/* pc端分页按钮 */}
       <div className='hidden lg:flex justify-between items-end mt-10 font-medium text-black duration-500 dark:text-gray-300 pt-3 space-x-2 overflow-x-auto'>
         {/* 上一页 */}
-        <SmartLink
-          href={{
-            pathname:
-              currentPage === 2
-                ? `${pagePrefix}/`
-                : `${pagePrefix}/page/${currentPage - 1}`,
-            query: router.query.s ? { s: router.query.s } : {}
-          }}
-          rel='prev'
-          className={`${currentPage === 1 ? 'invisible' : 'block'}`}>
-          <div className='hover:border-indigo-600 dark:hover:border-yellow-600 relative w-24 h-10 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border dark:border-gray-600 rounded-lg cursor-pointer group'>
-            <i className='fas fa-angle-left mr-2 transition-all duration-200 transform group-hover:-translate-x-4' />
-            <div className='absolute translate-x-4 ml-2 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0'>
-              {locale.PAGINATION.PREV}
+        {showPrev ? (
+          <SmartLink
+            href={{
+              pathname:
+                currentPage === 2
+                  ? `${pagePrefix}/`
+                  : `${pagePrefix}/page/${currentPage - 1}`,
+              query: router.query.s ? { s: router.query.s } : {}
+            }}
+            rel='prev'>
+            <div className='hover:border-indigo-600 dark:hover:border-yellow-600 relative w-24 h-10 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border dark:border-gray-600 rounded-lg cursor-pointer group'>
+              <i className='fas fa-angle-left mr-2 transition-all duration-200 transform group-hover:-translate-x-4' />
+              <div className='absolute translate-x-4 ml-2 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0'>
+                {locale.PAGINATION.PREV}
+              </div>
             </div>
-          </div>
-        </SmartLink>
+          </SmartLink>
+        ) : (
+          <div className='w-24 h-10' />
+        )}
 
         {/* 分页 */}
         <div className='flex items-center space-x-2'>
@@ -84,51 +87,58 @@ const PaginationNumber = ({ page, totalPage }) => {
         </div>
 
         {/* 下一页 */}
-        <SmartLink
-          href={{
-            pathname: `${pagePrefix}/page/${currentPage + 1}`,
-            query: router.query.s ? { s: router.query.s } : {}
-          }}
-          rel='next'
-          className={`${+showNext ? 'block' : 'invisible'} `}>
-          <div className='hover:border-indigo-600 dark:hover:border-yellow-600 relative w-24 h-10 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border dark:border-gray-600 rounded-lg cursor-pointer group'>
-            <i className='fas fa-angle-right mr-2 transition-all duration-200 transform group-hover:translate-x-6' />
-            <div className='absolute -translate-x-10 ml-2 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:-translate-x-2'>
-              {locale.PAGINATION.NEXT}
+        {showNext ? (
+          <SmartLink
+            href={{
+              pathname: `${pagePrefix}/page/${currentPage + 1}`,
+              query: router.query.s ? { s: router.query.s } : {}
+            }}
+            rel='next'>
+            <div className='hover:border-indigo-600 dark:hover:border-yellow-600 relative w-24 h-10 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border dark:border-gray-600 rounded-lg cursor-pointer group'>
+              <i className='fas fa-angle-right mr-2 transition-all duration-200 transform group-hover:translate-x-6' />
+              <div className='absolute -translate-x-10 ml-2 opacity-0 transition-all duration-200 group-hover:opacity-100 group-hover:-translate-x-2'>
+                {locale.PAGINATION.NEXT}
+              </div>
             </div>
-          </div>
-        </SmartLink>
+          </SmartLink>
+        ) : (
+          <div className='w-24 h-10' />
+        )}
       </div>
 
       {/* 移动端分页 */}
 
       <div className='lg:hidden w-full flex flex-row'>
         {/* 上一页 */}
-        <SmartLink
-          href={{
-            pathname:
-              currentPage === 2
-                ? `${pagePrefix}/`
-                : `${pagePrefix}/page/${currentPage - 1}`,
-            query: router.query.s ? { s: router.query.s } : {}
-          }}
-          rel='prev'
-          className={`${showPrev ? 'block' : 'hidden'} dark:text-white relative w-full flex-1 h-14 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border rounded-xl cursor-pointer`}>
-          {locale.PAGINATION.PREV}
-        </SmartLink>
+        {showPrev ? (
+          <SmartLink
+            href={{
+              pathname:
+                currentPage === 2
+                  ? `${pagePrefix}/`
+                  : `${pagePrefix}/page/${currentPage - 1}`,
+              query: router.query.s ? { s: router.query.s } : {}
+            }}
+            rel='prev'
+            className='dark:text-white relative w-full flex-1 h-14 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border rounded-xl cursor-pointer'>
+            {locale.PAGINATION.PREV}
+          </SmartLink>
+        ) : null}
 
         {showPrev && showNext && <div className='w-12'></div>}
 
         {/* 下一页 */}
-        <SmartLink
-          href={{
-            pathname: `${pagePrefix}/page/${currentPage + 1}`,
-            query: router.query.s ? { s: router.query.s } : {}
-          }}
-          rel='next'
-          className={`${+showNext ? 'block' : 'hidden'} dark:text-white relative w-full flex-1 h-14 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border rounded-xl cursor-pointer`}>
-          {locale.PAGINATION.NEXT}
-        </SmartLink>
+        {showNext ? (
+          <SmartLink
+            href={{
+              pathname: `${pagePrefix}/page/${currentPage + 1}`,
+              query: router.query.s ? { s: router.query.s } : {}
+            }}
+            rel='next'
+            className='dark:text-white relative w-full flex-1 h-14 flex items-center transition-all duration-200 justify-center py-2 px-2 bg-white dark:bg-[#1e1e1e] border rounded-xl cursor-pointer'>
+            {locale.PAGINATION.NEXT}
+          </SmartLink>
+        ) : null}
       </div>
     </>
   )
