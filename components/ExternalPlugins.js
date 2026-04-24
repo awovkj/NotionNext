@@ -195,9 +195,9 @@ const ExternalPlugin = props => {
       {config.WEB_WHIZ_ENABLED && <WebWhiz />}
       {config.AD_WWADS_BLOCK_DETECT && <AdBlockDetect />}
       {config.TIANLI_KEY && <TianliGPT />}
-      <VConsole />
+      {config.DEBUG && <VConsole />}
       {config.ENABLE_NPROGRSS && <LoadingProgress />}
-      <AosAnimation />
+      {config.ANIMATE_CSS_URL && <AosAnimation />}
       {config.ANALYTICS_51LA_ID && config.ANALYTICS_51LA_CK && <LA51 />}
       {config.COZE_BOT_ID && <Coze />}
 

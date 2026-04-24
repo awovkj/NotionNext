@@ -1,7 +1,6 @@
 import { siteConfig } from '@/lib/config'
 import { compressImage, mapImgUrl } from '@/lib/db/notion/mapImage'
 import { isBrowser, loadExternalResource } from '@/lib/utils'
-import mediumZoom from '@fisch0920/medium-zoom'
 import 'katex/dist/katex.min.css'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
@@ -28,14 +27,8 @@ const NotionPage = ({ post, className }) => {
   const POST_DISABLE_DATABASE_CLICK = siteConfig('POST_DISABLE_DATABASE_CLICK')
   const SPOILER_TEXT_TAG = siteConfig('SPOILER_TEXT_TAG')
 
-  // 惰性初始化 mediumZoom，避免每次渲染都重新创建
+  // 惰性初始化 mediumZoom，避免首页为未使用场景打包执行
   const zoomRef = useRef(null)
-  if (isBrowser && !zoomRef.current) {
-    zoomRef.current = mediumZoom({
-      background: 'rgba(0, 0, 0, 0.2)',
-      margin: getMediumZoomMargin()
-    })
-  }
 
   const articleRef = useRef(null)
   const IMAGE_ZOOM_IN_WIDTH = siteConfig('IMAGE_ZOOM_IN_WIDTH', 1200)
@@ -49,11 +42,25 @@ const NotionPage = ({ post, className }) => {
 
   // 页面文章发生变化时会执行的勾子
   useEffect(() => {
-    // 相册视图点击禁止跳转，只能放大查看图片
-    if (POST_DISABLE_GALLERY_CLICK) {
-      // 针对页面中的gallery视图，点击后是放大图片还是跳转到gallery的内部页面
-      processGalleryImg(zoomRef?.current)
+    let observer = null
+
+    const initZoom = async () => {
+      if (!isBrowser || !POST_DISABLE_GALLERY_CLICK) {
+        return
+      }
+
+      if (!zoomRef.current) {
+        const { default: mediumZoom } = await import('@fisch0920/medium-zoom')
+        zoomRef.current = mediumZoom({
+          background: 'rgba(0, 0, 0, 0.2)',
+          margin: getMediumZoomMargin()
+        })
+      }
+
+      processGalleryImg(zoomRef.current)
     }
+
+    void initZoom()
 
     // 页内数据库点击禁止跳转，只能查看
     if (POST_DISABLE_DATABASE_CLICK) {
@@ -67,7 +74,7 @@ const NotionPage = ({ post, className }) => {
     const container = articleRef.current
     if (!container) return
 
-    const observer = new MutationObserver(mutationsList => {
+    observer = new MutationObserver(mutationsList => {
       for (const mutation of mutationsList) {
         if (
           mutation.type === 'attributes' &&
@@ -92,7 +99,7 @@ const NotionPage = ({ post, className }) => {
     })
 
     return () => {
-      observer.disconnect()
+      observer?.disconnect()
     }
   }, [
     IMAGE_ZOOM_IN_WIDTH,
@@ -115,8 +122,13 @@ const NotionPage = ({ post, className }) => {
 
     // 查找所有具有 'notion-collection-page-properties' 类的元素,删除notion自带的页面properties
     const timer = setTimeout(() => {
+      const container = articleRef.current
+      if (!container) {
+        return
+      }
+
       // 查找所有具有 'notion-collection-page-properties' 类的元素
-      const elements = document.querySelectorAll(
+      const elements = container.querySelectorAll(
         '.notion-collection-page-properties'
       )
 
@@ -125,7 +137,7 @@ const NotionPage = ({ post, className }) => {
         element?.remove()
       })
       //新标签页打开
-      const links = document.querySelectorAll('a[href]')
+      const links = container.querySelectorAll('a[href]')
       links.forEach(link => {
         const href = link.getAttribute('href')
         // 检查是否为外部链接（不是以/或#开头，也不是相对路径）

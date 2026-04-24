@@ -54,12 +54,16 @@ export async function getStaticProps({ params: { page }, locale }) {
 
   // 处理预览
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
-    for (const i in props.posts) {
-      const post = props.posts[i]
-      if (post.password && post.password !== '') {
-        continue
-      }
-      post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+    const previewPosts = props.posts.filter(
+      post => !post.password || post.password === ''
+    )
+
+    for (let i = 0; i < previewPosts.length; i += 4) {
+      await Promise.all(
+        previewPosts.slice(i, i + 4).map(async post => {
+          post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+        })
+      )
     }
   }
 

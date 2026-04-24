@@ -288,9 +288,7 @@ const nextConfig = {
 
     // Enable source maps in development mode
     if (dev || process.env.NODE_ENV_API === 'development') {
-      // config.devtool = 'source-map'
-      config.devtool = 'eval-source-map'
-      // console.log('启动调试 nextjs.config.devtool ', config.devtool)
+      config.devtool = 'eval-cheap-module-source-map'
     }
 
     // 优化模块解析

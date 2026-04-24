@@ -4,7 +4,8 @@
       "mcp__sequential-thinking__sequentialthinking",
       "Bash(npx next:*)",
       "mcp__plugin_oh-my-claudecode_t__ast_grep_replace",
-      "Bash(npm run:*)"
+      "Bash(npm run:*)",
+      "Bash(git diff *)"
     ]
   }
 }

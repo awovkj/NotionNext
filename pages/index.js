@@ -47,23 +47,35 @@ export async function getStaticProps(req) {
 
   // 预览文章内容
   if (siteConfig('POST_LIST_PREVIEW', false, props?.NOTION_CONFIG)) {
-    for (const i in props.posts) {
-      const post = props.posts[i]
-      if (post.password && post.password !== '') {
-        continue
-      }
-      post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+    const previewPosts = props.posts.filter(
+      post => !post.password || post.password === ''
+    )
+
+    for (let i = 0; i < previewPosts.length; i += 4) {
+      await Promise.all(
+        previewPosts.slice(i, i + 4).map(async post => {
+          post.blockMap = await getPostBlocks(post.id, 'slug', POST_PREVIEW_LINES)
+        })
+      )
     }
   }
 
   // 生成robotTxt
   generateRobotsTxt(props)
   // 生成Feed订阅
-  generateRss(props)
+  if (siteConfig('ENABLE_RSS', false, props?.NOTION_CONFIG)) {
+    generateRss(props)
+  }
   // 生成
   generateSitemapXml(props)
   // 检查数据是否需要从algolia删除
-  checkDataFromAlgolia(props)
+  if (
+    siteConfig('ALGOLIA_APP_ID', null, props?.NOTION_CONFIG) &&
+    siteConfig('ALGOLIA_ADMIN_APP_KEY', null, props?.NOTION_CONFIG) &&
+    siteConfig('ALGOLIA_INDEX', null, props?.NOTION_CONFIG)
+  ) {
+    checkDataFromAlgolia(props)
+  }
   if (siteConfig('UUID_REDIRECT', false, props?.NOTION_CONFIG)) {
     // 生成重定向 JSON
     generateRedirectJson(props)
