@@ -11,15 +11,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
  */
 const Catalog = ({ toc }) => {
   const { locale } = useGlobal()
-  // 监听滚动事件
-  useEffect(() => {
-    window.addEventListener('scroll', actionSectionScrollSpy)
-    actionSectionScrollSpy()
-    return () => {
-      window.removeEventListener('scroll', actionSectionScrollSpy)
-    }
-  }, [])
-
   // 目录自动滚动
   const tRef = useRef(null)
   const tocIds = []
@@ -53,8 +44,19 @@ const Catalog = ({ toc }) => {
       setActiveSection(currentSectionId)
       const index = tocIds.indexOf(currentSectionId) || 0
       tRef?.current?.scrollTo({ top: 28 * index, behavior: 'smooth' })
-    }, 200)
+    }, 200),
+    [activeSection]
   )
+
+  // 监听滚动事件
+  useEffect(() => {
+    window.addEventListener('scroll', actionSectionScrollSpy, { passive: true })
+    actionSectionScrollSpy()
+    return () => {
+      window.removeEventListener('scroll', actionSectionScrollSpy)
+      actionSectionScrollSpy.cancel()
+    }
+  }, [actionSectionScrollSpy])
 
   // 无目录就直接返回空
   if (!toc || toc.length < 1) {

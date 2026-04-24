@@ -2,7 +2,7 @@ import { siteConfig } from '@/lib/config'
 import { isBrowser } from '@/lib/utils'
 import throttle from 'lodash.throttle'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import DarkModeButton from './DarkModeButton'
 import Logo from './Logo'
 import { MenuListTop } from './MenuListTop'
@@ -30,74 +30,53 @@ const Header = props => {
     slideOverRef?.current?.toggleSlideOvers()
   }
 
-  /**
-   * 根据滚动条，切换导航栏样式
-   */
-  const scrollTrigger = useCallback(
-    throttle(() => {
-      const scrollS = window.scrollY
-      // 导航栏设置 白色背景
-      if (scrollS <= 1) {
-        setFixedNav(false)
-        setBgWhite(false)
-        setTextWhite(false)
+  useEffect(() => {
+    if (!isBrowser) {
+      return
+    }
 
-        // 文章详情页特殊处理
-        if (document?.querySelector('#post-bg')) {
-          setFixedNav(true)
-          setTextWhite(true)
-        }
+    let prevScrollY = window.scrollY
+    let ticking = false
+
+    const updateHeader = throttle(() => {
+      const currentScrollY = window.scrollY
+      const isAtTop = currentScrollY <= 1
+      const hasPostBg = Boolean(document?.querySelector('#post-bg'))
+
+      if (isAtTop) {
+        setFixedNav(hasPostBg)
+        setBgWhite(false)
+        setTextWhite(hasPostBg)
       } else {
-        // 向下滚动后的导航样式
         setFixedNav(true)
         setTextWhite(false)
         setBgWhite(true)
       }
+
+      setActiveIndex(currentScrollY > prevScrollY ? 1 : 0)
+      prevScrollY = currentScrollY
     }, 100)
-  )
-  useEffect(() => {
-    scrollTrigger()
-  }, [router])
-
-  // 监听滚动
-  useEffect(() => {
-    window.addEventListener('scroll', scrollTrigger)
-    return () => {
-      window.removeEventListener('scroll', scrollTrigger)
-    }
-  }, [])
-
-  // 导航栏根据滚动轮播菜单内容
-  useEffect(() => {
-    let prevScrollY = 0
-    let ticking = false
 
     const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY
-          if (currentScrollY > prevScrollY) {
-            setActiveIndex(1) // 向下滚动时设置activeIndex为1
-          } else {
-            setActiveIndex(0) // 向上滚动时设置activeIndex为0
-          }
-          prevScrollY = currentScrollY
-          ticking = false
-        })
-        ticking = true
+      if (ticking) {
+        return
       }
+
+      ticking = true
+      window.requestAnimationFrame(() => {
+        updateHeader()
+        ticking = false
+      })
     }
 
-    if (isBrowser) {
-      window.addEventListener('scroll', handleScroll)
-    }
+    updateHeader()
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
-      if (isBrowser) {
-        window.removeEventListener('scroll', handleScroll)
-      }
+      window.removeEventListener('scroll', handleScroll)
+      updateHeader.cancel()
     }
-  }, [])
+  }, [router.asPath])
 
   return (
     <>

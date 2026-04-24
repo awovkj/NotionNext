@@ -1,6 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextRequest, NextResponse } from 'next/server'
-import { checkStrIsNotionId, getLastPartOfUrl } from '@/lib/utils'
+import { checkStrIsNotionId, checkStrIsUuid, getLastPartOfUrl } from '@/lib/utils'
 import { idToUuid } from 'notion-utils'
 import BLOG from './blog.config'
 
@@ -43,7 +43,9 @@ async function getRedirectJson(origin: string): Promise<Record<string, string>> 
     return _redirectJsonCache
   }
   try {
-    const response = await fetch(`${origin}/redirect.json`)
+    const response = await fetch(`${origin}/redirect.json`, {
+      next: { revalidate: 300 }
+    })
     if (response.ok) {
       _redirectJsonCache = (await response.json()) as Record<string, string>
       _redirectJsonCacheTime = now
@@ -59,18 +61,24 @@ async function getRedirectJson(origin: string): Promise<Record<string, string>> 
 const noAuthMiddleware = async (req: NextRequest, ev: any) => {
   // 如果没有配置 Clerk 相关环境变量，返回一个默认响应或者继续处理请求
   if (BLOG['UUID_REDIRECT']) {
-    const redirectJson = await getRedirectJson(req.nextUrl.origin)
     let lastPart = getLastPartOfUrl(req.nextUrl.pathname) as string
-    if (checkStrIsNotionId(lastPart)) {
+    const isNotionLikeId = checkStrIsNotionId(lastPart)
+    const isUuid = checkStrIsUuid(lastPart)
+
+    if (isNotionLikeId) {
       lastPart = idToUuid(lastPart)
     }
-    if (lastPart && redirectJson[lastPart]) {
-      const redirectToUrl = req.nextUrl.clone()
-      redirectToUrl.pathname = '/' + redirectJson[lastPart]
-      console.log(
-        `redirect from ${req.nextUrl.pathname} to ${redirectToUrl.pathname}`
-      )
-      return NextResponse.redirect(redirectToUrl, 308)
+
+    if (isNotionLikeId || isUuid) {
+      const redirectJson = await getRedirectJson(req.nextUrl.origin)
+      if (lastPart && redirectJson[lastPart]) {
+        const redirectToUrl = req.nextUrl.clone()
+        redirectToUrl.pathname = '/' + redirectJson[lastPart]
+        console.log(
+          `redirect from ${req.nextUrl.pathname} to ${redirectToUrl.pathname}`
+        )
+        return NextResponse.redirect(redirectToUrl, 308)
+      }
     }
   }
   return NextResponse.next()

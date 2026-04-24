@@ -5,7 +5,12 @@
       "Bash(npx next:*)",
       "mcp__plugin_oh-my-claudecode_t__ast_grep_replace",
       "Bash(npm run:*)",
-      "Bash(git diff *)"
+      "Bash(git diff *)",
+      "Bash(git -C \"/c/Users/31373/Downloads/NotionNext\" status --short)",
+      "Bash(python *)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(npm *)"
     ]
   }
 }

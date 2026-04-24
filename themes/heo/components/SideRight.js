@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+import { siteConfig } from '@/lib/config'
 import { AnalyticsCard } from './AnalyticsCard'
 import Card from './Card'
 import Catalog from './Catalog'
@@ -7,18 +8,9 @@ import LatestPostsGroupMini from './LatestPostsGroupMini'
 import TagGroups from './TagGroups'
 import TouchMeCard from './TouchMeCard'
 
-const FaceBookPage = dynamic(
-  () => {
-    let facebook = <></>
-    try {
-      facebook = import('@/components/FacebookPage')
-    } catch (err) {
-      console.error(err)
-    }
-    return facebook
-  },
-  { ssr: false }
-)
+const FaceBookPage = dynamic(() => import('@/components/FacebookPage'), {
+  ssr: false
+})
 
 /**
  * Hexo主题右侧栏
@@ -27,6 +19,10 @@ const FaceBookPage = dynamic(
  */
 export default function SideRight(props) {
   const { post, tagOptions, currentTag, rightAreaSlot } = props
+  const hasFacebookPage = Boolean(
+    siteConfig('FACEBOOK_PAGE', null, props?.NOTION_CONFIG) &&
+      siteConfig('FACEBOOK_APP_ID', null, props?.NOTION_CONFIG)
+  )
 
   // 只摘取标签的前60个，防止右侧过长
   const sortedTags = tagOptions?.slice(0, 60) || []
@@ -59,7 +55,7 @@ export default function SideRight(props) {
 
         {rightAreaSlot}
 
-        <FaceBookPage />
+        {hasFacebookPage ? <FaceBookPage /> : null}
 
         {/* 标签和成绩 */}
         <Card

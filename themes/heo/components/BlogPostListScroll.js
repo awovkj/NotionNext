@@ -1,7 +1,7 @@
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
 import { getListByPage } from '@/lib/utils'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import CONFIG from '../config'
 import BlogPostCard from './BlogPostCard'
 import BlogPostListEmpty from './BlogPostListEmpty'
@@ -22,49 +22,54 @@ const BlogPostListScroll = ({
   const { locale, NOTION_CONFIG } = useGlobal()
   const [page, updatePage] = useState(1)
   const POSTS_PER_PAGE = siteConfig('POSTS_PER_PAGE', null, NOTION_CONFIG)
-  const postsToShow = getListByPage(posts, page, POSTS_PER_PAGE)
-
-  let hasMore = false
-  if (posts) {
-    const totalCount = posts.length
-    hasMore = page * POSTS_PER_PAGE < totalCount
-  }
+  const loadMoreRef = useRef(null)
+  const postsToShow = useMemo(
+    () => getListByPage(posts, page, POSTS_PER_PAGE),
+    [posts, page, POSTS_PER_PAGE]
+  )
+  const hasMore = posts ? page * POSTS_PER_PAGE < posts.length : false
 
   const handleGetMore = () => {
-    if (!hasMore) return
-    updatePage(page + 1)
-  }
-
-  // 监听滚动自动分页加载
-  const scrollTrigger = () => {
-    requestAnimationFrame(() => {
-      const scrollS = window.scrollY + window.outerHeight
-      const clientHeight = targetRef
-        ? targetRef.current
-          ? targetRef.current.clientHeight
-          : 0
-        : 0
-      if (scrollS > clientHeight + 100) {
-        handleGetMore()
+    updatePage(prev => {
+      if (!posts || prev * POSTS_PER_PAGE >= posts.length) {
+        return prev
       }
+      return prev + 1
     })
   }
 
-  // 监听滚动
   useEffect(() => {
-    window.addEventListener('scroll', scrollTrigger)
-    return () => {
-      window.removeEventListener('scroll', scrollTrigger)
+    const sentinel = loadMoreRef.current
+    if (!sentinel || typeof window === 'undefined' || !hasMore) {
+      return
     }
-  })
 
-  const targetRef = useRef(null)
+    if (!window.IntersectionObserver) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0]?.isIntersecting) {
+          handleGetMore()
+        }
+      },
+      {
+        rootMargin: '200px 0px'
+      }
+    )
+
+    observer.observe(sentinel)
+    return () => {
+      observer.disconnect()
+    }
+  }, [hasMore, posts?.length, POSTS_PER_PAGE])
   const POST_TWO_COLS = siteConfig('HEO_HOME_POST_TWO_COLS', true, CONFIG)
   if (!postsToShow || postsToShow.length === 0) {
     return <BlogPostListEmpty currentSearch={currentSearch} />
   } else {
     return (
-      <div id='container' ref={targetRef} className='w-full'>
+      <div id='container' className='w-full'>
         {/* 文章列表 */}
         <div
           className={`${POST_TWO_COLS && '2xl:grid 2xl:grid-cols-2'} grid-cols-1 gap-5`}>
@@ -80,14 +85,13 @@ const BlogPostListScroll = ({
         </div>
 
         {/* 更多按钮 */}
-        <div>
+        <div ref={loadMoreRef}>
           <div
             onClick={() => {
               handleGetMore()
             }}
             className='w-full my-4 py-4 text-center cursor-pointer rounded-xl dark:text-gray-200'>
-            {' '}
-            {hasMore ? locale.COMMON.MORE : `${locale.COMMON.NO_MORE}`}{' '}
+            {hasMore ? locale.COMMON.MORE : `${locale.COMMON.NO_MORE}`}
           </div>
         </div>
       </div>

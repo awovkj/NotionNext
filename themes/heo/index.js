@@ -65,14 +65,27 @@ const LayoutBase = props => {
       return
     }
 
+    let requestId = null
     const onScroll = () => {
-      const threshold = window.innerHeight * 0.72
-      setShowHomeTopUI(window.scrollY > threshold)
+      if (requestId) {
+        return
+      }
+
+      requestId = window.requestAnimationFrame(() => {
+        const threshold = window.innerHeight * 0.72
+        setShowHomeTopUI(window.scrollY > threshold)
+        requestId = null
+      })
     }
 
     onScroll()
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (requestId) {
+        window.cancelAnimationFrame(requestId)
+      }
+    }
   }, [router.route])
 
   const headerSlot = (
@@ -109,6 +122,14 @@ const LayoutBase = props => {
 
   // 加载wow动画
   useEffect(() => {
+    if (typeof document === 'undefined') {
+      return
+    }
+
+    if (!document.querySelector('.wow')) {
+      return
+    }
+
     loadWowJS()
   }, [])
 
