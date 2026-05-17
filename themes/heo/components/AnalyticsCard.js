@@ -15,6 +15,7 @@ export function AnalyticsCard(props) {
   const siteTimeTitle = siteConfig('HEO_SITE_TIME_TITLE', null, CONFIG)
   const siteVisitTitle = siteConfig('HEO_SITE_VISIT_TITLE', null, CONFIG)
   const siteVisitorTitle = siteConfig('HEO_SITE_VISITOR_TITLE', null, CONFIG)
+  const pagePvTitle = siteConfig('HEO_PAGE_PV_TITLE', null, CONFIG)
 
   const { postCount } = props
   return <>
@@ -31,16 +32,22 @@ export function AnalyticsCard(props) {
                     <div>{diffDays} 天</div>
                 </div>
             </div>
-            <div className='hidden busuanzi_container_page_pv'>
+            <div className='inline'>
                 <div className='flex justify-between'>
                     <div>{siteVisitTitle}</div>
-                    <div className='busuanzi_value_page_pv' />
+                    <div><span id="busuanzi_value_site_pv">加载中...</span> 次</div>
                 </div>
             </div>
-            <div className='hidden busuanzi_container_site_uv'>
+            <div className='inline'>
                 <div className='flex justify-between'>
                     <div>{siteVisitorTitle}</div>
-                    <div className='busuanzi_value_site_uv' />
+                    <div><span id="busuanzi_value_site_uv">加载中...</span> 人</div>
+                </div>
+            </div>
+            <div className='inline'>
+                <div className='flex justify-between'>
+                    <div>{pagePvTitle}</div>
+                    <div><span id="busuanzi_value_page_pv">加载中...</span> 次</div>
                 </div>
             </div>
         </div>
