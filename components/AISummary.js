@@ -1,18 +1,117 @@
 import styles from './AISummary.module.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useGlobal } from '@/lib/global'
 
 const AISummary = ({ aiSummary }) => {
   const { locale } = useGlobal()
-  const [summary, setSummary] = useState(aiSummary)
+  const containerRef = useRef(null)
+  const [summary, setSummary] = useState('')
 
   useEffect(() => {
-    showAiSummaryAnimation(aiSummary, setSummary)
-  }, [])
+    if (!aiSummary) {
+      setSummary('')
+      return
+    }
+
+    if (
+      typeof window === 'undefined' ||
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    ) {
+      setSummary(aiSummary)
+      return
+    }
+
+    let currentIndex = 0
+    let isVisible = false
+    let timerId = null
+    let frameId = null
+    let observer = null
+    let cancelled = false
+
+    setSummary('')
+
+    const clearPendingWork = () => {
+      if (timerId !== null) {
+        window.clearTimeout(timerId)
+        timerId = null
+      }
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+        frameId = null
+      }
+    }
+
+    const getDelay = char => {
+      return /[，。！？、；：,.!?;:]/.test(char) ? 110 : 22
+    }
+
+    const scheduleNextFrame = delay => {
+      clearPendingWork()
+      timerId = window.setTimeout(() => {
+        timerId = null
+        frameId = window.requestAnimationFrame(typeNextChar)
+      }, delay)
+    }
+
+    const typeNextChar = () => {
+      frameId = null
+
+      if (cancelled || !isVisible) {
+        return
+      }
+
+      if (currentIndex >= aiSummary.length) {
+        setSummary(aiSummary)
+        observer?.disconnect()
+        return
+      }
+
+      currentIndex += 1
+      setSummary(aiSummary.slice(0, currentIndex))
+      scheduleNextFrame(getDelay(aiSummary[currentIndex - 1]))
+    }
+
+    const startOrResume = delay = 0 => {
+      if (cancelled || currentIndex >= aiSummary.length) {
+        return
+      }
+
+      scheduleNextFrame(delay)
+    }
+
+    const target = containerRef.current
+    if (!target || !window.IntersectionObserver) {
+      isVisible = true
+      startOrResume(120)
+    } else {
+      observer = new IntersectionObserver(
+        entries => {
+          isVisible = Boolean(entries[0]?.isIntersecting)
+
+          if (isVisible) {
+            startOrResume(currentIndex === 0 ? 160 : 0)
+          } else {
+            clearPendingWork()
+          }
+        },
+        {
+          rootMargin: '80px 0px',
+          threshold: 0.1
+        }
+      )
+      observer.observe(target)
+    }
+
+    return () => {
+      cancelled = true
+      clearPendingWork()
+      observer?.disconnect()
+    }
+  }, [aiSummary])
 
   return (
     aiSummary && (
-      <div className={styles['post-ai']}>
+      <div ref={containerRef} className={styles['post-ai']}>
         <div className={styles['ai-container']}>
           <div className={styles['ai-header']}>
             <div className={styles['ai-icon']}>
@@ -42,57 +141,6 @@ const AISummary = ({ aiSummary }) => {
       </div>
     )
   )
-}
-
-const showAiSummaryAnimation = (rawSummary, setSummary) => {
-  if (!rawSummary) return
-  let currentIndex = 0
-  const typingDelay = 20
-  const punctuationDelayMultiplier = 6
-  let animationRunning = true
-  let lastUpdateTime = performance.now()
-  const animate = () => {
-    if (currentIndex < rawSummary.length && animationRunning) {
-      const currentTime = performance.now()
-      const timeDiff = currentTime - lastUpdateTime
-
-      const letter = rawSummary.slice(currentIndex, currentIndex + 1)
-      const isPunctuation = /[，。！、？,.!?]/.test(letter)
-      const delay = isPunctuation
-        ? typingDelay * punctuationDelayMultiplier
-        : typingDelay
-
-      if (timeDiff >= delay) {
-        setSummary(rawSummary.slice(0, currentIndex + 1))
-        lastUpdateTime = currentTime
-        currentIndex++
-
-        if (currentIndex < rawSummary.length) {
-          setSummary(rawSummary.slice(0, currentIndex))
-        } else {
-          setSummary(rawSummary)
-          observer.disconnect()
-        }
-      }
-      requestAnimationFrame(animate)
-    }
-  }
-  animate(rawSummary)
-  const observer = new IntersectionObserver(
-    entries => {
-      animationRunning = entries[0].isIntersecting
-      if (animationRunning && currentIndex === 0) {
-        setTimeout(() => {
-          requestAnimationFrame(animate)
-        }, 200)
-      }
-    },
-    { threshold: 0 }
-  )
-  let post_ai = document.querySelector('.post-ai')
-  if (post_ai) {
-    observer.observe(post_ai)
-  }
 }
 
 export default AISummary

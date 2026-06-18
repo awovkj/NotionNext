@@ -19,28 +19,107 @@ const Hero = props => {
   const HEO_HERO_REVERSE = siteConfig('HEO_HERO_REVERSE', false, CONFIG)
   const fullText = '同是天涯沦落人,相逢何必曾相识'
   const [typingText, setTypingText] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
+  const [typingStopped, setTypingStopped] = useState(false)
+  const typingStoppedRef = useRef(false)
 
   useEffect(() => {
     if (!fullText) return
-    const timer = setTimeout(() => {
-      if (!isDeleting) {
-        if (typingText.length < fullText.length) {
-          setTypingText(fullText.slice(0, typingText.length + 1))
-        } else {
-          setTimeout(() => setIsDeleting(true), 1000)
+
+    let active = true
+    let index = 0
+    let deleting = false
+    let timer = null
+
+    const tick = () => {
+      if (!active || typingStoppedRef.current) {
+        return
+      }
+
+      if (!deleting) {
+        index = Math.min(index + 1, fullText.length)
+        setTypingText(fullText.slice(0, index))
+
+        if (index === fullText.length) {
+          timer = window.setTimeout(() => {
+            deleting = true
+            tick()
+          }, 1200)
+          return
         }
       } else {
-        if (typingText.length > 0) {
-          setTypingText(typingText.slice(0, -1))
-        } else {
-          setIsDeleting(false)
+        index = Math.max(index - 1, 0)
+        setTypingText(fullText.slice(0, index))
+
+        if (index === 0) {
+          deleting = false
         }
       }
-    }, isDeleting ? 50 : 100)
 
-    return () => clearTimeout(timer)
-  }, [fullText, typingText, isDeleting])
+      timer = window.setTimeout(tick, deleting ? 55 : 95)
+    }
+
+    timer = window.setTimeout(tick, 120)
+
+    return () => {
+      active = false
+      if (timer) {
+        window.clearTimeout(timer)
+      }
+    }
+  }, [fullText])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    let frameId = null
+
+    const stopTyping = () => {
+      if (typingStoppedRef.current) {
+        return
+      }
+
+      typingStoppedRef.current = true
+      setTypingText(fullText)
+      setTypingStopped(true)
+    }
+
+    const checkBlogReached = () => {
+      frameId = null
+
+      if (typingStoppedRef.current) {
+        return
+      }
+
+      const postList = document.getElementById('post-outer-wrapper')
+      if (!postList) {
+        return
+      }
+
+      const rect = postList.getBoundingClientRect()
+      if (rect.top <= window.innerHeight * 0.2) {
+        stopTyping()
+      }
+    }
+
+    const onScrollOrResize = () => {
+      if (frameId !== null) {
+        return
+      }
+      frameId = window.requestAnimationFrame(checkBlogReached)
+    }
+
+    onScrollOrResize()
+    window.addEventListener('scroll', onScrollOrResize, { passive: true })
+    window.addEventListener('resize', onScrollOrResize)
+
+    return () => {
+      window.removeEventListener('scroll', onScrollOrResize)
+      window.removeEventListener('resize', onScrollOrResize)
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId)
+      }
+    }
+  }, [fullText])
 
   const handleScrollDown = () => {
     if (typeof window === 'undefined') return
@@ -57,7 +136,8 @@ const Hero = props => {
       >
         <div className='relative z-10 h-full flex flex-col items-center justify-center px-6 text-center text-white'>
           <h1 className='text-4xl md:text-5xl font-extrabold tracking-wide drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] text-white -mt-20'>
-            {typingText}<span className='heo-typing-caret'>|</span>
+            {typingText}
+            {!typingStopped && <span className='heo-typing-caret'>|</span>}
           </h1>
           <button
             type='button'
@@ -198,7 +278,6 @@ function TagsGroupBar() {
                 }
               >
                 <LazyImage
-                  priority={true}
                   src={g.img_1}
                   title={g.title_1}
                   className='w-2/3 hidden xl:block'
@@ -211,7 +290,6 @@ function TagsGroupBar() {
                 }
               >
                 <LazyImage
-                  priority={true}
                   src={g.img_2}
                   title={g.title_2}
                   className='w-2/3 hidden xl:block'
@@ -469,9 +547,9 @@ function TodayCard({ cRef, siteInfo }) {
         </div>
 
         {/* 封面图 */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+        <LazyImage
           src='https://tutu.510517.xyz/202602171655982.webp'
+          alt={siteConfig('HEO_HERO_TITLE_5', null, CONFIG)}
           id='today-card-cover'
           className={`${
             isCoverUp ? '' : ' pointer-events-none'
