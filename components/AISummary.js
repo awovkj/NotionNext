@@ -71,7 +71,7 @@ const AISummary = ({ aiSummary }) => {
       scheduleNextFrame(getDelay(aiSummary[currentIndex - 1]))
     }
 
-    const startOrResume = delay = 0 => {
+    const startOrResume = (delay = 0) => {
       if (cancelled || currentIndex >= aiSummary.length) {
         return
       }

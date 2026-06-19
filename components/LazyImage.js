@@ -107,6 +107,22 @@ const enqueueImageLoad = item => {
   }
 }
 
+/**
+ * @param {{
+ *   priority?: boolean
+ *   id?: string
+ *   src?: string
+ *   alt?: string
+ *   placeholderSrc?: string
+ *   className?: string
+ *   width?: number | string
+ *   height?: number | string
+ *   title?: string
+ *   onLoad?: () => void
+ *   onClick?: import('react').MouseEventHandler<HTMLImageElement>
+ *   style?: import('react').CSSProperties
+ * }} props
+ */
 export default function LazyImage({
   priority,
   id,

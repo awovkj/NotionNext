@@ -45,8 +45,6 @@ export const BeiAnGongAn: React.FC<BeiAnGongAnProps> = ({
         height={iconSize}
         alt='公安备案图标'
         className='inline-block align-middle'
-        loading='lazy'
-        decoding='async'
       />
       <a
         href={href}
